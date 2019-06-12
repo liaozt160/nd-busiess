@@ -28,7 +28,10 @@ Route::namespace('NewDream')->group(function () {
             Route::post('account/update', 'AccountController@accountUpdate');
             Route::post('account/del', 'AccountController@accountDelete');
             Route::post('account/list', 'AccountController@accountList');
+            Route::post('account/show', 'AccountController@accountShow');
         });
+
+        Route::post('/profile', 'AccountController@profile');
     });
 
 });

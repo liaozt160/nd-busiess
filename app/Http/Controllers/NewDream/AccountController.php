@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\NewDream;
 
+use App\Exceptions\BaseException;
 use App\Models\Account;
 use App\Traits\ApiTrait;
 use App\Traits\Consts;
@@ -34,7 +35,10 @@ class AccountController extends Controller
         ];
         $credentials = array_merge($credentials,$param);
         $token = $this->guard()->attempt($credentials);
-        return $this->ok(['access_token' => $token]);
+        if($token){
+            return $this->ok(['access_token' => $token]);
+        }
+        throw new BaseException(Consts::ACCOUNT_LOGIN_FAILED);
     }
 
     /**
@@ -93,4 +97,19 @@ class AccountController extends Controller
         $list = Account::getList();
         return $this->ok($list);
     }
+
+    public function accountShow(Request $request){
+        $id = $request->input('id');
+        $m = Account::find($id);
+        if($m){
+            return $this->ok($m);
+        }
+        throw new BaseException(Consts::UNKNOWN_ERROR);
+    }
+
+    public function profile(Request $request){
+        $user = $this->guard()->user();
+        return $this->ok($user);
+    }
+
 }

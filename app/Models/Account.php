@@ -16,7 +16,7 @@ class Account extends Authenticatable implements JWTSubject
         'email', 'phone', 'name', 'is_agent', 'access_level', 'role', 'password',
     ];
 
-    protected $hidden = ['password'];
+    protected $hidden = ['password','remember_token'];
 
     public static function addAccount($param = [])
     {
@@ -66,6 +66,7 @@ class Account extends Authenticatable implements JWTSubject
         if(!$m){
             return $m;
         }
+        unset($param['password']);
         $m->fill($param);
         if($m->save()){
             return $m;
