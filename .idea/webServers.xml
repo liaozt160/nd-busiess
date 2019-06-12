@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="ce15d606-3aa9-455e-baa4-ae1029fcb0fd" name="nd.dev.tt" url="http://tank.dev.tt">
+        <fileTransfer host="tank.dev.tt" port="22" rootFolder="/opt/newdream/web/newdream" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
