@@ -67,7 +67,6 @@ class AccountController extends Controller
         return $this->err(Consts::SAVE_RECORD_FAILED);
     }
 
-
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
