@@ -21,7 +21,7 @@ Route::post('/login', 'NewDream\AccountController@login')->name('login');
 Route::post('account/add', 'NewDream\AccountController@accountAdd');
 Route::namespace('NewDream')->group(function () {
     Route::middleware('auth.token')->group(function (){
-        Route::post('/logout', 'AccountController@logout');
+        Route::get('/logout', 'AccountController@logout');
 
         Route::middleware('access.level:three')->group(function (){
 //            Route::post('account/add', 'AccountController@accountAdd');

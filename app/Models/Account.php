@@ -15,6 +15,7 @@ class Account extends Authenticatable implements JWTSubject
     protected $fillable = [
         'email', 'phone', 'name', 'is_agent', 'access_level', 'role', 'password',
     ];
+    protected $appends = ['roles'];
 
     protected $hidden = ['password','remember_token'];
 
@@ -88,6 +89,20 @@ class Account extends Authenticatable implements JWTSubject
     public static function loginByToken($param=[]){
 
     }
+
+    public function getRolesAttribute()
+    {
+        $roles = [];
+        if($this->role == 1){
+            $roles  = ['admin'];
+        }else if($this->role == 2){
+            $roles  = ['buyer_broker'];
+        }else{
+            $roles  = ['business_broker'];
+        }
+        return $this->attributes['roles'] = $roles;
+    }
+
 
 }
 
