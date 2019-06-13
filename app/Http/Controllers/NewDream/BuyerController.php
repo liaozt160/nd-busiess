@@ -19,27 +19,33 @@ class BuyerController extends BaseController
     public function Update(Request $request){
         $param = $request->except('id');
         $id = $request->input('id');
+        $user = $this->guard()->user();
+        Buyer::accessCheck($id,$user);
         $m = Buyer::updateItem($id,$param);
         return $this->ok($m);
     }
 
     public function Delete(Request $request){
         $id = $request->input('id');
+        $user = $this->guard()->user();
+        Buyer::accessCheck($id,$user);
         $m = Buyer::deleteItem($id);
         return $this->ok();
     }
 
     public function List(Request $request){
         $param = $request->post();
-        $list = Buyer::listItem($param);
+        $user = $this->guard()->user();
+        $accountId = $user->role=Consts::ACCOUNT_ROLE_USER?null:$user->id;
+        $list = Buyer::listItem($param,$accountId);
         return $this->ok($list);
     }
 
     public function Show(Request $request){
         $id = $request->input('id');
         $user = $this->guard()->user();
+        Buyer::accessCheck($id,$user);
         $m = Buyer::find($id);
-        $m->accessCheck($user);
         if($m){
             return $this->ok($m);
         }

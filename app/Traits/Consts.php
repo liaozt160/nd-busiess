@@ -30,8 +30,10 @@ class Consts {
     const ACCOUNT_ACCESS_LEVEL_TWO = 2;
     const ACCOUNT_ACCESS_LEVEL_THREE = 3;
 
-    const ACCOUNT_ROLE_USER = 1;
-    const ACCOUNT_ROLE_ADMIN = 2;
+    const ACCOUNT_ROLE_ADMIN = 1;
+    const ACCOUNT_ROLE_BUYER_BROKER = 2;
+    const ACCOUNT_ROLE_BUSINESS_BROKER = 3;
+    const ACCOUNT_ROLE_USER = 4;
 
     const ACCOUNT_SAVE_ERROR = 2001;
     const ACCOUNT_LOGIN_FAILED = 2002;

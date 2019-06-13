@@ -45,17 +45,24 @@ class Business extends Model
         throw new BaseException(Consts::SAVE_RECORD_FAILED);
     }
 
-    public static function listItem($param){
+    public static function listItem($param,$accountId=null){
         $query  = self::whereNull('deleted_at');
+        if($accountId){
+            $query->where('business_broker',$accountId);
+        }
         $list = $query->paginate(15);
         return $list;
     }
 
-    public function accessCheck($user){
-        if($user->role == Consts::ACCOUNT_ROLE_USER){
+    public static function accessCheck($id,$user){
+        $m = self::find($id);
+        if(!$m){
+            throw new BaseException(Consts::NO_RECORD_FOUND);
+        }
+        if($user->role == Consts::ACCOUNT_ROLE_ADMIN){
             return true;
         }
-        if($user->id == $this->business_broker){
+        if($user->id == $m->business_broker){
             return true;
         }
         throw new BaseException(Consts::ACCOUNT_ACCESS_DENY);
