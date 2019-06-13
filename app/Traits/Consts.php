@@ -20,6 +20,7 @@ class Consts {
     const DATABASE_ERROR = 1003;
     const DATA_VALIDATE_WRONG = 1005;
     const SAVE_RECORD_FAILED = 1006;
+    const NO_RECORD_FOUND = 1007;
 
     /**
      * Account info

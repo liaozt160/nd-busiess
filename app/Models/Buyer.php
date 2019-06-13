@@ -7,10 +7,10 @@ use App\Traits\Consts;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-class Business extends Model
+class Buyer extends Model
 {
     protected $guarded = ['id'];
-    protected $table = 'business';
+    protected $table = 'buyer';
     public static function addItem($param){
         $m = new self();
         $m->fill($param);
@@ -45,20 +45,26 @@ class Business extends Model
         throw new BaseException(Consts::SAVE_RECORD_FAILED);
     }
 
-    public static function listItem($param){
+    public static function listItem($param,$accountId=null){
         $query  = self::whereNull('deleted_at');
+        if($accountId){
+            $query->where('buyer_broker',$accountId);
+        }
         $list = $query->paginate(15);
         return $list;
     }
 
-    public function accessCheck($user){
+    public static function accessCheck($id,$user){
+        $m = self::find($id);
+        if(!$m){
+            throw new BaseException(Consts::NO_RECORD_FOUND);
+        }
         if($user->role == Consts::ACCOUNT_ROLE_USER){
             return true;
         }
-        if($user->id == $this->business_broker){
+        if($user->id == $m->buyer_broker){
             return true;
         }
         throw new BaseException(Consts::ACCOUNT_ACCESS_DENY);
     }
-
 }

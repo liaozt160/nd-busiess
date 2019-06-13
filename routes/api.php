@@ -22,6 +22,7 @@ Route::post('account/add', 'NewDream\AccountController@accountAdd');
 Route::namespace('NewDream')->group(function () {
     Route::middleware('auth.token')->group(function (){
         Route::get('/logout', 'AccountController@logout');
+        Route::post('/profile', 'AccountController@profile');
 
         Route::middleware('access.level:three')->group(function (){
 //            Route::post('account/add', 'AccountController@accountAdd');
@@ -31,7 +32,22 @@ Route::namespace('NewDream')->group(function () {
             Route::post('account/show', 'AccountController@accountShow');
         });
 
-        Route::post('/profile', 'AccountController@profile');
+        Route::middleware([])->group(function (){
+            Route::post('business/add', 'BusinessController@Add');
+            Route::post('business/update', 'BusinessController@Update');
+            Route::post('business/del', 'BusinessController@Delete');
+            Route::post('business/list', 'BusinessController@List');
+            Route::post('business/show', 'BusinessController@Show');
+        });
+
+        Route::middleware([])->group(function (){
+            Route::post('buyer/add', 'BuyerController@Add');
+            Route::post('buyer/update', 'BuyerController@Update');
+            Route::post('buyer/del', 'BuyerController@Delete');
+            Route::post('buyer/list', 'BuyerController@List');
+            Route::post('buyer/show', 'BuyerController@Show');
+        });
+
     });
 
 });

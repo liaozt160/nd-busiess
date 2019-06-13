@@ -9,6 +9,7 @@ return [
     \App\Traits\Consts::SAVE_RECORD_FAILED => 'SAVE RECORD FAILED',
     \App\Traits\Consts::ACCOUNT_SAVE_ERROR => 'ACCOUNT LOGIN FAILED',
     \App\Traits\Consts::ACCOUNT_LOGIN_FAILED => 'ACCOUNT LOGIN FAILED',
+    \App\Traits\Consts::NO_RECORD_FOUND => 'NO RECORD FOUND',
 
     \App\Traits\Consts::TOKEN_WRONG => 'TOKEN WRONG',
     \App\Traits\Consts::TOKEN_NOT_PROVIDED => 'TOKEN NOT PROVIDED',

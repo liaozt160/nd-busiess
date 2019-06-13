@@ -97,8 +97,10 @@ class Account extends Authenticatable implements JWTSubject
             $roles  = ['admin'];
         }else if($this->role == 2){
             $roles  = ['buyer_broker'];
-        }else{
+        }else if($this->role == 3){
             $roles  = ['business_broker'];
+        }else{
+            $roles  = [];
         }
         return $this->attributes['roles'] = $roles;
     }
