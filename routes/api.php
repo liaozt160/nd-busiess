@@ -32,6 +32,10 @@ Route::namespace('NewDream')->group(function () {
             Route::post('account/show', 'AccountController@accountShow');
             Route::post('account/status', 'AccountController@accountStatus');
             Route::post('account/password', 'AccountController@accountPassword');
+
+            Route::post('account/assign', 'AccountController@businessAssign');
+            Route::post('account/assign/list', 'AccountController@businessAssignList');
+//            Route::post('business/assign', 'AccountController@accountStatus');
         });
 
         Route::middleware(['access.business'])->group(function (){

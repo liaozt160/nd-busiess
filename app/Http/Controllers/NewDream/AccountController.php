@@ -4,6 +4,7 @@ namespace App\Http\Controllers\NewDream;
 
 use App\Exceptions\BaseException;
 use App\Models\Account;
+use App\Models\BusinessAssign;
 use App\Traits\ApiTrait;
 use App\Traits\Consts;
 use App\Traits\MsgTrait;
@@ -113,5 +114,17 @@ class AccountController extends BaseController
         return $this->ok($m);
     }
 
+    public function businessAssign(Request $request){
+        $business = $request->post('business');
+        $accountId = $request->post('account_id');
+        $list = BusinessAssign::addItems($accountId,$business);
+        return $this->ok($list);
+    }
+
+    public function businessAssignList(Request $request){
+        $accountId = $request->post('account_id');
+        $list = BusinessAssign::getAssignList($accountId);
+        return $this->ok($list);
+    }
 
 }

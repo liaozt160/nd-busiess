@@ -59,7 +59,7 @@ class Buyer extends Model
         if(!$m){
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
-        if($user->role == Consts::ACCOUNT_ROLE_USER){
+        if($user->role == Consts::ACCOUNT_ROLE_ADMIN){
             return true;
         }
         if($user->id == $m->buyer_broker){
