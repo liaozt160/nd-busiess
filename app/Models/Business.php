@@ -46,7 +46,6 @@ class Business extends Model
     }
 
     public static function listItem($param,$accountId=null){
-        var_dump($accountId);
         $query  = self::whereNull('deleted_at');
         if($accountId){
             $query->where('business_broker',$accountId);

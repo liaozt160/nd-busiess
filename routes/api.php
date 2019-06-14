@@ -35,6 +35,7 @@ Route::namespace('NewDream')->group(function () {
 
             Route::post('account/assign', 'AccountController@businessAssign');
             Route::post('account/assign/list', 'AccountController@businessAssignList');
+            Route::post('account/attention/list', 'AccountController@businessAttentionList');
 //            Route::post('business/assign', 'AccountController@accountStatus');
         });
 
@@ -52,6 +53,9 @@ Route::namespace('NewDream')->group(function () {
             Route::post('buyer/del', 'BuyerController@Delete');
             Route::post('buyer/list', 'BuyerController@List');
             Route::post('buyer/show', 'BuyerController@Show');
+            Route::post('buyer/attention/pay', 'BuyerController@attentionPay');
+            Route::post('buyer/attention/list', 'BuyerController@attentionList');
+            Route::post('buyer/attention/del', 'BuyerController@attentionDel');
         });
 
     });

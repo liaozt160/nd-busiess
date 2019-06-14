@@ -10,10 +10,14 @@ class BusinessAssign extends Model
     protected $guarded = ['id'];
     public static function addItems($accountId,$business=[]){
         $del = self::where('account_id',$accountId)->delete();
+        $business = array_unique($business);
         foreach ($business as $item){
+            if(!$item){
+                continue;
+            }
             self::create(['account_id'=>$accountId,'business_id' => $item]);
         }
-        $list = self::where('account_id',$accountId)->paginate(15);
+        $list = self::getAssignList($accountId);
         return $list;
     }
 
@@ -23,8 +27,8 @@ class BusinessAssign extends Model
                 ->leftjoin('accounts as a','b.account_id','=','a.id')
                 ->leftjoin('business as c','b.business_id','=','c.id')
         ;
-//                ->where('account_id',$accountId);
-        $list = $query->get();
+        $query->where('account_id',$accountId);
+        $list = $query->paginate(15);
         return $list;
     }
 

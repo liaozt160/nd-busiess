@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\NewDream;
 
 use App\Exceptions\BaseException;
+use App\Models\BusinessAttention;
 use App\Models\Buyer;
 use App\Traits\Consts;
 use Illuminate\Http\Request;
@@ -51,4 +52,11 @@ class BuyerController extends BaseController
         }
         throw new BaseException(Consts::NO_RECORD_FOUND);
     }
+
+    public function attentionPay(Request $request){
+        $param = $request->only(['business_id','account_id','buyer_id']);
+        $m = BusinessAttention::addItemByArray($param);
+        return $this->ok($m);
+    }
+
 }
