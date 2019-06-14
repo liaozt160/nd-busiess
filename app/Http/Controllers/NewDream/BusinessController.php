@@ -4,6 +4,7 @@ namespace App\Http\Controllers\NewDream;
 
 use App\Exceptions\BaseException;
 use App\Models\Business;
+use App\Models\BusinessAttention;
 use App\Traits\Consts;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -43,7 +44,6 @@ class BusinessController extends BaseController
     }
 
     public function Show(Request $request){
-        $accountId = $this->guard()->id();
         $id = $request->input('id');
         $user = $this->guard()->user();
         Business::accessCheck($id,$user);
@@ -53,4 +53,17 @@ class BusinessController extends BaseController
         }
         throw new BaseException(Consts::NO_RECORD_FOUND);
     }
+
+    public function attentionList(Request $request){
+        $accountId = $this->guard()->id();
+        $list = BusinessAttention::getListByBusiness($accountId);
+        return $this->ok($list);
+    }
+
+    public function attentionDel(Request $request){
+        $id = $request->input('id');
+        $m = BusinessAttention::delItemByBusiness($id);
+        return $this->ok();
+    }
+
 }

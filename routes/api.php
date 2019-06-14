@@ -45,6 +45,9 @@ Route::namespace('NewDream')->group(function () {
             Route::post('business/del', 'BusinessController@Delete');
             Route::post('business/list', 'BusinessController@List');
             Route::post('business/show', 'BusinessController@Show');
+
+            Route::post('business/attention/list', 'BusinessController@attentionList');
+            Route::post('business/attention/del', 'BusinessController@attentionDel');
         });
 
         Route::middleware(['access.buyer'])->group(function (){

@@ -6,6 +6,7 @@ use App\Exceptions\BaseException;
 use App\Traits\Consts;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class BusinessAttention extends Model
 {
@@ -54,13 +55,16 @@ class BusinessAttention extends Model
 
 
     public static function getListByBusiness($accountId){
+//        DB::enableQueryLog();
         $query = self::from('attention_to_business as t')
-            ->select(['b.title','t.business_id','a.name','t.account_id','s.buyer','t.buyer_id','t.created_at']);
-        $query->leftjoin('accounts as a','t.account_id','=','a.id')
-            ->leftjoin('business as b','t.business_id','=','b.id')
+            ->select(['t.id','b.title','t.business_id','a.name','t.account_id','s.buyer','t.buyer_id','t.created_at']);
+        $query->join('accounts as a','t.account_id','=','a.id')
+            ->join('business as b','t.business_id','=','b.id')
             ->leftjoin('buyer as s','t.buyer_id','=','s.id');
-        $query->where('b.business_broker',$accountId)->whereNull('business_deleted_at');
+        $query->whereNull('t.business_deleted_at');
+        $query->whereRaw('nd_b.business_broker = '.$accountId);
         $list = $query->paginate(15);
+//        var_dump(DB::getQueryLog());
         return $list;
     }
 

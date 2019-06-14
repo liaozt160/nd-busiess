@@ -59,4 +59,16 @@ class BuyerController extends BaseController
         return $this->ok($m);
     }
 
+    public function attentionList(Request $request){
+        $accountId = $this->guard()->id();
+        $list = BusinessAttention::getListByBuyer($accountId);
+        return $this->ok($list);
+    }
+
+    public function attentionDel(Request $request){
+        $id = $request->input('id');
+        $m = BusinessAttention::delItemByBuyer($id);
+        return $this->ok();
+    }
+
 }
