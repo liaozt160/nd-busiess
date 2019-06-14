@@ -62,6 +62,8 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'auth.token' => \App\Http\Middleware\RefreshToken::class,
         'access.level' => \App\Http\Middleware\AccessLevelThree::class,
+        'access.business' => \App\Http\Middleware\BusinessBroker::class,
+        'access.buyer' => \App\Http\Middleware\BuyerBroker::class,
     ];
 
     /**

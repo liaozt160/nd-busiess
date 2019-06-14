@@ -30,9 +30,11 @@ Route::namespace('NewDream')->group(function () {
             Route::post('account/del', 'AccountController@accountDelete');
             Route::post('account/list', 'AccountController@accountList');
             Route::post('account/show', 'AccountController@accountShow');
+            Route::post('account/status', 'AccountController@accountStatus');
+            Route::post('account/password', 'AccountController@accountPassword');
         });
 
-        Route::middleware([])->group(function (){
+        Route::middleware(['access.business'])->group(function (){
             Route::post('business/add', 'BusinessController@Add');
             Route::post('business/update', 'BusinessController@Update');
             Route::post('business/del', 'BusinessController@Delete');
@@ -40,7 +42,7 @@ Route::namespace('NewDream')->group(function () {
             Route::post('business/show', 'BusinessController@Show');
         });
 
-        Route::middleware([])->group(function (){
+        Route::middleware(['access.buyer'])->group(function (){
             Route::post('buyer/add', 'BuyerController@Add');
             Route::post('buyer/update', 'BuyerController@Update');
             Route::post('buyer/del', 'BuyerController@Delete');

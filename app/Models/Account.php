@@ -13,7 +13,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class Account extends Authenticatable implements JWTSubject
 {
     protected $fillable = [
-        'email', 'phone', 'name', 'is_agent', 'access_level', 'role', 'password',
+        'email', 'phone', 'name', 'is_agent', 'access_level', 'role', 'password','status','remarks'
     ];
     protected $appends = ['roles'];
 
@@ -105,6 +105,22 @@ class Account extends Authenticatable implements JWTSubject
         return $this->attributes['roles'] = $roles;
     }
 
+    /**
+     * User: Tank
+     * Date: 2019/6/13
+     * Time: 19:47
+     */
+    public static function updateStatus($id,$status){
+        $m = self::find($id);
+        if(!$m){
+            throw new BaseException(Consts::NO_RECORD_FOUND);
+        }
+        $m->status = $status;
+        if($m->save()){
+            return $m;
+        }
+        throw new BaseException(Consts::SAVE_RECORD_FAILED);
+    }
 
 }
 

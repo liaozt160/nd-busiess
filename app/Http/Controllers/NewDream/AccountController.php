@@ -25,6 +25,7 @@ class AccountController extends BaseController
         $param = $request->only(['email','password']);
         $credentials = [
             'deleted_at' => null,
+            'status' => Consts::ACCOUNT_ROLE_ADMIN,
         ];
         $credentials = array_merge($credentials,$param);
         $token = $this->guard()->attempt($credentials);
@@ -104,5 +105,13 @@ class AccountController extends BaseController
         $user = $this->guard()->user();
         return $this->ok($user);
     }
+
+    public function accountStatus(Request $request){
+        $id = $request->input('id');
+        $status = $request->input('status',1);
+        $m = Account::updateStatus($id,$status);
+        return $this->ok($m);
+    }
+
 
 }
