@@ -11,61 +11,106 @@ class Business extends Model
 {
     protected $guarded = ['id'];
     protected $table = 'business';
-    public static function addItem($param){
+
+    public static function addItem($param)
+    {
         $m = new self();
         $m->fill($param);
-        if($m->save()){
+        if ($m->save()) {
             return $m;
         }
         throw new BaseException(Consts::SAVE_RECORD_FAILED);
     }
 
-    public static function updateItem($id,$param){
+    public static function updateItem($id, $param)
+    {
         $m = self::find($id);
-        if(!$m){
+        if (!$m) {
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
         $m->fill($param);
-        if($m->save()){
+        if ($m->save()) {
             return $m;
         }
         throw new BaseException(Consts::SAVE_RECORD_FAILED);
     }
 
 
-    public static function deleteItem($id){
+    public static function deleteItem($id)
+    {
         $m = self::find($id);
-        if(!$m){
+        if (!$m) {
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
         $m->deleted_at = new Carbon();
-        if($m->save()){
+        if ($m->save()) {
             return $m;
         }
         throw new BaseException(Consts::SAVE_RECORD_FAILED);
     }
 
-    public static function listItem($param,$accountId=null){
-        $query  = self::whereNull('deleted_at');
-        if($accountId){
-            $query->where('business_broker',$accountId);
+    public static function listItem($param, $accountId = null)
+    {
+        $query = self::whereNull('deleted_at');
+        if ($accountId) {
+            $query->where('business_broker', $accountId);
         }
         $list = $query->paginate(15);
         return $list;
     }
 
-    public static function accessCheck($id,$user){
+    public static function accessCheck($id, $user)
+    {
         $m = self::find($id);
-        if(!$m){
+        if (!$m) {
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
-        if($user->role == Consts::ACCOUNT_ROLE_ADMIN){
+        if ($user->role == Consts::ACCOUNT_ROLE_ADMIN) {
             return true;
         }
-        if($user->id == $m->business_broker){
+        if ($user->id == $m->business_broker) {
             return true;
         }
         throw new BaseException(Consts::ACCOUNT_ACCESS_DENY);
+    }
+
+
+    public static function getListByBuyerLevelOne($param)
+    {
+        $columns = ['id', 'listing', 'title', 'price', 'employee_count', 'status'];
+        $query = self::select($columns)->whereNull('deleted_at');
+        $list = $query->paginate(15);
+        return $list;
+    }
+
+    public static function getListByBuyerLevelTwo($param, $accountId)
+    {
+        $columns = ['b.id', 'b.listing', 'b.title', 'b.price', 'b.employee_count', 'b.status'];
+        $query = self::from('business_assign as a')->select($columns)->whereNull('b.deleted_at');
+        $query->join('business as b', 'a.business_id', '=', 'b.id')->where('a.account_id', $accountId);
+        $list = $query->paginate(15);
+        return $list;
+    }
+
+    public static function showLevelOne($businessId)
+    {
+        $columns = ['b.id', 'b.listing', 'b.title', 'b.price', 'b.employee_count','b.profitability'
+            ,'b.country','b.states','b.city','b.address','b.real_estate','b.building_sf', 'b.status'];
+        $query = self::from('business as b')->select($columns)->whereNull('b.deleted_at')->where('b.id',$businessId);
+        $m = $query->first();
+        return $m;
+    }
+
+    public static function showLevelTwo($accountId, $businessId)
+    {
+        $columns = ['b.id', 'b.listing', 'b.title', 'b.price', 'b.employee_count','b.profitability'
+            ,'b.country','b.states','b.city','b.address','b.real_estate','b.building_sf','b.gross_income',
+            'b.value_of_real_estate','b.net_income','b.lease','b.lease_term','b.ebitda','b.ff_e','b.inventory','b.commission','b.buyer_financing', 'b.status'];
+        $query = self::from('business_assign as a')->select($columns)->whereNull('b.deleted_at');
+        $query->join('business as b', 'a.business_id', '=', 'b.id')
+            ->where('a.account_id', $accountId)->where('a.business_id', $businessId);
+        $m = $query->first();
+        return $m;
     }
 
 }

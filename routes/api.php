@@ -45,9 +45,15 @@ Route::namespace('NewDream')->group(function () {
             Route::post('business/del', 'BusinessController@Delete');
             Route::post('business/list', 'BusinessController@List');
             Route::post('business/show', 'BusinessController@Show');
+            Route::post('business/status', 'BusinessController@setStatus');
 
             Route::post('business/attention/list', 'BusinessController@attentionList');
             Route::post('business/attention/del', 'BusinessController@attentionDel');
+
+            Route::post('business/buyer/list/level/one', 'BusinessController@BuyerListLevelOne');
+            Route::post('business/buyer/list/level/two', 'BusinessController@BuyerListLevelTwo');
+            Route::post('business/buyer/show/level/one', 'BusinessController@showLevelOne');
+            Route::post('business/buyer/show/level/two', 'BusinessController@showLevelTwo');
         });
 
         Route::middleware(['access.buyer'])->group(function (){

@@ -29,13 +29,14 @@ class CreateBusiess extends Migration
             $table->string('city',150)->nullable();
             $table->string('address',200)->nullable();
 
-            /**
-             * 第二批文件列表
-             */
+
             $table->tinyInteger('profitability')->nullable()->comment('是否盈利');
             $table->tinyInteger('real_estate')->nullable()->comment('是否包含房地产');
             $table->Integer('building_sf')->nullable()->comment('营业面积');
 
+            /**
+             * 第二批文件列表
+             */
             $table->double('gross_income')->nullable()->comment('毛利润 EX. $8300/month');
             $table->double('value_of_real_estate')->nullable()->comment('Est. Value of Real Estate房地产估价');
 

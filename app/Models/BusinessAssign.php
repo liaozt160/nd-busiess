@@ -27,7 +27,7 @@ class BusinessAssign extends Model
                 ->leftjoin('accounts as a','b.account_id','=','a.id')
                 ->leftjoin('business as c','b.business_id','=','c.id')
         ;
-        $query->where('account_id',$accountId);
+        $query->where('b.account_id',$accountId);
         $list = $query->paginate(15);
         return $list;
     }
