@@ -23,6 +23,7 @@ Route::namespace('NewDream')->group(function () {
     Route::middleware('auth.token')->group(function (){
         Route::get('/logout', 'AccountController@logout');
         Route::post('/profile', 'AccountController@profile');
+        Route::post('/profile/password', 'AccountController@profilePassword');
 
         Route::middleware('access.level:three')->group(function (){
 //            Route::post('account/add', 'AccountController@accountAdd');

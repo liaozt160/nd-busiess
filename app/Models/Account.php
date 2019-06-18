@@ -122,5 +122,21 @@ class Account extends Authenticatable implements JWTSubject
         throw new BaseException(Consts::SAVE_RECORD_FAILED);
     }
 
+    public static function passwordUpdate($accountId,$newPassword,$oldPassword=null){
+        $m = self::find($accountId);
+        if(!$m){
+            throw new BaseException(Consts::NO_RECORD_FOUND);
+        }
+        if($oldPassword && !password_verify($oldPassword,$m->password)){
+            throw new BaseException(Consts::PASSWORD_VERIFY_FAILED);
+        }
+        $m->password = password_hash($newPassword,PASSWORD_BCRYPT);
+        if($m->save()){
+            return $m;
+        }
+        throw new BaseException(Consts::SAVE_RECORD_FAILED);
+    }
+
+
 }
 

@@ -44,5 +44,6 @@ class Consts {
     const TOKEN_NOT_PROVIDED = 2101;
     const TOKEN_USER_NOT_FOUND = 2102;
 
+    const PASSWORD_VERIFY_FAILED = 2103;
 
 }

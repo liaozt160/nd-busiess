@@ -134,4 +134,20 @@ class AccountController extends BaseController
         return $this->ok($list);
     }
 
+    public function accountPassword(Request $request){
+        $accountId = $request->input('account_id');
+//        $oldPassword = $request->input('old_password');
+        $newPassword = $request->input('new_password');
+        $m = Account::passwordUpdate($accountId,$newPassword);
+        return $this->ok();
+    }
+
+    public function profilePassword(Request $request){
+        $accountId = $this->guard()->id();
+        $oldPassword = $request->input('old_password');
+        $newPassword = $request->input('new_password');
+        $m = Account::passwordUpdate($accountId,$newPassword,$oldPassword);
+        return $this->ok();
+    }
+
 }
