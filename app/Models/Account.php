@@ -67,7 +67,9 @@ class Account extends Authenticatable implements JWTSubject
         if(!$m){
             return $m;
         }
-        unset($param['password']);
+        if(isset($param['password']) && $param['password']){
+            $param['password'] = password_hash($param['password'],PASSWORD_BCRYPT);
+        }
         $m->fill($param);
         if($m->save()){
             return $m;
