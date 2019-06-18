@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\NewDream;
 
+use App\Events\PayAttention;
 use App\Exceptions\BaseException;
+use App\Mail\CreateUser;
 use App\Models\Account;
 use App\Models\BusinessAssign;
 use App\Models\BusinessAttention;
@@ -11,6 +13,7 @@ use App\Traits\Consts;
 use App\Traits\MsgTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 
 class AccountController extends BaseController
 {
@@ -147,6 +150,14 @@ class AccountController extends BaseController
         $oldPassword = $request->input('old_password');
         $newPassword = $request->input('new_password');
         $m = Account::passwordUpdate($accountId,$newPassword,$oldPassword);
+        return $this->ok();
+    }
+
+    public function test(){
+        $account = $this->guard()->user();
+        $m =  BusinessAttention::find(1);
+        event(new PayAttention($m));
+//        $m = Mail::to('tank@ylbservices.com')->send(new CreateUser());
         return $this->ok();
     }
 

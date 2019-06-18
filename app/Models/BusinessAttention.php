@@ -92,4 +92,13 @@ class BusinessAttention extends Model
         }
         throw new BaseException(Consts::SAVE_RECORD_FAILED);
     }
+
+    public function account(){
+        return $this->hasOne('App\Models\Account','id','account_id');
+    }
+
+    public function business(){
+        return $this->hasOne('App\Models\Business','id','business_id');
+    }
+
 }

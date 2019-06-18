@@ -24,6 +24,7 @@ Route::namespace('NewDream')->group(function () {
         Route::get('/logout', 'AccountController@logout');
         Route::post('/profile', 'AccountController@profile');
         Route::post('/profile/password', 'AccountController@profilePassword');
+        Route::post('/profile/test', 'AccountController@test');
 
         Route::middleware('access.level:three')->group(function (){
 //            Route::post('account/add', 'AccountController@accountAdd');
@@ -51,10 +52,6 @@ Route::namespace('NewDream')->group(function () {
             Route::post('business/attention/list', 'BusinessController@attentionList');
             Route::post('business/attention/del', 'BusinessController@attentionDel');
 
-            Route::post('business/buyer/list/level/one', 'BusinessController@BuyerListLevelOne');
-            Route::post('business/buyer/list/level/two', 'BusinessController@BuyerListLevelTwo');
-            Route::post('business/buyer/show/level/one', 'BusinessController@showLevelOne');
-            Route::post('business/buyer/show/level/two', 'BusinessController@showLevelTwo');
         });
 
         Route::middleware(['access.buyer'])->group(function (){
@@ -66,6 +63,11 @@ Route::namespace('NewDream')->group(function () {
             Route::post('buyer/attention/pay', 'BuyerController@attentionPay');
             Route::post('buyer/attention/list', 'BuyerController@attentionList');
             Route::post('buyer/attention/del', 'BuyerController@attentionDel');
+
+            Route::post('business/buyer/list/level/one', 'BusinessController@BuyerListLevelOne');
+            Route::post('business/buyer/list/level/two', 'BusinessController@BuyerListLevelTwo');
+            Route::post('business/buyer/show/level/one', 'BusinessController@showLevelOne');
+            Route::post('business/buyer/show/level/two', 'BusinessController@showLevelTwo');
         });
 
     });

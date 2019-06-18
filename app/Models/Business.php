@@ -113,4 +113,8 @@ class Business extends Model
         return $m;
     }
 
+    public function account(){
+        return $this->hasOne('App\Models\Account','id','business_broker');
+    }
+
 }
