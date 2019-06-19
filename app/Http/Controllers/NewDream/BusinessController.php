@@ -15,6 +15,7 @@ class BusinessController extends BaseController
 
     public function Add(Request $request){
         $param = $request->post();
+        $param['business_broker'] = $this->guard()->id();
         $m = Business::addItem($param);
         return $this->ok($m);
     }
