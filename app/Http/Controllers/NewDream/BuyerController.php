@@ -38,7 +38,7 @@ class BuyerController extends BaseController
     public function List(Request $request){
         $param = $request->post();
         $user = $this->guard()->user();
-        $accountId = $user->role=Consts::ACCOUNT_ROLE_ADMIN?null:$user->id;
+        $accountId = $user->role==Consts::ACCOUNT_ROLE_ADMIN?null:$user->id;
         $list = Buyer::listItem($param,$accountId);
         return $this->ok($list);
     }
@@ -56,6 +56,7 @@ class BuyerController extends BaseController
 
     public function attentionPay(Request $request){
         $param = $request->only(['business_id','account_id','buyer_id']);
+        $param['account_id'] = $this->guard()->id();
         $m = BusinessAttention::addItemByArray($param);
         return $this->ok($m);
     }
