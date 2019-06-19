@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Route::get('/info', function () {
-    echo phpinfo();
+//    echo phpinfo();
 });
 
 Route::get('/test', function () {

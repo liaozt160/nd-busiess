@@ -71,4 +71,10 @@ class BuyerController extends BaseController
         return $this->ok();
     }
 
+    public function Query(){
+        $accountId = $this->guard()->id();
+        $list = Buyer::queryAll($accountId);
+        return $this->ok($list);
+    }
+
 }

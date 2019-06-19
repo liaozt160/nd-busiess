@@ -54,6 +54,17 @@ class Buyer extends Model
         return $list;
     }
 
+    public static function queryAll($accountId,$q=null){
+        $query = self::select(['id as key','buyer as label'])
+            ->where('status',Consts::BUSINESS_STATUS_NORMAL)->whereNull('deleted_at')
+            ->where('buyer_broker',$accountId);
+        if($q){
+            $query->where('title','like','%'.$q.'%');
+        }
+        return $query->get();
+    }
+
+
     public static function accessCheck($id,$user){
         $m = self::find($id);
         if(!$m){

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Consts;
 use Illuminate\Database\Eloquent\Model;
 
 class BusinessAssign extends Model
@@ -29,6 +30,11 @@ class BusinessAssign extends Model
         ;
         $query->where('b.account_id',$accountId);
         $list = $query->paginate(15);
+        return $list;
+    }
+
+    public static function getAssignListTo($accountId){
+        $list = self::select('business_id')->where('account_id',$accountId)->get();
         return $list;
     }
 

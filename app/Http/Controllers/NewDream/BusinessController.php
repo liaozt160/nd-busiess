@@ -5,6 +5,7 @@ namespace App\Http\Controllers\NewDream;
 use App\Exceptions\BaseException;
 use App\Models\Business;
 use App\Models\BusinessAttention;
+use App\Models\BusinessZh;
 use App\Traits\Consts;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -48,6 +49,44 @@ class BusinessController extends BaseController
         $user = $this->guard()->user();
         Business::accessCheck($id,$user);
         $m = Business::find($id);
+        if($m){
+            return $this->ok($m);
+        }
+        throw new BaseException(Consts::NO_RECORD_FOUND);
+    }
+
+    /**
+     *  update zh
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws BaseException
+     * User: Tank
+     * Date: 2019/6/19
+     * Time: 10:17
+     */
+    public function UpdateZh(Request $request){
+        $param = $request->except('id');
+        $id = $request->input('id');
+        $user = $this->guard()->user();
+        Business::accessCheck($id,$user);
+        $m = BusinessZh::updateItem($id,$param);
+        return $this->ok($m);
+    }
+
+    /**
+     *  update zh
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws BaseException
+     * User: Tank
+     * Date: 2019/6/19
+     * Time: 10:17
+     */
+    public function showZh(Request $request){
+        $id = $request->input('id');
+        $user = $this->guard()->user();
+        Business::accessCheck($id,$user);
+        $m = BusinessZh::where('business_id',$id)->first();
         if($m){
             return $this->ok($m);
         }

@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use App\Traits\MsgTrait;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class BaseException extends Exception
@@ -19,7 +20,6 @@ class BaseException extends Exception
 
     public function report()
     {
-
     }
 
     public function render($request)

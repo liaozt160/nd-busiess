@@ -36,7 +36,7 @@ Route::namespace('NewDream')->group(function () {
             Route::post('account/password', 'AccountController@accountPassword');
 
             Route::post('account/assign', 'AccountController@businessAssign');
-            Route::post('account/assign/list', 'AccountController@businessAssignList');
+            Route::post('account/assign/list', 'AccountController@businessAssignListTo');
             Route::post('account/attention/list', 'AccountController@businessAttentionList');
 //            Route::post('business/assign', 'AccountController@accountStatus');
         });
@@ -44,9 +44,14 @@ Route::namespace('NewDream')->group(function () {
         Route::middleware(['access.business'])->group(function (){
             Route::post('business/add', 'BusinessController@Add');
             Route::post('business/update', 'BusinessController@Update');
+            Route::post('business/show', 'BusinessController@Show');
+
+//            Route::post('business/zh/add', 'BusinessController@AddZh');
+            Route::post('business/zh/update', 'BusinessController@UpdateZh');
+            Route::post('business/zh/show', 'BusinessController@ShowZh');
+
             Route::post('business/del', 'BusinessController@Delete');
             Route::post('business/list', 'BusinessController@List');
-            Route::post('business/show', 'BusinessController@Show');
             Route::post('business/status', 'BusinessController@setStatus');
 
             Route::post('business/attention/list', 'BusinessController@attentionList');
@@ -60,6 +65,7 @@ Route::namespace('NewDream')->group(function () {
             Route::post('buyer/del', 'BuyerController@Delete');
             Route::post('buyer/list', 'BuyerController@List');
             Route::post('buyer/show', 'BuyerController@Show');
+            Route::post('buyer/query', 'BuyerController@Query');
             Route::post('buyer/attention/pay', 'BuyerController@attentionPay');
             Route::post('buyer/attention/list', 'BuyerController@attentionList');
             Route::post('buyer/attention/del', 'BuyerController@attentionDel');

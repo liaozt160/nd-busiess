@@ -113,8 +113,26 @@ class Business extends Model
         return $m;
     }
 
+
+    public static function getQueryAll($q=null){
+        $query = self::select(['id as key','title as label'])
+            ->where('status',Consts::BUSINESS_STATUS_NORMAL)->whereNull('deleted_at')
+        ;
+        if($q){
+            $query->where('title','like','%'.$q.'%');
+        }
+        return $query->get();
+    }
+
+
+
     public function account(){
         return $this->hasOne('App\Models\Account','id','business_broker');
+    }
+
+
+    public function businessZh(){
+        return $this->hasOne('App\Models\BusinessZh','business_id','id');
     }
 
 }

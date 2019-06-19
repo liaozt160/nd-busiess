@@ -22,6 +22,12 @@ class Consts {
     const SAVE_RECORD_FAILED = 1006;
     const NO_RECORD_FOUND = 1007;
 
+
+    /** business status */
+    const BUSINESS_STATUS_NORMAL = 1;
+    const BUSINESS_STATUS_DISABLED = 2;
+    const BUSINESS_STATUS_SOLD = 3;
+
     /**
      * Account info
      */
@@ -45,5 +51,6 @@ class Consts {
     const TOKEN_USER_NOT_FOUND = 2102;
 
     const PASSWORD_VERIFY_FAILED = 2103;
+
 
 }

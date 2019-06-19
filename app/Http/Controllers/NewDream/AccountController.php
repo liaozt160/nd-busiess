@@ -6,6 +6,7 @@ use App\Events\PayAttention;
 use App\Exceptions\BaseException;
 use App\Mail\CreateUser;
 use App\Models\Account;
+use App\Models\Business;
 use App\Models\BusinessAssign;
 use App\Models\BusinessAttention;
 use App\Traits\ApiTrait;
@@ -13,6 +14,7 @@ use App\Traits\Consts;
 use App\Traits\MsgTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class AccountController extends BaseController
@@ -125,11 +127,27 @@ class AccountController extends BaseController
         return $this->ok($list);
     }
 
+    /**
+     *  公司分配
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * User: Tank
+     * Date: 2019/6/19
+     * Time: 15:05
+     */
     public function businessAssignList(Request $request){
         $accountId = $request->post('account_id');
         $list = BusinessAssign::getAssignList($accountId);
         return $this->ok($list);
     }
+
+    public function businessAssignListTo(Request $request){
+        $accountId = $request->post('account_id');
+        $list = BusinessAssign::getAssignListTo($accountId);
+        $query = Business::getQueryAll();
+        return $this->ok(['business'=>$query,'assigned' => array_values(array_column($list->toArray(),'business_id'))]);
+    }
+
 
     public function businessAttentionList(Request $request){
         $accountId = $request->post('account_id');
@@ -154,6 +172,11 @@ class AccountController extends BaseController
     }
 
     public function test(){
+//        $log = Log::critical('aaaaaaaaa');
+//        var_dump($log);
+        throw new BaseException(1,'dddddddddd');
+        return $this->ok();
+        exit;
         $account = $this->guard()->user();
         $m =  BusinessAttention::find(1);
         event(new PayAttention($m));
