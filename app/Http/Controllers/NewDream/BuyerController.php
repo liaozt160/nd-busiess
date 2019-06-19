@@ -38,7 +38,7 @@ class BuyerController extends BaseController
     public function List(Request $request){
         $param = $request->post();
         $user = $this->guard()->user();
-        $accountId = $user->role=Consts::ACCOUNT_ROLE_USER?null:$user->id;
+        $accountId = $user->role=Consts::ACCOUNT_ROLE_ADMIN?null:$user->id;
         $list = Buyer::listItem($param,$accountId);
         return $this->ok($list);
     }
