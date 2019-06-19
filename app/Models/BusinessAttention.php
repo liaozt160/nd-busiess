@@ -44,7 +44,7 @@ class BusinessAttention extends Model
 
     public static function getListByBuyer($accountId){
         $query = self::from('attention_to_business as t')
-            ->select(['b.title','t.business_id','a.name','t.account_id','s.buyer','t.buyer_id','t.created_at']);
+            ->select(['b.title','b.listing','b.price','b.status','t.business_id','a.name','t.account_id','s.buyer','t.buyer_id','t.created_at']);
         $query->leftjoin('accounts as a','t.account_id','=','a.id')
             ->leftjoin('business as b','t.business_id','=','b.id')
             ->leftjoin('buyer as s','t.buyer_id','=','s.id');
