@@ -95,7 +95,8 @@ class AccountController extends BaseController
      * Time: 17:38
      */
     public function accountList(Request $request){
-        $list = Account::getList();
+        $q = $request->input('q',null);
+        $list = Account::getList($q);
         return $this->ok($list);
     }
 
@@ -122,6 +123,8 @@ class AccountController extends BaseController
 
     public function businessAssign(Request $request){
         $business = $request->post('business');
+        $business = (substr($business,1,strlen($business)-2));
+        $business = explode(',',$business);
         $accountId = $request->post('account_id');
         $list = BusinessAssign::addItems($accountId,$business);
         return $this->ok($list);

@@ -8,6 +8,7 @@ use App\Traits\Consts;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class Account extends Authenticatable implements JWTSubject
@@ -77,8 +78,11 @@ class Account extends Authenticatable implements JWTSubject
         return false;
     }
 
-    public static function getList(){
+    public static function getList($q=null){
         $query  = self::whereNull('deleted_at');
+        if($q){
+            $query->where(DB::raw("concat(email,phone,name)"),'like','%'.$q.'%');
+        }
         $list = $query->paginate(15);
         return $list;
     }

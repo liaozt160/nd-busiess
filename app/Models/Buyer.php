@@ -6,6 +6,7 @@ use App\Exceptions\BaseException;
 use App\Traits\Consts;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Buyer extends Model
 {
@@ -50,6 +51,22 @@ class Buyer extends Model
         if($accountId){
             $query->where('buyer_broker',$accountId);
         }
+        if(isset($param['q']) && isset($param['q'])){
+            $query->where(DB::raw("concat(email,phone,buyer)"),'like','%'.$param['q'].'%');
+        }
+
+        if(isset($param['funds_available_from']) && $param['funds_available_from']){
+            $query->where('funds_available', '>=', $param['funds_available_from']);
+        }
+
+        if(isset($param['funds_available_to']) && $param['funds_available_to']){
+            $query->where('funds_available' , '<=', $param['funds_available_to']);
+        }
+
+        if(isset($param['funds_verified']) && $param['funds_verified']){
+            $query->where('funds_verified' ,$param['funds_verified']);
+        }
+
         $list = $query->paginate(15);
         return $list;
     }
