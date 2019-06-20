@@ -139,13 +139,13 @@ class AccountController extends BaseController
      * Time: 15:05
      */
     public function businessAssignList(Request $request){
-        $accountId = $request->post('account_id');
+        $accountId = $request->input('id');
         $list = BusinessAssign::getAssignList($accountId);
         return $this->ok($list);
     }
 
     public function businessAssignListTo(Request $request){
-        $accountId = $request->post('account_id');
+        $accountId = $request->input('id');
         $list = BusinessAssign::getAssignListTo($accountId);
         $query = Business::getQueryAll();
         return $this->ok(['business'=>$query,'assigned' => array_values(array_column($list->toArray(),'business_id'))]);

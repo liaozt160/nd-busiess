@@ -6,6 +6,7 @@ use App\Exceptions\BaseException;
 use App\Traits\Consts;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Business extends Model
 {
