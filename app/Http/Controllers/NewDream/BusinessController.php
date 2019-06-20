@@ -6,6 +6,7 @@ use App\Exceptions\BaseException;
 use App\Models\Business;
 use App\Models\BusinessAttention;
 use App\Models\BusinessZh;
+use App\Models\Location;
 use App\Traits\Consts;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -50,10 +51,19 @@ class BusinessController extends BaseController
         $user = $this->guard()->user();
         Business::accessCheck($id,$user);
         $m = Business::find($id);
-        if($m){
-            return $this->ok($m);
+        if(!$m){
+            throw new BaseException(Consts::NO_RECORD_FOUND);
         }
-        throw new BaseException(Consts::NO_RECORD_FOUND);
+        $countries = Location::queryChild();
+        if($m->country){
+            $states = Location::queryChild($m->country);
+        }
+        if($m->states){
+            $cities =  Location::queryChild($m->states);
+        }
+        $locations = compact('countries','states','cities');
+        $m->locations = $locations;
+        return $this->ok($m);
     }
 
     /**
