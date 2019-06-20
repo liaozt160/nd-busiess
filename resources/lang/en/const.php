@@ -10,6 +10,7 @@ return [
     \App\Traits\Consts::ACCOUNT_SAVE_ERROR => 'account login failed',
     \App\Traits\Consts::ACCOUNT_LOGIN_FAILED => 'account login failed',
     \App\Traits\Consts::NO_RECORD_FOUND => 'no record found',
+    \App\Traits\Consts::RECORD_EXIST => 'record exist',
 
     \App\Traits\Consts::TOKEN_WRONG => 'token wrong',
     \App\Traits\Consts::TOKEN_NOT_PROVIDED => 'token not provided',

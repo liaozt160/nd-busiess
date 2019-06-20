@@ -24,6 +24,10 @@ class BusinessAttention extends Model
     }
 
     public static function addItemByArray($param){
+        $m = self::where($param)->first();
+        if($m){
+            throw new BaseException(Consts::RECORD_EXIST);
+        }
         $m = self::create($param);
         if($m){
             return $m;
