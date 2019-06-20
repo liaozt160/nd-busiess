@@ -26,6 +26,8 @@ Route::namespace('NewDream')->group(function () {
         Route::post('/profile/password', 'AccountController@profilePassword');
         Route::post('/profile/test', 'AccountController@test');
 
+        Route::post('/dashboard/index', 'AccountController@dashboard');
+
         Route::post('/location/query', 'LocationController@query');
 
         Route::middleware('access.level:three')->group(function (){

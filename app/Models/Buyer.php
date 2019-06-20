@@ -99,4 +99,16 @@ class Buyer extends Model
     public function account(){
         return $this->hasOne('App\Models\Account','id','buyer_broker');
     }
+
+    public static function buyerSum($accountId=null,$status=null){
+        $query = self::whereNull('deleted_at');
+        if($accountId){
+            $query->where('buyer_broker',$accountId);
+        }
+        if($status){
+            $query->where('status',$status);
+        }
+        return $query->count();
+    }
+
 }

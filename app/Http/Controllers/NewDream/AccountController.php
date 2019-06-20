@@ -9,6 +9,7 @@ use App\Models\Account;
 use App\Models\Business;
 use App\Models\BusinessAssign;
 use App\Models\BusinessAttention;
+use App\Models\Buyer;
 use App\Traits\ApiTrait;
 use App\Traits\Consts;
 use App\Traits\MsgTrait;
@@ -186,5 +187,47 @@ class AccountController extends BaseController
 //        $m = Mail::to('tank@ylbservices.com')->send(new CreateUser());
         return $this->ok();
     }
+
+
+    public function dashboard(){
+        $role = $this->guard()->user()->role;
+        if($role == Consts::ACCOUNT_ROLE_ADMIN){
+            return $this->ok($this->dashboardAdmin());
+        }
+        if($role == Consts::ACCOUNT_ROLE_BUYER_BROKER){
+            $id = $this->guard()->id();
+            return $this->ok($this->dashboardBuyer($id));
+        }
+    }
+
+    protected function dashboardAdmin(){
+        $business = Business::businessSum(null,Consts::BUSINESS_STATUS_NORMAL);
+        $businessSaled = Business::businessSum(null,Consts::BUSINESS_STATUS_SOLD);
+        $buyers = Buyer::buyerSum(null,Consts::BUSINESS_STATUS_NORMAL);
+        $attentions = BusinessAttention::getListSumByBusiness();
+        $buyerBroker = Account::getSumByBuyerBroker();
+        $businessBroker = Account::getSumByBusinessBroker();
+        return compact('business','businessSaled','buyers','attentions','buyerBroker','businessBroker');
+    }
+
+    protected function dashboardBusiness(){
+        $business = Business::businessSum(null,Consts::BUSINESS_STATUS_NORMAL);
+        $businessSaled = Business::businessSum(null,Consts::BUSINESS_STATUS_SOLD);
+        $buyers = Buyer::buyerSum(null,Consts::BUSINESS_STATUS_NORMAL);
+        $attentions = BusinessAttention::getListSumByBusiness();
+        $buyerBroker = Account::getSumByBuyerBroker();
+        $businessBroker = Account::getSumByBusinessBroker();
+        return compact('business','businessSaled','buyers','attentions','buyerBroker','businessBroker');
+    }
+
+    protected function dashboardBuyer($id){
+        $business = Business::businessSum(null,Consts::BUSINESS_STATUS_NORMAL);
+        $buyers = Buyer::buyerSum($id,Consts::BUSINESS_STATUS_NORMAL);
+        $attentions = BusinessAttention::getListSumByBusiness();
+        $buyerBroker = Account::getSumByBuyerBroker();
+        $businessBroker = Account::getSumByBusinessBroker();
+        return compact('business','businessSaled','buyers','attentions','buyerBroker','businessBroker');
+    }
+
 
 }

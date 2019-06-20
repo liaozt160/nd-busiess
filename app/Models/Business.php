@@ -117,9 +117,6 @@ class Business extends Model
             ,'b.country','b.states','b.city','b.address','b.real_estate','b.building_sf', 'b.status'];
         $query = self::from('business as b')->select($columns)->whereNull('b.deleted_at')->where('b.id',$businessId);
         $m = $query->first();
-        if($m){
-            $m->setLocation();
-        }
         return $m;
     }
 
@@ -132,9 +129,6 @@ class Business extends Model
         $query->join('business as b', 'a.business_id', '=', 'b.id')
             ->where('a.account_id', $accountId)->where('a.business_id', $businessId);
         $m = $query->first();
-        if($m){
-            $m->setLocation();
-        }
         return $m;
     }
 
@@ -161,14 +155,26 @@ class Business extends Model
     }
 
     public function setLocation($lang = 'en'){
-        $column = $lang == 'en'?'MergerNameEn':'MergerName';
-        $columnName = $lang == 'en'?'NameEn':'Name';
-
+        $column = $lang == 'en'?'MergerNameEn as merger':'MergerName as merger';
+        $columnName = $lang == 'en'?'NameEn as name':'Name as name';
         $code = $this->country ? $this->country:null;
         $code = $this->states ? $this->states:$code;
         $code = $this->city ? $this->city:$code;
-        $location = Location::select(DB::raw('concat('.$column.',",",'.$columnName.') as location'))->where('code',$code)->first();
-        $this->location = $location?$location->location:'';
+        $location = Location::select([$column,$columnName])->where('code',$code)->first();
+        $this->location = $location?implode(',',$location->toArray()):'';
     }
+
+
+    public static function businessSum($accountId=null,$status=null){
+        $query = self::whereNull('deleted_at');
+        if($accountId){
+            $query->where('business_broker',$accountId);
+        }
+        if($status){
+            $query->where('status',$status);
+        }
+        return $query->count();
+    }
+
 
 }

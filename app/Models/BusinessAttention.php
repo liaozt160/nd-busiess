@@ -105,4 +105,33 @@ class BusinessAttention extends Model
         return $this->hasOne('App\Models\Business','id','business_id');
     }
 
+
+    /**  卖家关注汇总
+     * User: Tank
+     * Date: 2019/6/20
+     * Time: 19:14
+     */
+    public static function getListSumByBusiness($accountId=null){
+        $query = self::from('attention_to_business as a')
+            ->join('business as b','b.id','=','a.business_id')
+            ->whereNull('a.buyer_deleted_at')
+            ->whereNull('a.business_deleted_at');
+        if($accountId){
+            $query->where('b.business_broker',$accountId);
+        }
+        return $query->count();
+    }
+
+    public static function getListSumByBuyer($accountId=null){
+        $query = self::from('attention_to_business')
+            ->whereNull('buyer_deleted_at')
+            ->whereNull('business_deleted_at');
+        if($accountId){
+            $query->where('account_id',$accountId);
+        }
+        return $query->count();
+    }
+
+
+
 }

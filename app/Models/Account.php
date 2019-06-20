@@ -143,6 +143,16 @@ class Account extends Authenticatable implements JWTSubject
         throw new BaseException(Consts::SAVE_RECORD_FAILED);
     }
 
+    public static function getSumByBuyerBroker(){
+        $count = self::whereNull('deleted_at')->where('role',Consts::ACCOUNT_ROLE_BUYER_BROKER)->count();
+        return $count;
+    }
+
+    public static function getSumByBusinessBroker(){
+        $count = self::whereNull('deleted_at')->where('role',Consts::ACCOUNT_ROLE_BUSINESS_BROKER)->count();
+        return $count;
+    }
+
 
 }
 
