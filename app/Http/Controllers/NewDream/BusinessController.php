@@ -54,15 +54,15 @@ class BusinessController extends BaseController
         if(!$m){
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
-        $countries = Location::queryChild();
-        if($m->country){
-            $states = Location::queryChild($m->country);
-        }
-        if($m->states){
-            $cities =  Location::queryChild($m->states);
-        }
-        $locations = compact('countries','states','cities');
-        $m->locations = $locations;
+//        $countries = Location::queryChild();
+//        if($m->country){
+//            $states = Location::queryChild($m->country);
+//        }
+//        if($m->states){
+//            $cities =  Location::queryChild($m->states);
+//        }
+//        $locations = compact('countries','states','cities');
+//        $m->locations = $locations;
         return $this->ok($m);
     }
 

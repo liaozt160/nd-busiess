@@ -117,6 +117,9 @@ class Business extends Model
             ,'b.country','b.states','b.city','b.address','b.real_estate','b.building_sf', 'b.status'];
         $query = self::from('business as b')->select($columns)->whereNull('b.deleted_at')->where('b.id',$businessId);
         $m = $query->first();
+        if($m){
+            $m->setLocation();
+        }
         return $m;
     }
 
@@ -129,6 +132,9 @@ class Business extends Model
         $query->join('business as b', 'a.business_id', '=', 'b.id')
             ->where('a.account_id', $accountId)->where('a.business_id', $businessId);
         $m = $query->first();
+        if($m){
+            $m->setLocation();
+        }
         return $m;
     }
 
