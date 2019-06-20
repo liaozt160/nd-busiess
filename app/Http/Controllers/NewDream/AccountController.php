@@ -122,7 +122,7 @@ class AccountController extends BaseController
     }
 
     public function businessAssign(Request $request){
-        $business = $request->post('business');
+        $business = $request->post('assigned');
         $business = (substr($business,1,strlen($business)-2));
         $business = explode(',',$business);
         $accountId = $request->post('account_id');
