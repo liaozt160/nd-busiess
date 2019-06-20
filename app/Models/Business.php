@@ -62,11 +62,11 @@ class Business extends Model
         }
 
         if(isset($param['price_from']) && $param['price_from']){
-            $query->where('price_from', '>=', $param['price_from']);
+            $query->where('price', '>=', $param['price']);
         }
 
         if(isset($param['price_to']) && $param['price_to']){
-            $query->where('price_to' , '<=', $param['price_to']);
+            $query->where('price' , '<=', $param['price']);
         }
 
         if(isset($param['status']) && $param['status']){
