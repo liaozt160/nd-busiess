@@ -66,7 +66,7 @@ class Buyer extends Model
         if(isset($param['funds_verified']) && $param['funds_verified']){
             $query->where('funds_verified' ,$param['funds_verified']);
         }
-
+        $list = $query->with('account:id,name,email,phone,role')->paginate(15);
         $list = $query->paginate(15);
         return $list;
     }
@@ -94,5 +94,9 @@ class Buyer extends Model
             return true;
         }
         throw new BaseException(Consts::ACCOUNT_ACCESS_DENY);
+    }
+
+    public function account(){
+        return $this->hasOne('App\Models\Account','id','buyer_broker');
     }
 }

@@ -52,6 +52,7 @@ class Business extends Model
 
     public static function listItem($param, $accountId = null)
     {
+//        DB::enableQueryLog();
         $query = self::whereNull('deleted_at');
         if ($accountId) {
             $query->where('business_broker', $accountId);
@@ -72,7 +73,8 @@ class Business extends Model
         if(isset($param['status']) && $param['status']){
             $query->where('status' ,$param['status']);
         }
-        $list = $query->paginate(15);
+        $list = $query->with('account:id,name,email,phone,role')->paginate(15);
+//        var_dump(DB::getQueryLog());
         return $list;
     }
 
