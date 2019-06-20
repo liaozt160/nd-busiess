@@ -38,7 +38,7 @@ class BusinessController extends BaseController
     }
 
     public function List(Request $request){
-        $param = $request->post();
+        $param = $request->input();
         $user = $this->guard()->user();
         $accountId = $user->role==Consts::ACCOUNT_ROLE_ADMIN?null:$user->id;
         $list = Business::listItem($param,$accountId);

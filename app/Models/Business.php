@@ -55,6 +55,22 @@ class Business extends Model
         if ($accountId) {
             $query->where('business_broker', $accountId);
         }
+
+        if(isset($param['q']) && isset($param['q'])){
+            $query->where(DB::raw("concat(company,title)"),'like','%'.$param['q'].'%');
+        }
+
+        if(isset($param['price_from']) && $param['price_from']){
+            $query->where('price_from', '>=', $param['price_from']);
+        }
+
+        if(isset($param['price_to']) && $param['price_to']){
+            $query->where('price_to' , '<=', $param['price_to']);
+        }
+
+        if(isset($param['status']) && $param['status']){
+            $query->where('status' ,$param['status']);
+        }
         $list = $query->paginate(15);
         return $list;
     }
