@@ -9,7 +9,8 @@ class LocationController extends  BaseController
 {
     public function query(Request $request){
         $code = $request->input('code','0');
-        $list = Location::queryChild($code);
+        $lang = $request->input('language','en');
+        $list = Location::queryChild($code,$lang);
         return $this->ok($list);
     }
 
