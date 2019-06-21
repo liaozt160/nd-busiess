@@ -198,6 +198,10 @@ class AccountController extends BaseController
             $id = $this->guard()->id();
             return $this->ok($this->dashboardBuyer($id));
         }
+        if($role == Consts::ACCOUNT_ROLE_BUSINESS_BROKER){
+            $id = $this->guard()->id();
+            return $this->ok($this->dashboardBusiness($id));
+        }
     }
 
     protected function dashboardAdmin(){
@@ -210,23 +214,17 @@ class AccountController extends BaseController
         return compact('business','businessSaled','buyers','attentions','buyerBroker','businessBroker');
     }
 
-    protected function dashboardBusiness(){
-        $business = Business::businessSum(null,Consts::BUSINESS_STATUS_NORMAL);
-        $businessSaled = Business::businessSum(null,Consts::BUSINESS_STATUS_SOLD);
-        $buyers = Buyer::buyerSum(null,Consts::BUSINESS_STATUS_NORMAL);
+    protected function dashboardBusiness($accountId){
+        $business = Business::businessSum($accountId,Consts::BUSINESS_STATUS_NORMAL);
+        $businessSaled = Business::businessSum($accountId,Consts::BUSINESS_STATUS_SOLD);
         $attentions = BusinessAttention::getListSumByBusiness();
-        $buyerBroker = Account::getSumByBuyerBroker();
-        $businessBroker = Account::getSumByBusinessBroker();
-        return compact('business','businessSaled','buyers','attentions','buyerBroker','businessBroker');
+        return compact('business','businessSaled','attentions');
     }
 
     protected function dashboardBuyer($id){
-        $business = Business::businessSum(null,Consts::BUSINESS_STATUS_NORMAL);
         $buyers = Buyer::buyerSum($id,Consts::BUSINESS_STATUS_NORMAL);
-        $attentions = BusinessAttention::getListSumByBusiness();
-        $buyerBroker = Account::getSumByBuyerBroker();
-        $businessBroker = Account::getSumByBusinessBroker();
-        return compact('business','businessSaled','buyers','attentions','buyerBroker','businessBroker');
+        $attentions = BusinessAttention::getListSumByBusiness($id);
+        return compact('buyers','attentions');
     }
 
 

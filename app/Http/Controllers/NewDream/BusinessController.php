@@ -82,6 +82,7 @@ class BusinessController extends BaseController
      */
     public function UpdateZh(Request $request){
         $param = $request->except('id');
+        $param['business_broker'] = $this->guard()->id();
         $id = $request->input('id',null);
         $user = $this->guard()->user();
         Business::accessCheck($id,$user);
