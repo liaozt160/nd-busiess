@@ -14,6 +14,7 @@ class BusinessChinese extends Migration
     public function up()
     {
         Schema::create('business_zh', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->bigInteger('business_id');
             $table->bigInteger('business_broker')->nullable()->comment('买方中介方');
             $table->string('company', 200)->nullable()->comment('company name');
