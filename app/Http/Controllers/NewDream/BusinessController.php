@@ -15,15 +15,19 @@ class BusinessController extends BaseController
 {
 
     public function Add(Request $request){
-        $param = $request->post();
+        $param = $request->except('lang');
         $param['business_broker'] = $this->guard()->id();
-        $m = Business::addItem($param);
+        $lang =  $request->only('lang');
+        if($lang == 'en'){
+            $m = Business::addItem($param);
+        }else{
+            $m = BusinessZh::addItem($param);
+        }
         return $this->ok($m);
     }
 
     public function Update(Request $request){
         $param = $request->except('id');
-        unset($param['account']);
         $id = $request->input('id');
         $user = $this->guard()->user();
         Business::accessCheck($id,$user);
@@ -78,7 +82,16 @@ class BusinessController extends BaseController
      */
     public function UpdateZh(Request $request){
         $param = $request->except('id');
-        $id = $request->input('id');
+        $id = $request->input('id',null);
+        $user = $this->guard()->user();
+        Business::accessCheck($id,$user);
+        $m = BusinessZh::updateItem($id,$param);
+        return $this->ok($m);
+    }
+
+    public function addZh(Request $request){
+        $param = $request->except('id');
+        $id = $request->input('id',null);
         $user = $this->guard()->user();
         Business::accessCheck($id,$user);
         $m = BusinessZh::updateItem($id,$param);

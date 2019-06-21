@@ -24,4 +24,20 @@ class BusinessZh extends Model
         throw new BaseException(Consts::SAVE_RECORD_FAILED);
     }
 
+    public static function addItem($param)
+    {
+        $business = Business::addItem([]);
+        if(!$business){
+            throw new BaseException(Consts::SAVE_RECORD_FAILED);
+        }
+        $m = new self();
+        $m->business_id = $business->id;
+        $m->fill($param);
+        if ($m->save()) {
+            $m->id = $m->business_id;
+            return $m;
+        }
+        throw new BaseException(Consts::SAVE_RECORD_FAILED);
+    }
+
 }
