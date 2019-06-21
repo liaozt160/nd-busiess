@@ -73,7 +73,7 @@ class Business extends Model
         if(isset($param['status']) && $param['status']){
             $query->where('status' ,$param['status']);
         }
-        $list = $query->with('account:id,name,email,phone,role')->paginate(15);
+        $list = $query->paginate(15);
 //        var_dump(DB::getQueryLog());
         return $list;
     }

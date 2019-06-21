@@ -22,7 +22,8 @@ class BusinessController extends BaseController
     }
 
     public function Update(Request $request){
-        $param = $request->except(['id','account']);
+        $param = $request->except('id');
+        unset($param['account']);
         $id = $request->input('id');
         $user = $this->guard()->user();
         Business::accessCheck($id,$user);
