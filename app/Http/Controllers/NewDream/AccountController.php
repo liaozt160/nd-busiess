@@ -217,14 +217,14 @@ class AccountController extends BaseController
     protected function dashboardBusiness($accountId){
         $business = Business::businessSum($accountId,Consts::BUSINESS_STATUS_NORMAL);
         $businessSaled = Business::businessSum($accountId,Consts::BUSINESS_STATUS_SOLD);
-        $attentions = BusinessAttention::getListSumByBusiness();
+        $attentions = BusinessAttention::getListSumByBusiness($accountId);
         return compact('business','businessSaled','attentions');
     }
 
     protected function dashboardBuyer($id){
         $business = Business::businessSum(null,Consts::BUSINESS_STATUS_NORMAL);
         $buyers = Buyer::buyerSum($id,Consts::BUSINESS_STATUS_NORMAL);
-        $attentions = BusinessAttention::getListSumByBusiness($id);
+        $attentions = BusinessAttention::getListSumByBuyer($id);
         return compact('buyers','attentions','business');
     }
 
