@@ -222,9 +222,10 @@ class AccountController extends BaseController
     }
 
     protected function dashboardBuyer($id){
+        $business = Business::businessSum(null,Consts::BUSINESS_STATUS_NORMAL);
         $buyers = Buyer::buyerSum($id,Consts::BUSINESS_STATUS_NORMAL);
         $attentions = BusinessAttention::getListSumByBusiness($id);
-        return compact('buyers','attentions');
+        return compact('buyers','attentions','business');
     }
 
 
