@@ -115,7 +115,7 @@ class BusinessController extends BaseController
         if($m){
             return $this->ok($m);
         }
-        throw new BaseException(Consts::NO_RECORD_FOUND);
+        return $this->ok(new BusinessZh());
     }
 
     /**
