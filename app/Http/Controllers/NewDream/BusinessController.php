@@ -17,7 +17,7 @@ class BusinessController extends BaseController
     public function Add(Request $request){
         $param = $request->except('lang');
         $param['business_broker'] = $this->guard()->id();
-        $lang =  $request->only('lang','en');
+        $lang =  $request->post('lang','en');
         if($lang == 'zh'){
             $m = BusinessZh::addItem($param);
         }else{
