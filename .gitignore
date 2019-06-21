@@ -10,6 +10,7 @@
 /public/images/tutors
 /public/wap
 /public/web
+/web
 /storage/*.key
 /vendor
 /.idea
