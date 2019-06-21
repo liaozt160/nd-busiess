@@ -66,7 +66,7 @@ class Buyer extends Model
         if(isset($param['funds_verified']) && $param['funds_verified']){
             $query->where('funds_verified' ,$param['funds_verified']);
         }
-        $list = $query->with('account:id,name,email,phone,role')->paginate(15);
+//        $list = $query->with('account:id,name,email,phone,role')->paginate(15);
         $list = $query->paginate(15);
         return $list;
     }
