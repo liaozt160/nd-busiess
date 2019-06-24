@@ -79,4 +79,12 @@ class BuyerController extends BaseController
         return $this->ok($list);
     }
 
+    public function servicePay(Request $request){
+        $servicesPay = $request->post('services_pay');
+        $id = $request->post('id');
+        $m  = Buyer::setServicePay($id,$servicesPay);
+        return $this->ok();
+
+    }
+
 }

@@ -204,6 +204,13 @@ class AccountController extends BaseController
         }
     }
 
+    /**
+     * 管理员中心
+     * @return array
+     * User: Tank
+     * Date: 2019/6/24
+     * Time: 14:10
+     */
     protected function dashboardAdmin(){
         $business = Business::businessSum(null,Consts::BUSINESS_STATUS_NORMAL);
         $businessSaled = Business::businessSum(null,Consts::BUSINESS_STATUS_SOLD);
@@ -214,6 +221,14 @@ class AccountController extends BaseController
         return compact('business','businessSaled','buyers','attentions','buyerBroker','businessBroker');
     }
 
+    /**
+     * 买家中心
+     * @param $accountId
+     * @return array
+     * User: Tank
+     * Date: 2019/6/24
+     * Time: 14:09
+     */
     protected function dashboardBusiness($accountId){
         $business = Business::businessSum($accountId,Consts::BUSINESS_STATUS_NORMAL);
         $businessSaled = Business::businessSum($accountId,Consts::BUSINESS_STATUS_SOLD);
@@ -221,6 +236,14 @@ class AccountController extends BaseController
         return compact('business','businessSaled','attentions');
     }
 
+    /**
+     * 买家中心
+     * @param $id
+     * @return array
+     * User: Tank
+     * Date: 2019/6/24
+     * Time: 14:09
+     */
     protected function dashboardBuyer($id){
         $business = Business::businessSum(null,Consts::BUSINESS_STATUS_NORMAL);
         $buyers = Buyer::buyerSum($id,Consts::BUSINESS_STATUS_NORMAL);

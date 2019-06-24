@@ -42,6 +42,10 @@ Route::namespace('NewDream')->group(function () {
             Route::post('account/assign', 'AccountController@businessAssign');
             Route::post('account/assign/list', 'AccountController@businessAssignListTo');
             Route::post('account/attention/list', 'AccountController@businessAttentionList');
+
+            Route::post('account/buyer/services/pay', 'BuyerController@servicePay');
+            Route::post('account/buyer/assign/get', 'AccountController@businessAttentionList');
+            Route::post('account/buyer/assign/update', 'AccountController@businessAttentionList');
 //            Route::post('business/assign', 'AccountController@accountStatus');
         });
 

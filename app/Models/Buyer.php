@@ -111,4 +111,16 @@ class Buyer extends Model
         return $query->count();
     }
 
+    public static function setServicePay($id,$status){
+        $m = self::find($id);
+        if(!$m){
+            throw new BaseException(Consts::NO_RECORD_FOUND);
+        }
+        $m->services_pay = $status;
+        if($m->save()){
+            return $m;
+        }
+        throw new BaseException(Consts::SAVE_RECORD_FAILED);
+    }
+
 }
