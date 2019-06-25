@@ -46,7 +46,8 @@ Route::namespace('NewDream')->group(function () {
             Route::post('account/buyer/services/pay', 'BuyerController@servicePay');
             Route::post('account/buyer/assign/get', 'AccountController@businessAttentionList');
             Route::post('account/buyer/assign/update', 'AccountController@businessAttentionList');
-//            Route::post('business/assign', 'AccountController@accountStatus');
+
+
         });
 
         Route::middleware(['access.business'])->group(function (){
@@ -82,6 +83,11 @@ Route::namespace('NewDream')->group(function () {
             Route::post('business/buyer/list/level/two', 'BusinessController@BuyerListLevelTwo');
             Route::post('business/buyer/show/level/one', 'BusinessController@showLevelOne');
             Route::post('business/buyer/show/level/two', 'BusinessController@showLevelTwo');
+
+            Route::post('order/list', 'OrderController@list');
+            Route::post('order/add', 'OrderController@Add');
+            Route::post('order/update', 'OrderController@Update');
+            Route::post('order/del', 'OrderController@Delete');
         });
 
     });
