@@ -103,7 +103,7 @@ class Order extends Model
             $query->where('o.buyer_id',$buyerId);
         }
         if($accountId){
-            $query->where('o.account_id',$buyerId);
+            $query->where('o.account_id',$accountId);
         }
         $list = $query->paginate(15);
         return $list;
