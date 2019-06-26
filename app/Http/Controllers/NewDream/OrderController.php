@@ -41,7 +41,7 @@ class OrderController extends BaseController
 
     public function List(Request $request){
         $param = $request->input();
-        $buyerId = $request->input('buyer_id');
+        $buyerId = $request->input('buyer_id',null);
         $user = $this->guard()->user();
         $accountId = $user->role==Consts::ACCOUNT_ROLE_ADMIN?null:$user->id;
         $list = Order::listItem($param,$buyerId,$accountId);
