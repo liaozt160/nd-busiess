@@ -13,7 +13,7 @@ class Order extends Model
 {
     protected $guarded = ['id'];
     protected $fillable = [
-        'account_id', 'order_no', 'paid', 'pay_amount', 'status', 'remark','buyer_id'
+        'order_no', 'paid', 'pay_amount', 'status', 'remark','buyer_id'
     ];
     protected $table = 'buyer_order';
 
@@ -99,7 +99,7 @@ class Order extends Model
             ->leftjoin('accounts as b','o.account_id','=','b.id')
             ->leftjoin('buyer as c','o.buyer_id','=','c.id')
             ->whereNull('o.deleted_at')
-            ->where('buyer_id',$buyerId);
+            ->where('o.buyer_id',$buyerId);
         if($accountId){
             $query->where('o.account_id',$accountId);
         }

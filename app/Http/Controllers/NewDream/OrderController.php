@@ -13,6 +13,9 @@ class OrderController extends BaseController
 
     public function Add(Request $request){
         $param = $request->post();
+        if(!(isset($param['buyer_id']) && $param['buyer_id'])){
+            throw new BaseException(Consts::DATA_VALIDATE_WRONG);
+        }
         $accountId = $this->guard()->id();
         $m = Order::addItem($param,$accountId);
         return $this->ok($m);
