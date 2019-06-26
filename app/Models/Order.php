@@ -92,7 +92,7 @@ class Order extends Model
 
     public static function listItem($param,$buyerId, $accountId = null)
     {
-        $column = ['o.id','o.account_id','o.buyer_id','c.name as buyer_name','o.audit_id','a.name as audit_name','o.order_no','o.paid','o.pay_amount','o.remark','o.created_at','o.audit_at','o.status'];
+        $column = ['o.id','o.account_id','o.buyer_id','c.buyer as buyer_name','o.audit_id','a.name as audit_name','o.order_no','o.paid','o.pay_amount','o.remark','o.created_at','o.audit_at','o.status'];
         $query = self::from('buyer_order as o')
             ->select($column)
             ->leftjoin('accounts as a','o.audit_id','=','a.id')
