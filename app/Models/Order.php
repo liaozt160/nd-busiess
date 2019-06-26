@@ -99,10 +99,10 @@ class Order extends Model
             ->leftjoin('accounts as b','o.account_id','=','b.id')
             ->leftjoin('buyer as c','o.buyer_id','=','c.id')
             ->whereNull('o.deleted_at');
-        if($accountId){
-            $query->where('o.buyer_id',$buyerId);
-        }else{
+        if($accountId === null){
             $query->where('o.account_id',$accountId);
+        }else{
+            $query->where('o.buyer_id',$buyerId);
         }
         $list = $query->paginate(15);
         return $list;
