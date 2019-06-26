@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Exceptions\BaseException;
 use App\Traits\Consts;
 use Carbon\Carbon;
+use function foo\func;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -72,8 +73,6 @@ class Order extends Model
             DB::rollBack();
             throw new BaseException(Consts::SAVE_RECORD_FAILED);
         }
-
-
         return $m;
     }
 
@@ -93,11 +92,12 @@ class Order extends Model
 
     public static function listItem($param, $accountId = null)
     {
-        $column = ['o.account_id','b.name','o.order_no','o.paid','o.pay_amount','o.remark','o.created_at','o.audit_at','o.status'];
+        $column = ['o.id','o.account_id','o.buyer_id','c.name as buyer_name','o.audit_id','a.name as audit_name','o.order_no','o.paid','o.pay_amount','o.remark','o.created_at','o.audit_at','o.status'];
         $query = self::from('buyer_order as o')
             ->select($column)
             ->leftjoin('accounts as a','o.audit_id','=','a.id')
             ->leftjoin('accounts as b','o.account_id','=','b.id')
+            ->leftjoin('accounts as c','o.buyer_id','=','c.id')
             ->whereNull('o.deleted_at');
         if($accountId){
             $query->where('o.account_id',$accountId);
@@ -123,4 +123,47 @@ class Order extends Model
     public function orderDetail(){
         return $this->hasMany('App\Models\OrderDetail','order_id','id');
     }
+
+    public function buyer(){
+        return $this->hasOne('App\Models\Buyer','id','buyer_id');
+    }
+
+    public function audit(){
+        return $this->hasOne('App\Models\Account','id','audit_id');
+    }
+
+    public static function getItemByBuyerId($id){
+        $query = self::where('id',$id);
+        $query->with('buyer:id,buyer','audit:id,name');
+//        $query->with(['orderDetail' =>function($query){
+//            $query->select(['id','order_id','business_id']);
+//        }]);
+        $m = $query->first();
+        if(!$m){
+            throw new BaseException(Consts::NO_RECORD_FOUND);
+        }
+        $details = OrderDetail::getBusiness($m->id)->toArray();
+        if($details){
+            $details= array_column($details,'business_id');
+        }
+        $m->order_detail = $details;
+        return $m;
+    }
+
+    public static function auditItem($id,$auditId){
+        $m = self::find($id);
+        if(!$m){
+            throw new BaseException(Consts::NO_RECORD_FOUND);
+        }
+        if($m->audit_id){
+            throw new BaseException(Consts::RECORD_EXIST);
+        }
+        $m->audit_id = $auditId;
+        $m->audit_at = new Carbon();
+        if($m->save()){
+            return $m;
+        }
+        throw new BaseException(Consts::SAVE_RECORD_FAILED);
+    }
+
 }

@@ -72,6 +72,19 @@ class BusinessController extends BaseController
     }
 
     /**
+     *  query business
+     * @param Request $request
+     * User: Tank
+     * Date: 2019/6/26
+     * Time: 9:41
+     */
+    public function query(Request $request){
+        $q = $request->input('q',null);
+        $list = Business::getQueryAll($q);
+        return $this->ok($list);
+    }
+
+    /**
      *  update zh
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse

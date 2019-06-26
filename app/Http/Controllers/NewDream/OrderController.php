@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\NewDream;
 
+use App\Exceptions\BaseException;
 use App\Models\Order;
 use App\Traits\Consts;
 use Illuminate\Http\Request;
@@ -43,4 +44,19 @@ class OrderController extends BaseController
         return $this->ok($list);
     }
 
+    public function Show(Request $request){
+        $id = $request->input('id');
+        if(!$id){
+            throw new BaseException(Consts::DATA_VALIDATE_WRONG);
+        }
+        $m = Order::getItemByBuyerId($id);
+        return $this->ok($m);
+    }
+
+    public function Audit(Request $request){
+        $id = $request->input('id');
+        $accountId = $this->guard()->id();
+        $m = Order::auditItem($id,$accountId);
+        return $this->ok();
+    }
 }

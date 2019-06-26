@@ -29,6 +29,7 @@ Route::namespace('NewDream')->group(function () {
         Route::post('/dashboard/index', 'AccountController@dashboard');
 
         Route::post('/location/query', 'LocationController@query');
+        Route::post('/business/query', 'BusinessController@query');
 
         Route::middleware('access.level:three')->group(function (){
 //            Route::post('account/add', 'AccountController@accountAdd');
@@ -47,7 +48,7 @@ Route::namespace('NewDream')->group(function () {
             Route::post('account/buyer/assign/get', 'AccountController@businessAttentionList');
             Route::post('account/buyer/assign/update', 'AccountController@businessAttentionList');
 
-
+            Route::post('order/audit', 'OrderController@Audit');
         });
 
         Route::middleware(['access.business'])->group(function (){
@@ -88,6 +89,7 @@ Route::namespace('NewDream')->group(function () {
             Route::post('order/add', 'OrderController@Add');
             Route::post('order/update', 'OrderController@Update');
             Route::post('order/del', 'OrderController@Delete');
+            Route::post('order/show', 'OrderController@Show');
         });
 
     });
