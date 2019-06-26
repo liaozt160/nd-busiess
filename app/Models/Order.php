@@ -90,7 +90,7 @@ class Order extends Model
         throw new BaseException(Consts::SAVE_RECORD_FAILED);
     }
 
-    public static function listItem($param, $accountId = null)
+    public static function listItem($param,$buyerId, $accountId = null)
     {
         $column = ['o.id','o.account_id','o.buyer_id','c.name as buyer_name','o.audit_id','a.name as audit_name','o.order_no','o.paid','o.pay_amount','o.remark','o.created_at','o.audit_at','o.status'];
         $query = self::from('buyer_order as o')
@@ -98,7 +98,8 @@ class Order extends Model
             ->leftjoin('accounts as a','o.audit_id','=','a.id')
             ->leftjoin('accounts as b','o.account_id','=','b.id')
             ->leftjoin('accounts as c','o.buyer_id','=','c.id')
-            ->whereNull('o.deleted_at');
+            ->whereNull('o.deleted_at')
+            ->where('buyerId',$buyerId);
         if($accountId){
             $query->where('o.account_id',$accountId);
         }
