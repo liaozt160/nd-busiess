@@ -18,5 +18,7 @@ return [
     \App\Traits\Consts::ACCOUNT_ACCESS_DENY => 'account access deny',
     \App\Traits\Consts::ACCOUNT_EXIST => 'account exist',
     \App\Traits\Consts::PASSWORD_VERIFY_FAILED => 'password verify failed',
+    \App\Traits\Consts::STATUS_OUT_OF_RANGE => 'status out of range',
+
 
 ];

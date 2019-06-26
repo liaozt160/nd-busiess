@@ -63,4 +63,24 @@ class OrderController extends BaseController
         $m = Order::auditItem($id,$accountId);
         return $this->ok();
     }
+
+    public function Status(Request $request){
+        $id = $request->input('id');
+        $status = $request->input('status');
+        if(!($id || $status)){
+            throw new BaseException(Consts::DATA_VALIDATE_WRONG);
+        }
+        $m = Order::updateStatus($id,$status);
+        return $this->ok();
+    }
+
+    public function View(Request $request){
+        $id = $request->input('id');
+        if(!$id){
+            throw new BaseException(Consts::DATA_VALIDATE_WRONG);
+        }
+        $m = Order::getDetailList($id);
+        return $this->ok($m);
+    }
+
 }

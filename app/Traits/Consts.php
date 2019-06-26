@@ -29,6 +29,9 @@ class Consts {
     const BUSINESS_STATUS_DISABLED = 2;
     const BUSINESS_STATUS_SOLD = 3;
 
+    const ORDER_STATUS_READY = 0;
+    const ORDER_STATUS_PENDING = 1;
+    const ORDER_STATUS_AUDITED = 2;
     /**
      * Account info
      */
@@ -53,5 +56,6 @@ class Consts {
 
     const PASSWORD_VERIFY_FAILED = 2103;
 
+    const STATUS_OUT_OF_RANGE = 2014;
 
 }

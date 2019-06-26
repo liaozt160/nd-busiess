@@ -90,6 +90,8 @@ Route::namespace('NewDream')->group(function () {
             Route::post('order/update', 'OrderController@Update');
             Route::post('order/del', 'OrderController@Delete');
             Route::post('order/show', 'OrderController@Show');
+            Route::post('order/view', 'OrderController@View');
+            Route::post('order/status', 'OrderController@Status');
         });
 
     });

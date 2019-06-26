@@ -92,15 +92,16 @@ class Order extends Model
 
     public static function listItem($param,$buyerId, $accountId = null)
     {
-        $column = ['o.id','o.account_id','o.buyer_id','c.buyer as buyer_name','o.audit_id','a.name as audit_name','o.order_no','o.paid','o.pay_amount','o.remark','o.created_at','o.audit_at','o.status'];
+        $column = ['o.id','o.account_id','b.name as account_name','b.role as account_role','o.buyer_id','c.buyer as buyer_name','o.audit_id','a.name as audit_name','o.order_no','o.paid','o.pay_amount','o.remark','o.created_at','o.audit_at','o.status'];
         $query = self::from('buyer_order as o')
             ->select($column)
             ->leftjoin('accounts as a','o.audit_id','=','a.id')
             ->leftjoin('accounts as b','o.account_id','=','b.id')
             ->leftjoin('buyer as c','o.buyer_id','=','c.id')
-            ->whereNull('o.deleted_at')
-            ->where('o.buyer_id',$buyerId);
+            ->whereNull('o.deleted_at');
         if($accountId){
+            $query->where('o.buyer_id',$buyerId);
+        }else{
             $query->where('o.account_id',$accountId);
         }
         $list = $query->paginate(15);
@@ -143,7 +144,7 @@ class Order extends Model
         if(!$m){
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
-        $details = OrderDetail::getBusiness($m->id)->toArray();
+        $details = OrderDetail::getBusinessWithId($m->id)->toArray();
         if($details){
             $details= array_column($details,'business_id');
         }
@@ -161,10 +162,35 @@ class Order extends Model
         }
         $m->audit_id = $auditId;
         $m->audit_at = new Carbon();
+        $m->status = Consts::ORDER_STATUS_PENDING;
         if($m->save()){
             return $m;
         }
         throw new BaseException(Consts::SAVE_RECORD_FAILED);
+    }
+
+    public static function updateStatus($id,$status){
+        if(!($status == 0 || $status == 1)){
+            throw new BaseException(Consts::STATUS_OUT_OF_RANGE);
+        }
+        $m = self::find($id);
+        if(!$m){
+            throw new BaseException(Consts::NO_RECORD_FOUND);
+        }
+        $m->status = $status;
+        if(!$m->save()){
+            throw new BaseException(Consts::SAVE_RECORD_FAILED);
+        }
+        return $m;
+    }
+
+    public static function getDetailList($id){
+        $m = self::with('buyer:id,buyer','audit:id,name')->find($id);
+        if(!$m){
+            throw new BaseException(Consts::NO_RECORD_FOUND);
+        }
+        $m->details = OrderDetail::getBusinessLevelTwo($m->id);
+        return $m;
     }
 
 }
