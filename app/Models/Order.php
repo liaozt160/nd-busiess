@@ -97,7 +97,7 @@ class Order extends Model
             ->select($column)
             ->leftjoin('accounts as a','o.audit_id','=','a.id')
             ->leftjoin('accounts as b','o.account_id','=','b.id')
-            ->leftjoin('accounts as c','o.buyer_id','=','c.id')
+            ->leftjoin('buyer as c','o.buyer_id','=','c.id')
             ->whereNull('o.deleted_at')
             ->where('buyer_id',$buyerId);
         if($accountId){
