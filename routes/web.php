@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return redirect('/web/');
+    return redirect('/web/#');
 });
 
 Route::get('/info', function () {
@@ -22,4 +22,8 @@ Route::get('/info', function () {
 Route::get('/test', function () {
 //    $users = \App\users::all();
 //    dd($users);
+});
+
+Route::get('/vue', function () {
+    return view('vue');
 });
