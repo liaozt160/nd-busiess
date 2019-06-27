@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/web/');
 });
 
 Route::get('/info', function () {
@@ -20,6 +20,6 @@ Route::get('/info', function () {
 });
 
 Route::get('/test', function () {
-    $users = \App\users::all();
-    dd($users);
+//    $users = \App\users::all();
+//    dd($users);
 });
