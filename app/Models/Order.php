@@ -117,7 +117,7 @@ class Order extends Model
         if($user->role == Consts::ACCOUNT_ROLE_ADMIN){
             return true;
         }
-        if($user->id == $m->buyer_broker){
+        if($user->id == $m->account_id){
             return true;
         }
         throw new BaseException(Consts::ACCOUNT_ACCESS_DENY);

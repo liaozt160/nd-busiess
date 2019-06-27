@@ -80,6 +80,8 @@ class OrderController extends BaseController
         if(!$id){
             throw new BaseException(Consts::DATA_VALIDATE_WRONG);
         }
+        $user = $this->guard()->user();
+        Order::accessCheck($id,$user);
         $m = Order::getDetailList($id);
         return $this->ok($m);
     }

@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return redirect('/web/#');
+    return redirect();
 });
 
 Route::get('/info', function () {
