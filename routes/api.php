@@ -32,7 +32,7 @@ Route::namespace('NewDream')->group(function () {
         Route::post('/business/query', 'BusinessController@query');
 
         Route::middleware('access.level:three')->group(function (){
-//            Route::post('account/add', 'AccountController@accountAdd');
+//            Route::post('account/add', 'AccountController@accountAdd'); //remark
             Route::post('account/update', 'AccountController@accountUpdate');
             Route::post('account/del', 'AccountController@accountDelete');
             Route::post('account/list', 'AccountController@accountList');
