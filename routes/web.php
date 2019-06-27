@@ -11,8 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return redirect();
+Route::get('/', function (\Illuminate\Http\Request $request) {
+    return redirect($request->url().'/web');
 });
 
 Route::get('/info', function () {
