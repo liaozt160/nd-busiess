@@ -15,7 +15,7 @@ class OrderDetail extends Model
     }
 
     public static function getBusinessLevelTwo($orderId){
-        $columns = ['b.id', 'b.listing', 'b.title', 'b.price', 'b.employee_count','b.profitability'
+        $columns = ['b.id', 'b.listing', 'b.title','b.company', 'b.price', 'b.employee_count','b.profitability'
             ,'b.country','b.states','b.city','b.address','b.real_estate','b.building_sf','b.gross_income',
             'b.value_of_real_estate','b.net_income','b.lease','b.lease_term','b.ebitda','b.ff_e','b.inventory','b.commission','b.buyer_financing', 'b.status'];
         $query = self::select($columns)->from('buyer_order_detail as d')
