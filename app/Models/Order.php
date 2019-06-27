@@ -161,9 +161,6 @@ class Order extends Model
         if(!$m){
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
-        if($m->audit_id){
-            throw new BaseException(Consts::RECORD_EXIST);
-        }
         $m->audit_id = $auditId;
         $m->audit_at = new Carbon();
         $m->status = $status;
