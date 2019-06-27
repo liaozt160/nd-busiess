@@ -104,6 +104,8 @@ class Order extends Model
         }
         if($accountId){
             $query->where('o.account_id',$accountId);
+        }else{
+            $query->where('o.status','<>',0);
         }
         $list = $query->paginate(15);
         return $list;

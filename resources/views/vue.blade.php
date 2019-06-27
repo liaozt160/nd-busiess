@@ -8,7 +8,7 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-
+        <link href="/css/app.css" rel="stylesheet">
         <!-- Styles -->
         <style>
             html, body {
@@ -64,12 +64,11 @@
         </style>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
-            <div class="content">
-                <div class="title m-b-md">
-                    New Dream
-                </div>
-            </div>
+        <div id="app" class="flex-center position-ref full-height">
+            {{--<example-component></example-component>--}}
+            <login></login>
+            <footer></footer>
         </div>
     </body>
+    <script src="{{ asset('js/app.js') }}<?= '?v='.time()?>"></script>
 </html>
