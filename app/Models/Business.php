@@ -96,7 +96,7 @@ class Business extends Model
 
     public static function getListByBuyerLevelOne($param)
     {
-        $columns = ['id', 'listing', 'title', 'price', 'employee_count', 'status'];
+        $columns = ['id', 'listing', 'title','b.company', 'price', 'employee_count', 'status'];
         $query = self::select($columns)->whereNull('deleted_at');
         $list = $query->paginate(15);
         return $list;
@@ -104,7 +104,7 @@ class Business extends Model
 
     public static function getListByBuyerLevelTwo($param, $accountId)
     {
-        $columns = ['b.id', 'b.listing', 'b.title', 'b.price', 'b.employee_count', 'b.status'];
+        $columns = ['b.id', 'b.listing', 'b.title','b.company', 'b.price', 'b.employee_count', 'b.status'];
         $query = self::from('business_assign as a')->select($columns)->whereNull('b.deleted_at');
         $query->join('business as b', 'a.business_id', '=', 'b.id')->where('a.account_id', $accountId);
         $list = $query->paginate(15);
@@ -113,7 +113,7 @@ class Business extends Model
 
     public static function showLevelOne($businessId)
     {
-        $columns = ['b.id', 'b.listing', 'b.title', 'b.price', 'b.employee_count','b.profitability'
+        $columns = ['b.id', 'b.listing', 'b.title', 'b.price','b.company', 'b.employee_count','b.profitability'
             ,'b.country','b.states','b.city','b.address','b.real_estate','b.building_sf', 'b.status'];
         $query = self::from('business as b')->select($columns)->whereNull('b.deleted_at')->where('b.id',$businessId);
         $m = $query->first();
@@ -125,7 +125,7 @@ class Business extends Model
 
     public static function showLevelTwo($accountId, $businessId)
     {
-        $columns = ['b.id', 'b.listing', 'b.title', 'b.price', 'b.employee_count','b.profitability'
+        $columns = ['b.id', 'b.listing', 'b.title','b.company', 'b.price', 'b.employee_count','b.profitability'
             ,'b.country','b.states','b.city','b.address','b.real_estate','b.building_sf','b.gross_income',
             'b.value_of_real_estate','b.net_income','b.lease','b.lease_term','b.ebitda','b.ff_e','b.inventory','b.commission','b.buyer_financing', 'b.status'];
         $query = self::from('business_assign as a')->select($columns)->whereNull('b.deleted_at');
