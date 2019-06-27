@@ -153,7 +153,10 @@ class Order extends Model
         return $m;
     }
 
-    public static function auditItem($id,$auditId){
+    public static function auditItem($id,$status,$auditId){
+        if(!($status == 2 || $status == 3)){
+            throw new BaseException(Consts::STATUS_OUT_OF_RANGE);
+        }
         $m = self::find($id);
         if(!$m){
             throw new BaseException(Consts::NO_RECORD_FOUND);
@@ -163,7 +166,7 @@ class Order extends Model
         }
         $m->audit_id = $auditId;
         $m->audit_at = new Carbon();
-        $m->status = Consts::ORDER_STATUS_PENDING;
+        $m->status = $status;
         if($m->save()){
             return $m;
         }

@@ -59,8 +59,9 @@ class OrderController extends BaseController
 
     public function Audit(Request $request){
         $id = $request->input('id');
+        $status = $request->input('status');
         $accountId = $this->guard()->id();
-        $m = Order::auditItem($id,$accountId);
+        $m = Order::auditItem($id,$status,$accountId);
         return $this->ok();
     }
 
