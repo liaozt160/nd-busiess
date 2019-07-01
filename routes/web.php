@@ -12,14 +12,13 @@
 */
 
 Route::get('/', function (\Illuminate\Http\Request $request) {
-    echo $request->url();
-    var_dump($request->getScheme());
-    exit();
-    return redirect($request->getScheme().$request->url().'/web');
+    $schema = $request->server('HTTP_X_FORWARDED_PROTO')?'https':'http';
+    $url = $schema.'://'.$request->getHost().'/web';
+    return redirect($url);
 });
 
 Route::get('/info', function () {
-    echo phpinfo();
+//    echo phpinfo();
 });
 
 Route::get('/test', function () {

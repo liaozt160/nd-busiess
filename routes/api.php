@@ -30,6 +30,7 @@ Route::namespace('NewDream')->group(function () {
 
         Route::post('/location/query', 'LocationController@query');
         Route::post('/business/query', 'BusinessController@query');
+        Route::post('/business/attention/query', 'BusinessController@queryByAttention');
 
         Route::middleware('access.level:three')->group(function (){
 //            Route::post('account/add', 'AccountController@accountAdd'); //remark

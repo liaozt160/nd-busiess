@@ -172,6 +172,27 @@ class Business extends Model
         return $query->get();
     }
 
+    public static function getQueryByAttention($q=null,$accountId=null,$buyer=null){
+//        DB::enableQueryLog();
+        $query = self::select(['b.id as key','b.title as label'])
+            ->from('attention_to_business as a')
+            ->join('business as b','a.business_id','=','b.id')
+            ->where('status',Consts::BUSINESS_STATUS_NORMAL)->whereNull('deleted_at')
+        ;
+        if($accountId){
+            $query->where('account_id',$accountId);
+        }
+        if($buyer){
+            $query->where('buyer_id',$buyer);
+        }
+        if($q){
+            $query->where('b.title','like','%'.$q.'%');
+        }
+        $list = $query->get();
+//        var_dump(DB::getQueryLog());
+        return $list;
+    }
+
 
 
     public function account(){

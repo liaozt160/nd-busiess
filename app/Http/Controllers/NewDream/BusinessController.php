@@ -84,6 +84,14 @@ class BusinessController extends BaseController
         return $this->ok($list);
     }
 
+    public function queryByAttention(Request $request){
+        $q = $request->input('q',null);
+        $buyerId = $request->input('buyer_id',null);
+        $accountId = $this->guard()->id();
+        $list = Business::getQueryByAttention($q,$accountId,$buyerId);
+        return $this->ok($list);
+    }
+
     /**
      *  update zh
      * @param Request $request
