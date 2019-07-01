@@ -73,6 +73,14 @@ class Business extends Model
         if(isset($param['status']) && $param['status']){
             $query->where('status' ,$param['status']);
         }
+
+        // order 排序
+        $order = (isset($param['order']) && $param['order'] == '1')?'ASC':'DESC';
+        $column = 'prop';
+        if(isset($param['prop']) && $param['prop']){
+            $column = $param['prop'];
+        }
+        $query->orderBy($column ,$order);
         $list = $query->with('account:id,name')->paginate(15);
 //        var_dump(DB::getQueryLog());
         return $list;
@@ -96,7 +104,7 @@ class Business extends Model
 
     public static function getListByBuyerLevelOne($param)
     {
-        $columns = ['id', 'listing', 'title','b.company', 'price', 'employee_count', 'status'];
+        $columns = ['id', 'listing', 'title','company', 'price', 'employee_count', 'status'];
         $query = self::select($columns)->whereNull('deleted_at');
         $list = $query->paginate(15);
         return $list;

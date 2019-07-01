@@ -20,8 +20,8 @@ Route::get('/info', function () {
 });
 
 Route::get('/test', function () {
-//    $users = \App\users::all();
-//    dd($users);
+
+
 });
 
 Route::get('/vue', function () {
