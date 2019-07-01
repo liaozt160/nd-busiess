@@ -12,11 +12,14 @@
 */
 
 Route::get('/', function (\Illuminate\Http\Request $request) {
-    return redirect($request->url().'/web');
+    echo $request->url();
+    var_dump($request->getScheme());
+    exit();
+    return redirect($request->getScheme().$request->url().'/web');
 });
 
 Route::get('/info', function () {
-//    echo phpinfo();
+    echo phpinfo();
 });
 
 Route::get('/test', function () {

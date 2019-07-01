@@ -104,17 +104,32 @@ class Business extends Model
 
     public static function getListByBuyerLevelOne($param)
     {
-        $columns = ['id', 'listing', 'title','company', 'price', 'employee_count', 'status'];
+        $columns = ['id', 'listing', 'title','company', 'price', 'employee_count', 'status','updated_at','created_at'];
         $query = self::select($columns)->whereNull('deleted_at');
+        // order 排序
+        $order = (isset($param['order']) && $param['order'] == '1')?'ASC':'DESC';
+        $column = 'updated_at';
+        if(isset($param['prop']) && $param['prop']){
+            $column = $param['prop'];
+        }
+        $query->orderBy($column ,$order);
         $list = $query->paginate(15);
         return $list;
     }
 
     public static function getListByBuyerLevelTwo($param, $accountId)
     {
-        $columns = ['b.id', 'b.listing', 'b.title','b.company', 'b.price', 'b.employee_count', 'b.status'];
+        $columns = ['b.id', 'b.listing', 'b.title','b.company', 'b.price', 'b.employee_count', 'b.status','b.updated_at','b.created_at'];
         $query = self::from('business_assign as a')->select($columns)->whereNull('b.deleted_at');
         $query->join('business as b', 'a.business_id', '=', 'b.id')->where('a.account_id', $accountId);
+
+        // order 排序
+        $order = (isset($param['order']) && $param['order'] == '1')?'ASC':'DESC';
+        $column = 'b.updated_at';
+        if(isset($param['prop']) && $param['prop']){
+            $column = 'b.'.$param['prop'];
+        }
+        $query->orderBy($column ,$order);
         $list = $query->paginate(15);
         return $list;
     }
