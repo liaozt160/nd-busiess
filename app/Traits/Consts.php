@@ -22,6 +22,8 @@ class Consts {
     const SAVE_RECORD_FAILED = 1006;
     const NO_RECORD_FOUND = 1007;
     const RECORD_EXIST =  1008;
+    const PARAM_VALIDATE_WRONG =  1009;
+    const PARAM_VALIDATE_OUT_OF_LIMIT =  1010;
 
 
     /** business status */

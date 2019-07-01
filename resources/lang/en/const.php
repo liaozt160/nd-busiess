@@ -19,6 +19,8 @@ return [
     \App\Traits\Consts::ACCOUNT_EXIST => 'account exist',
     \App\Traits\Consts::PASSWORD_VERIFY_FAILED => 'password verify failed',
     \App\Traits\Consts::STATUS_OUT_OF_RANGE => 'status out of range',
+    \App\Traits\Consts::PARAM_VALIDATE_OUT_OF_LIMIT => 'param validate out of limit',
+    \App\Traits\Consts::PARAM_VALIDATE_WRONG => 'param validate wrong',
 
 
 ];
