@@ -76,7 +76,7 @@ class Business extends Model
 
         // order 排序
         $order = (isset($param['order']) && $param['order'] == '1')?'ASC':'DESC';
-        $column = 'prop';
+        $column = 'updated_at';
         if(isset($param['prop']) && $param['prop']){
             $column = $param['prop'];
         }
