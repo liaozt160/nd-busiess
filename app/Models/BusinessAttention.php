@@ -24,7 +24,7 @@ class BusinessAttention extends Model
     }
 
     public static function addItemByArray($param){
-        $m = self::where($param)->first();
+        $m = self::where($param)->whereNull('buyer_deleted_at')->first();
         if($m){
             throw new BaseException(Consts::RECORD_EXIST);
         }
@@ -65,7 +65,7 @@ class BusinessAttention extends Model
         $query->join('accounts as a','t.account_id','=','a.id')
             ->join('business as b','t.business_id','=','b.id')
             ->leftjoin('buyer as s','t.buyer_id','=','s.id');
-        $query->whereNull('t.business_deleted_at');
+        $query->whereNull('t.business_deleted_at')->whereNull('t.buyer_deleted_at');
         $query->whereRaw('nd_b.business_broker = '.$accountId);
         $list = $query->paginate(15);
 //        var_dump(DB::getQueryLog());
