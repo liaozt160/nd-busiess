@@ -60,13 +60,22 @@ class BusinessAttention extends Model
     }
 
 
-    public static function getListByBuyer($accountId){
+    public static function getListByBuyer($accountId,$param=[]){
         $query = self::from('attention_to_business as t')
             ->select(['t.id','b.company','b.title','b.listing','b.price','b.status','t.business_id','a.name','t.account_id','s.buyer','t.buyer_id','t.created_at']);
         $query->leftjoin('accounts as a','t.account_id','=','a.id')
             ->leftjoin('business as b','t.business_id','=','b.id')
             ->leftjoin('buyer as s','t.buyer_id','=','s.id');
         $query->where('t.account_id',$accountId)->whereNull('buyer_deleted_at');
+
+        // filter
+        if(isset($param['status']) && $param['status']){
+            $query->where('b.status',$param['status']);
+        }
+        if(isset($param['q']) && $param['q']){
+            $q = $param['q'];
+            $query->where(DB::raw("concat(title,listing)"),'like','%'.$q.'%');
+        }
         $list = $query->paginate(15);
         return $list;
     }

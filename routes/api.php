@@ -94,7 +94,6 @@ Route::namespace('NewDream')->group(function () {
             Route::post('order/view', 'OrderController@View');
             Route::post('order/status', 'OrderController@Status');
         });
-
     });
 
 });
