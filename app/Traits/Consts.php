@@ -28,8 +28,8 @@ class Consts {
 
     /** business status */
     const BUSINESS_STATUS_NORMAL = 1;
-    const BUSINESS_STATUS_DISABLED = 2;
-    const BUSINESS_STATUS_SOLD = 3;
+    const BUSINESS_STATUS_DISABLED = 3;
+    const BUSINESS_STATUS_SOLD = 2;
 
     const ORDER_STATUS_READY = 0;
     const ORDER_STATUS_PENDING = 1;

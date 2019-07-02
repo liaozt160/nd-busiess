@@ -155,7 +155,9 @@ class AccountController extends BaseController
 
     public function businessAttentionList(Request $request){
         $accountId = $request->post('account_id');
-        $list = BusinessAttention::getList();
+        $param = $request->post();
+        $accountId = $this->guard()->id();
+        $list = BusinessAttention::getList($param,$accountId);
         return $this->ok($list);
     }
 

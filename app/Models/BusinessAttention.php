@@ -35,12 +35,26 @@ class BusinessAttention extends Model
         throw new BaseException(Consts::SAVE_RECORD_FAILED);
     }
 
-    public static function getList(){
+    public static function getList($param,$accountId){
         $query = self::from('attention_to_business as t')
-            ->select(['b.title','t.business_id','a.name','t.account_id','s.buyer','t.buyer_id','t.created_at']);
+            ->select(['t.id','b.company','b.title','b.listing','b.price','b.status','t.business_id','a.name','t.account_id','s.buyer','t.buyer_id','t.created_at']);
         $query->leftjoin('accounts as a','t.account_id','=','a.id')
         ->leftjoin('business as b','t.business_id','=','b.id')
         ->leftjoin('buyer as s','t.buyer_id','=','s.id');
+
+        // filter
+        if(isset($param['status']) && $param['status']){
+            $query->where('b.status',$param['status']);
+        }
+        if(isset($param['recommend_by_me']) && $param['recommend_by_me']){
+            $query->where('t.account_id',$accountId);
+        }
+
+        if(isset($param['q']) && $param['q']){
+            $q = $param['q'];
+            $query->where(DB::raw("concat(title,listing)"),'like','%'.$q.'%');
+        }
+
         $list = $query->paginate(15);
         return $list;
     }
