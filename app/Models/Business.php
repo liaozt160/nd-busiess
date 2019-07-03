@@ -55,7 +55,10 @@ class Business extends Model
 //        DB::enableQueryLog();
         $query = self::whereNull('deleted_at');
         if ($accountId) {
-            $query->where('business_broker', $accountId);
+            $accountIds = BusinessBrokerNetMember::getAccountIdByManager($accountId);
+            $accountIds = array_column($accountIds,'account_id');
+            $query->whereIn('business_broker',$accountIds);
+//            $query->where('business_broker', $accountId);
         }
 
         if(isset($param['q']) && isset($param['q'])){

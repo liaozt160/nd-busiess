@@ -5,6 +5,7 @@ namespace App\Http\Controllers\NewDream;
 use App\Exceptions\BaseException;
 use App\Models\Business;
 use App\Models\BusinessAttention;
+use App\Models\BusinessBrokerNetMember;
 use App\Models\BusinessZh;
 use App\Models\Location;
 use App\Traits\Consts;
@@ -220,5 +221,11 @@ class BusinessController extends BaseController
         throw new BaseException(Consts::NO_RECORD_FOUND);
     }
 
+    public function getBusinessBrokers(Request $request){
+        $user = $this->guard()->user();
+        $accountId = $user->role==Consts::ACCOUNT_ROLE_ADMIN?null:$user->id;
+        $list = BusinessBrokerNetMember::getAccountIdByManager($accountId);
+        return $this->ok($list);
+    }
 
 }

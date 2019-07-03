@@ -49,4 +49,32 @@ class BusinessBrokerNetMember extends Model
     public function account(){
         return $this->hasOne('App\Models\Account','id','account_id');
     }
+
+    public static function getAccountIdByManager($accountId){
+        if($accountId === null ){
+            $query = self::from('accounts as a')
+                ->select(['a.id','a.name'])
+                ->where('role',Consts::ACCOUNT_ROLE_BUSINESS_BROKER)
+                ->whereNull('deleted_at');
+            $list = $query->get();
+            return $list;
+        }
+        $m = self::find($accountId);
+        if(!$m){
+            throw new BaseException(Consts::NO_RECORD_FOUND);
+        }
+        if($m->manager != 1) {
+            $accounts = ['account_id' => $accountId, 'name' => 'my self'];
+            return $accounts;
+        }
+        $accounts = self::select(['a.account_id','a.name'])->where('net_id',$m->net_id)->where('manager',1)->get()->toArray();
+        $accounts = array_column($accounts,'account_id');
+        $query = self::from('business_broker_net_member as m')
+            ->select(['a.id','a.name'])
+            ->join('accounts as a','a.id','m.account_id')
+            ->whereIn('a.account_id',$accounts);
+        $list = $query->get();
+        return $list;
+    }
+
 }
