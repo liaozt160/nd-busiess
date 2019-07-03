@@ -103,9 +103,18 @@ class BusinessBrokerNet extends Model
         }
     }
 
+    public function withNetBroker(){
+        $brokers = BusinessBrokerNetMember::select('account_id')->where('net_id',$this->id)->get()->toArray();
+        if($brokers){
+            $brokers = array_column($brokers,'account_id');
+        }
+        $this->brokers = $brokers;
+    }
+
     public function nets()
     {
         return $this->hasMany('App\Models\BusinessBrokerNetMember', 'net_id', 'id');
     }
+
 
 }

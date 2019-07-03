@@ -6,6 +6,7 @@ use App\Exceptions\BaseException;
 use App\Models\BusinessBrokerNet;
 use App\Models\BusinessBrokerNetMember;
 use App\Traits\Consts;
+use function foo\func;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -16,6 +17,17 @@ class BusinessBrokerNetController extends BaseController
         $param = $request->post();
         $accountId = $this->guard()->id();
         $m = BusinessBrokerNet::addItem($param,$accountId);
+        return $this->ok($m);
+    }
+
+    public function Show(Request $request)
+    {
+        $id = $request->post('id');
+        $m = BusinessBrokerNet::find($id);
+        if(!$m){
+            throw new BaseException(Consts::NO_RECORD_FOUND);
+        }
+        $m->withNetBroker();
         return $this->ok($m);
     }
 
@@ -56,6 +68,11 @@ class BusinessBrokerNetController extends BaseController
         $status = $request->post('manager');
         $m = BusinessBrokerNetMember::setManager($id,$status);
         return $this->ok();
+    }
+
+    public function brokers(Request $request){
+        $list = BusinessBrokerNetMember::getFreeBusinessBroker();
+        return $this->ok($list);
     }
 
 }

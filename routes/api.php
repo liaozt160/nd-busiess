@@ -58,6 +58,8 @@ Route::namespace('NewDream')->group(function () {
             Route::post('account/business/net/update', 'BusinessBrokerNetController@Update');
             Route::post('account/business/net/members', 'BusinessBrokerNetController@getMember');
             Route::post('account/business/net/manager', 'BusinessBrokerNetController@setManager');
+            Route::post('account/business/net/brokers', 'BusinessBrokerNetController@brokers');
+            Route::post('account/business/net/show', 'BusinessBrokerNetController@Show');
         });
 
         Route::middleware(['access.business'])->group(function (){
