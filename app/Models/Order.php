@@ -104,6 +104,7 @@ class Order extends Model
 
     public static function listItem($param, $buyerId = null, $accountId = null)
     {
+//        DB::enableQueryLog();
         $column = ['o.id', 'o.account_id', 'b.name as account_name', 'b.role as account_role', 'o.buyer_id', 'c.buyer as buyer_name', 'o.audit_id', 'a.name as audit_name', 'o.order_no', 'o.paid', 'o.pay_amount', 'o.remark', 'o.created_at', 'o.audit_at', 'o.status'];
         $query = self::from('buyer_order as o')
             ->select($column)
@@ -120,6 +121,7 @@ class Order extends Model
             $query->where('o.status', '<>', 0);
         }
         $list = $query->paginate(15);
+//        var_dump(DB::getQueryLog());
         return $list;
     }
 

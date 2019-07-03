@@ -50,6 +50,12 @@ Route::namespace('NewDream')->group(function () {
             Route::post('account/buyer/assign/update', 'AccountController@businessAttentionList');
 
             Route::post('order/audit', 'OrderController@Audit');
+
+            //broker net
+            Route::post('account/business/net/add', 'BusinessBrokerNetController@Add');
+            Route::post('account/business/net/list', 'BusinessBrokerNetController@List');
+            Route::post('account/business/net/del', 'BusinessBrokerNetController@Delete');
+            Route::post('account/business/net/update', 'BusinessBrokerNetController@Update');
         });
 
         Route::middleware(['access.business'])->group(function (){
