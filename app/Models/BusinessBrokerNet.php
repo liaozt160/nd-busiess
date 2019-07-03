@@ -61,6 +61,7 @@ class BusinessBrokerNet extends Model
         }
     }
 
+
     public static function getList($param)
     {
         $query = self::whereNull('deleted_at');
@@ -108,7 +109,7 @@ class BusinessBrokerNet extends Model
         if($brokers){
             $brokers = array_column($brokers,'account_id');
         }
-        $this->brokers = $brokers;
+        $this->broker_id = $brokers;
     }
 
     public function nets()
