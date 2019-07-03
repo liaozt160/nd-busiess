@@ -60,10 +60,7 @@ class BusinessBrokerNetMember extends Model
             return $list;
         }
         $m = self::find($accountId);
-        if(!$m){
-            throw new BaseException(Consts::NO_RECORD_FOUND);
-        }
-        if($m->manager != 1) {
+        if(!$m || $m->manager != 1){
             $accounts = ['account_id' => $accountId, 'name' => 'my self'];
             return $accounts;
         }
