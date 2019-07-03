@@ -4,6 +4,7 @@ namespace App\Http\Controllers\NewDream;
 
 use App\Exceptions\BaseException;
 use App\Models\BusinessBrokerNet;
+use App\Models\BusinessBrokerNetMember;
 use App\Traits\Consts;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -42,6 +43,19 @@ class BusinessBrokerNetController extends BaseController
         $param = $request->post();
         $m = BusinessBrokerNet::updateItem($id,$param);
         return $this->ok($m);
+    }
+
+    public function getMember(Request $request){
+        $netId = $request->get('net_id');
+        $list = BusinessBrokerNetMember::getMember($netId);
+        return $this->ok($list);
+    }
+
+    public function setManager(Request $request){
+        $id = $request->post('id');
+        $status = $request->post('manager');
+        $m = BusinessBrokerNetMember::setManager($id,$status);
+        return $this->ok();
     }
 
 }
