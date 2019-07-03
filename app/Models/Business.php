@@ -54,12 +54,17 @@ class Business extends Model
     {
 //        DB::enableQueryLog();
         $query = self::whereNull('deleted_at');
-        if ($accountId) {
-            $accountIds = BusinessBrokerNetMember::getAccountIdByManager($accountId);
-            $accountIds = array_column($accountIds,'account_id');
-            $query->whereIn('business_broker',$accountIds);
-//            $query->where('business_broker', $accountId);
+        //with broker id or account's id
+        if(isset($param['broker_id']) && isset($param['broker_id'])){
+            $query->where('business_broker', $param['broker_id']);
+        }else{
+            if ($accountId) {
+                $accountIds = BusinessBrokerNetMember::getAccountIdByManager($accountId);
+                $accountIds = array_column($accountIds,'account_id');
+                $query->whereIn('business_broker',$accountIds);
+            }
         }
+
 
         if(isset($param['q']) && isset($param['q'])){
             $query->where(DB::raw("concat(company,title)"),'like','%'.$param['q'].'%');
