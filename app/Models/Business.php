@@ -65,7 +65,6 @@ class Business extends Model
             }
         }
 
-
         if(isset($param['q']) && isset($param['q'])){
             $query->where(DB::raw("concat(company,title)"),'like','%'.$param['q'].'%');
         }

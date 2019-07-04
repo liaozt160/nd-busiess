@@ -60,16 +60,17 @@ class BusinessBrokerNetMember extends Model
             return $list;
         }
         $m = self::find($accountId);
-        if(!$m || $m->manager != 1){
+//        dd($m);
+        if($m === null || $m->manager != 1){
             $accounts = [['account_id' => $accountId, 'name' => 'my self']];
             return $accounts;
         }
-        $accounts = self::select(['a.account_id','a.name'])->where('net_id',$m->net_id)->where('manager',1)->get()->toArray();
+        $accounts = self::select(['account_id'])->where('net_id',$m->net_id)->where('manager',1)->get()->toArray();
         $accounts = array_column($accounts,'account_id');
         $query = self::from('business_broker_net_member as m')
             ->select(['a.id','a.name'])
             ->join('accounts as a','a.id','m.account_id')
-            ->whereIn('a.account_id',$accounts);
+            ->whereIn('m.account_id',$accounts);
         $list = $query->get();
         return $list;
     }
