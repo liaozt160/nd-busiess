@@ -56,10 +56,8 @@ class Business extends Model
 //        DB::enableQueryLog();
         $query = self::whereNull('deleted_at');
         //with broker id or account's id
-        if(isset($param['broker_id'])){
-            if($param['broker_id'] != 0){
-                $query->where('business_broker', $param['broker_id']);
-            }
+        if(isset($param['broker_id']) && $param['broker_id'] != 0){
+            $query->where('business_broker', $param['broker_id']);
         }else{
             if ($accountId) {
                 $accountIds = BusinessBrokerNetMember::getAccountIdByManager($accountId);

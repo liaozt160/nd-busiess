@@ -78,7 +78,6 @@ Route::namespace('NewDream')->group(function () {
             Route::post('business/attention/list', 'BusinessController@attentionList');
             Route::post('business/attention/del', 'BusinessController@attentionDel');
 
-
             Route::post('business/brokers', 'BusinessController@getBusinessBrokers');
 
 
