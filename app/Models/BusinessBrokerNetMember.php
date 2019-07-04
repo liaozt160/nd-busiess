@@ -6,6 +6,7 @@ use App\Exceptions\BaseException;
 use App\Traits\Consts;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BusinessBrokerNetMember extends Model
 {
@@ -59,7 +60,11 @@ class BusinessBrokerNetMember extends Model
             $list = $query->get();
             return $list;
         }
+        Log::debug(__METHOD__.$accountId);
         $m = self::find($accountId);
+        if($m){
+            Log::debug(__METHOD__,$m->toArray());
+        }
         if($m === null || $m->manager != 1){
             $accounts = [['account_id' => $accountId, 'name' => 'my self']];
             return $accounts;
