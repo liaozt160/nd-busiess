@@ -57,7 +57,7 @@ class BusinessBrokerNetMember extends Model
                 ->select(['a.id','a.name'])
                 ->where('role',Consts::ACCOUNT_ROLE_BUSINESS_BROKER)
                 ->whereNull('deleted_at');
-            $list = $query->get();
+            $list = $query->get()->toArray();
             return $list;
         }
         $m = self::where('account_id',$accountId)->first();
@@ -71,7 +71,7 @@ class BusinessBrokerNetMember extends Model
             ->select(['a.id','a.name'])
             ->join('accounts as a','a.id','m.account_id')
             ->whereIn('m.account_id',$accounts);
-        $list = $query->get();
+        $list = $query->get()->toArray();
         return $list;
     }
 
