@@ -93,12 +93,12 @@ class BusinessBrokerNet extends Model
         $exist = BusinessBrokerNetMember::getExist($this->id);
         $exist = array_column($exist->toArray(),'account_id');
         $param = explode(',', substr($param, 1, strlen($param) - 2));
+        $intersect = array_intersect($exist,$param);
+        $param = array_diff($param,$intersect);
         foreach ($param as $item) {
-            if (!$item || in_array($item,$exist)) {
-                continue;
-            }
             $members[] = ['net_id' => $this->id, 'account_id' => $item];
         }
+        BusinessBrokerNetMember::where('net_id',$this->id)->whereNotIn('account_id',$intersect)->delete();
         if($members){
             $this->nets()->createMany($members);
         }

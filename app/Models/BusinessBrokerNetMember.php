@@ -19,7 +19,7 @@ class BusinessBrokerNetMember extends Model
 
     public static function getExist($netId)
     {
-        $list = self::select(['account_id'])->where('net_id', $netId)->get();
+        $list = self::select(['account_id','manager'])->where('net_id', $netId)->get();
         return $list;
     }
 

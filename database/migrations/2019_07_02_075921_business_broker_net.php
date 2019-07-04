@@ -42,7 +42,9 @@ class BusinessBrokerNet extends Migration
      */
     public function down()
     {
-        Schema::drop('business_broker_net');
-        Schema::drop('business_broker_net_member');
+        if(env('APP_ENV') == 'local'){
+            Schema::drop('business_broker_net');
+            Schema::drop('business_broker_net_member');
+        }
     }
 }
