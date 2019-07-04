@@ -7,6 +7,7 @@ use App\Traits\Consts;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Business extends Model
 {
@@ -63,6 +64,7 @@ class Business extends Model
                 if(is_object($accountIds)){
                     $accountIds = $accountIds->toArray();
                 }
+                Log::debug(__METHOD__,$accountIds);
                 $accountIds = array_column($accountIds,'account_id');
                 $query->whereIn('business_broker',$accountIds);
             }
