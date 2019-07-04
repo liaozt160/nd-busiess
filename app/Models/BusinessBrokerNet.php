@@ -112,6 +112,11 @@ class BusinessBrokerNet extends Model
         $this->broker_id = $brokers;
     }
 
+    public function withFreeNetBroker(){
+        $list = BusinessBrokerNetMember::getFreeBusinessBroker($this->id);
+        $this->free_brokers = $list;
+    }
+
     public function nets()
     {
         return $this->hasMany('App\Models\BusinessBrokerNetMember', 'net_id', 'id');

@@ -28,6 +28,7 @@ class BusinessBrokerNetController extends BaseController
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
         $m->withNetBroker();
+        $m->withFreeNetBroker();
         return $this->ok($m);
     }
 
@@ -71,7 +72,7 @@ class BusinessBrokerNetController extends BaseController
     }
 
     public function brokers(Request $request){
-        $list = BusinessBrokerNetMember::getFreeBusinessBroker();
+        $list = BusinessBrokerNetMember::getFreeBusinessBroker(2);
         return $this->ok($list);
     }
 
