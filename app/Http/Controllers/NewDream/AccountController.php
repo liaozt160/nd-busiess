@@ -96,8 +96,8 @@ class AccountController extends BaseController
      * Time: 17:38
      */
     public function accountList(Request $request){
-        $q = $request->input('q',null);
-        $list = Account::getList($q);
+        $param = $request->post();
+        $list = Account::getList($param);
         return $this->ok($list);
     }
 

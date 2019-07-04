@@ -78,10 +78,13 @@ class Account extends Authenticatable implements JWTSubject
         return false;
     }
 
-    public static function getList($q=null){
+    public static function getList($param=array()){
         $query  = self::whereNull('deleted_at');
-        if($q){
-            $query->where(DB::raw("concat(email,phone,name)"),'like','%'.$q.'%');
+        if(isset($param['q']) && $param['q']){
+            $query->where(DB::raw("concat(email,phone,name)"),'like','%'.$param['q'].'%');
+        }
+        if(isset($param['role']) && $param['role']){
+            $query->where('role',$param['role']);
         }
         $list = $query->paginate(15);
         return $list;
