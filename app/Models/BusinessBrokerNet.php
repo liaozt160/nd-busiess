@@ -79,6 +79,9 @@ class BusinessBrokerNet extends Model
         if (!$m) {
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
+        if(!$m->nets->isEmpty()){
+            throw new BaseException(Consts::SUBITEM_NEED_TO_CLEAN_FIRST);
+        }
         $m->deleted_at = new Carbon();
         $m->deleted_by = $accountId;
         if ($m->save()) {

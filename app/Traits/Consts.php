@@ -59,5 +59,6 @@ class Consts {
     const PASSWORD_VERIFY_FAILED = 2103;
 
     const STATUS_OUT_OF_RANGE = 2014;
+    const SUBITEM_NEED_TO_CLEAN_FIRST = 2015;
 
 }
