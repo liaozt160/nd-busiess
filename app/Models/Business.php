@@ -110,6 +110,14 @@ class Business extends Model
         if ($user->id == $m->business_broker) {
             return true;
         }
+        $list = BusinessBrokerNetMember::getAccountIdByManager($user->id);
+        if(is_object($list)){
+            $list = $list->all();
+        }
+        $accountIds = array_column($list,'account_id');
+        if(in_array($m->business_broker,$accountIds)){
+            return true;
+        }
         throw new BaseException(Consts::ACCOUNT_ACCESS_DENY);
     }
 
