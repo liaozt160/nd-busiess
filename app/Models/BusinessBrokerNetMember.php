@@ -61,7 +61,7 @@ class BusinessBrokerNetMember extends Model
         }
         $m = self::find($accountId);
         if(!$m || $m->manager != 1){
-            $accounts = ['account_id' => $accountId, 'name' => 'my self'];
+            $accounts = [['account_id' => $accountId, 'name' => 'my self']];
             return $accounts;
         }
         $accounts = self::select(['a.account_id','a.name'])->where('net_id',$m->net_id)->where('manager',1)->get()->toArray();
