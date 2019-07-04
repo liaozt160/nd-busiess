@@ -60,6 +60,9 @@ class Business extends Model
         }else{
             if ($accountId) {
                 $accountIds = BusinessBrokerNetMember::getAccountIdByManager($accountId);
+                if(is_object($accountIds)){
+                    $accountIds = $accountIds->toArray();
+                }
                 $accountIds = array_column($accountIds,'account_id');
                 $query->whereIn('business_broker',$accountIds);
             }
