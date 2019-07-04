@@ -54,10 +54,10 @@ class BusinessBrokerNetMember extends Model
     public static function getAccountIdByManager($accountId){
         if($accountId === null ){
             $query = self::from('accounts as a')
-                ->select(['a.id','a.name'])
+                ->select(['a.id as account_id','a.name'])
                 ->where('role',Consts::ACCOUNT_ROLE_BUSINESS_BROKER)
                 ->whereNull('deleted_at');
-            $list = $query->get()->toArray();
+            $list = $query->get();
             return $list;
         }
         $m = self::where('account_id',$accountId)->first();
@@ -68,10 +68,10 @@ class BusinessBrokerNetMember extends Model
         $accounts = self::select(['account_id'])->where('net_id',$m->net_id)->get()->toArray();
         $accounts = array_column($accounts,'account_id');
         $query = self::from('business_broker_net_member as m')
-            ->select(['a.id','a.name'])
+            ->select(['a.id as account_id','a.name'])
             ->join('accounts as a','a.id','m.account_id')
             ->whereIn('m.account_id',$accounts);
-        $list = $query->get()->toArray();
+        $list = $query->get();
         return $list;
     }
 

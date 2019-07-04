@@ -62,7 +62,7 @@ class Business extends Model
             if ($accountId) {
                 $accountIds = BusinessBrokerNetMember::getAccountIdByManager($accountId);
                 if(is_object($accountIds)){
-                    $accountIds = $accountIds->toArray();
+                    $accountIds = $accountIds->all();
                 }
                 Log::debug(__METHOD__,$accountIds);
                 $accountIds = array_column($accountIds,'account_id');
