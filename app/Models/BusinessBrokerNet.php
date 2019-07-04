@@ -92,6 +92,10 @@ class BusinessBrokerNet extends Model
 
     public function assignMember($param)
     {
+        if($param == '[]'){
+            BusinessBrokerNetMember::where('net_id',$this->id)->delete();
+            return;
+        }
         $members = [];
         $exist = BusinessBrokerNetMember::getExist($this->id);
         $exist = array_column($exist->toArray(),'account_id');
