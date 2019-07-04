@@ -72,7 +72,7 @@ class BusinessBrokerNetController extends BaseController
     }
 
     public function brokers(Request $request){
-        $list = BusinessBrokerNetMember::getFreeBusinessBroker(2);
+        $list = BusinessBrokerNetMember::getFreeBusinessBroker(null);
         return $this->ok($list);
     }
 
