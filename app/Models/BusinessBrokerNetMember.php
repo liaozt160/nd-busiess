@@ -60,11 +60,7 @@ class BusinessBrokerNetMember extends Model
             $list = $query->get();
             return $list;
         }
-        Log::debug(__METHOD__.$accountId);
-        $m = self::find($accountId);
-        if($m){
-            Log::debug(__METHOD__,$m->toArray());
-        }
+        $m = self::where('account_id',$accountId)->first();
         if($m === null || $m->manager != 1){
             $accounts = [['account_id' => $accountId, 'name' => 'my self']];
             return $accounts;
