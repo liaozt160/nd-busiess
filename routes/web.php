@@ -23,7 +23,6 @@ Route::get('/info', function () {
 
 Route::get('/test', function () {
 
-
 });
 
 Route::get('/vue', function () {
