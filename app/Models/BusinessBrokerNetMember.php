@@ -66,6 +66,7 @@ class BusinessBrokerNetMember extends Model
 
     public static function getAccountIdByManager($accountId)
     {
+        //admin role
         if ($accountId === null) {
             $query = self::from('accounts as a')
                 ->select(['a.id as account_id', 'a.name'])
@@ -74,12 +75,20 @@ class BusinessBrokerNetMember extends Model
             $list = $query->get();
             return $list;
         }
-        $m = self::where('account_id', $accountId)->first();
-        if ($m === null || $m->manager != 1) {
+
+        // don't belong to any broke net manage role
+        $m = self::select(['account_id','net_id','manager'])->where('account_id', $accountId)->get();
+        if ($m->isEmpty()) {
             $accounts = [['account_id' => $accountId, 'name' => 'my self']];
             return $accounts;
         }
-        $accounts = self::select(['account_id'])->where('net_id', $m->net_id)->get()->toArray();
+        $netids = $m->map(function ($item,$key){
+            if($item->manager == 1){
+                return $item->net_id;
+            }
+        });
+        // find all broker net member account id by manager
+        $accounts = self::select(['account_id'])->whereIn('net_id', $netids)->get()->toArray();
         $accounts = array_column($accounts, 'account_id');
         $query = self::from('business_broker_net_member as m')
             ->select(['a.id as account_id', 'a.name'])

@@ -60,6 +60,9 @@ Route::namespace('NewDream')->group(function () {
             Route::post('account/business/net/manager', 'BusinessBrokerNetController@setManager');
             Route::post('account/business/net/brokers', 'BusinessBrokerNetController@brokers');
             Route::post('account/business/net/show', 'BusinessBrokerNetController@Show');
+
+            // business
+            Route::post('account/business/owner', 'BusinessController@changeOwner');
         });
 
         Route::middleware(['access.business'])->group(function (){
@@ -79,7 +82,6 @@ Route::namespace('NewDream')->group(function () {
             Route::post('business/attention/del', 'BusinessController@attentionDel');
 
             Route::post('business/brokers', 'BusinessController@getBusinessBrokers');
-
 
 
         });

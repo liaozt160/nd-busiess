@@ -156,6 +156,14 @@ class Account extends Authenticatable implements JWTSubject
         return $count;
     }
 
+    public static function getBusinessBrokers(){
+        $column=['id as key','name as label'];
+        $condition=['role'=>3,'status' =>1];
+        $list = self::select($column)->where($condition)->get();
+        return $list;
+    }
+
+
 
 }
 

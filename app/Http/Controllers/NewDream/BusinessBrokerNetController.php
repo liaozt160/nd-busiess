@@ -28,7 +28,8 @@ class BusinessBrokerNetController extends BaseController
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
         $m->withNetBroker();
-        $m->withFreeNetBroker();
+//        $m->withFreeNetBroker(); // change it to multiple broker net
+        $m->free_brokers = BusinessBrokerNetMember::getAccountIdByManager(null);
         return $this->ok($m);
     }
 

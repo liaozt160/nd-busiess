@@ -11,6 +11,7 @@ use App\Models\Location;
 use App\Traits\Consts;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\App;
 
 class BusinessController extends BaseController
 {
@@ -18,7 +19,7 @@ class BusinessController extends BaseController
     public function Add(Request $request){
         $param = $request->except('lang');
         $param['business_broker'] = $this->guard()->id();
-        $lang =  $request->post('lang','en');
+        $lang =  App::getLocale();
         if($lang == 'zh'){
             $m = BusinessZh::addItem($param);
         }else{
@@ -222,10 +223,22 @@ class BusinessController extends BaseController
     }
 
     public function getBusinessBrokers(Request $request){
-        $user = $this->guard()->user();
-        $accountId = $user->role==Consts::ACCOUNT_ROLE_ADMIN?null:$user->id;
-        $list = BusinessBrokerNetMember::getAccountIdByManager($accountId);
+//        $user = $this->guard()->user();
+//        $accountId = $user->role==Consts::ACCOUNT_ROLE_ADMIN?null:$user->id;
+        $list = BusinessBrokerNetMember::getAccountIdByManager(null);
         return $this->ok($list);
     }
+
+    public function changeOwner(Request $request){
+        $businessId = $request->post('business_id');
+        $ownerId = $request->post('owner_id');
+        if(!$businessId || !$ownerId){
+            throw new BaseException(Consts::PARAM_VALIDATE_WRONG);
+        }
+        $boolean = Business::changeOwner($businessId,$ownerId);
+        return $this->ok();
+    }
+
+
 
 }

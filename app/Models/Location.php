@@ -15,7 +15,7 @@ class Location extends Model
         }else{
             $columns = ['code','name'];
         }
-        $list = self::select($columns)->where('parentId',$code)->get();
+        $list = self::select($columns)->where('parentId',$code)->orderBy('name')->get();
         return $list;
     }
 }

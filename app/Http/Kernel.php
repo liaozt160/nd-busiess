@@ -40,6 +40,7 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
             'bindings',
+            'language.check',
         ],
     ];
 
@@ -64,6 +65,7 @@ class Kernel extends HttpKernel
         'access.level' => \App\Http\Middleware\AccessLevelThree::class,
         'access.business' => \App\Http\Middleware\BusinessBroker::class,
         'access.buyer' => \App\Http\Middleware\BuyerBroker::class,
+        'language.check' => \App\Http\Middleware\CheckLanguage::class,
     ];
 
     /**
