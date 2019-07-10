@@ -203,7 +203,7 @@ class Business extends Model
             array_push($columns,'b.status');
         }
         $columns = array_map(function ($item) use ($columnPrefix) {
-            return  $item == 'status' ? 'b.status': $columnPrefix . $item;
+            return  $item == 'b.status' ? $item: $columnPrefix . $item;
         }, $columns);
         return $columns;
     }
