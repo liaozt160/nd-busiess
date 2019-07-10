@@ -64,14 +64,14 @@ class Business extends Model
 
     public static function listItem($param, $accountId = null)
     {
-        $columns = self::getColumnsByLevel(3);
+        $columns = self::getColumnsByLevel(Consts::ACCOUNT_ACCESS_LEVEL_THREE);
         if (App::getLocale() == 'zh') {
             array_push($columns,'z.business_id as id');
             $prifix = 'z.';
         } else {
             $prifix = 'b.';
         }
-//        DB::enableQueryLog();
+        //DB::enableQueryLog();
         $query = self::from('business as b')
             ->select($columns)
             ->leftjoin('business_zh as z', 'b.id', 'z.business_id')
@@ -151,11 +151,7 @@ class Business extends Model
         } else {
             $columnPrefix = 'b.';
         }
-        $columns = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'updated_at', 'created_at'];
-        $columns = array_map(function ($item) use ($columnPrefix) {
-            return $columnPrefix . $item;
-        }, $columns);
-        array_push($columns, 'b.status');
+        $columns = self::getColumnsByLevel(Consts::ACCOUNT_ACCESS_LEVEL_ONE,true);
         $query = self::select($columns)
             ->from('business as b')
             ->leftjoin('business_zh as z', 'b.id', 'z.business_id')
@@ -174,11 +170,9 @@ class Business extends Model
 
     public static function getListByBuyerLevelTwo($param, $accountId)
     {
-
-        $columns = ['b.id', 'b.listing', 'b.title', 'b.company', 'b.price', 'b.employee_count', 'b.status', 'b.updated_at', 'b.created_at'];
+        $columns = self::getColumnsByLevel(Consts::ACCOUNT_ACCESS_LEVEL_ONE,true);
         $query = self::from('business_assign as a')->select($columns)->whereNull('b.deleted_at');
         $query->join('business as b', 'a.business_id', '=', 'b.id')->where('a.account_id', $accountId);
-
         // order 排序
         $order = (isset($param['order']) && $param['order'] == '1') ? 'ASC' : 'DESC';
         $column = 'b.updated_at';
@@ -190,18 +184,20 @@ class Business extends Model
         return $list;
     }
 
-    public static function getColumnsByLevel($level = 1)
+    public static function getColumnsByLevel($level = 1,$list = false)
     {
+        $levelOneList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'updated_at', 'created_at'];
         $levelOne = ['id', 'listing', 'title', 'price', 'company', 'employee_count', 'profitability'
             , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'status'];
+        $levelTwoList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'status', 'updated_at', 'created_at'];
         $levelTwo = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'profitability'
             , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income',
             'value_of_real_estate', 'net_income', 'lease', 'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing', 'status'];
         $columnPrefix = App::getLocale() == 'zh'? 'z.':'b.';
         if($level == 1){
-            $columns = $levelOne;
+            $columns = $list?$levelOneList:$levelOne;
         }elseif($level == 2){
-            $columns = $levelTwo;
+            $columns = $list?$levelTwoList:$levelTwo;
         }else{
             $columns = ['*'];
         }
@@ -213,8 +209,7 @@ class Business extends Model
 
     public static function showLevelOne($businessId)
     {
-        $columns = ['b.id', 'b.listing', 'b.title', 'b.price', 'b.company', 'b.employee_count', 'b.profitability'
-            , 'b.country', 'b.states', 'b.city', 'b.address', 'b.real_estate', 'b.building_sf', 'b.status'];
+        $columns = self::getColumnsByLevel(Consts::ACCOUNT_ACCESS_LEVEL_ONE);
         $query = self::from('business as b')->select($columns)->whereNull('b.deleted_at')->where('b.id', $businessId);
         $m = $query->first();
         if ($m) {
@@ -225,9 +220,7 @@ class Business extends Model
 
     public static function showLevelTwo($accountId, $businessId)
     {
-        $columns = ['b.id', 'b.listing', 'b.title', 'b.company', 'b.price', 'b.employee_count', 'b.profitability'
-            , 'b.country', 'b.states', 'b.city', 'b.address', 'b.real_estate', 'b.building_sf', 'b.gross_income',
-            'b.value_of_real_estate', 'b.net_income', 'b.lease', 'b.lease_term', 'b.ebitda', 'b.ff_e', 'b.inventory', 'b.commission', 'b.buyer_financing', 'b.status'];
+        $columns = self::getColumnsByLevel(Consts::ACCOUNT_ACCESS_LEVEL_ONE);
         $query = self::from('business_assign as a')->select($columns)->whereNull('b.deleted_at');
         $query->join('business as b', 'a.business_id', '=', 'b.id')
             ->where('a.account_id', $accountId)->where('a.business_id', $businessId);
