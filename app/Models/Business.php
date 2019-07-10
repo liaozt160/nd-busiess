@@ -208,12 +208,12 @@ class Business extends Model
 //        $levelOne = ['id', 'listing', 'title', 'price', 'company', 'employee_count', 'profitability'
 //            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'b.status'];
         $levelOne = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability'
-            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income',
-            'value_of_real_estate', 'net_income', 'lease', 'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing', 'b.status'];
+            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income','gross_income_unit',
+            'value_of_real_estate', 'net_income','net_income_unit', 'lease', 'lease_unit', 'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing', 'b.status'];
         $levelTwoList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'b.status', 'updated_at', 'created_at'];
         $levelTwo = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability'
-            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income',
-            'value_of_real_estate', 'net_income', 'lease', 'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description', 'b.status'];
+            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income','gross_income_unit',
+            'value_of_real_estate', 'net_income', 'net_income_unit','lease','lease_unit',  'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description', 'b.status'];
         $columnPrefix = App::getLocale() == 'zh'? 'z.':'b.';
         if($level == 1){
             $columns = $list?$levelOneList:$levelOne;
