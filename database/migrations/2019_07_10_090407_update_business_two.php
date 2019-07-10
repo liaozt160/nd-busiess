@@ -29,5 +29,6 @@ class UpdateBusinessTwo extends Migration
     public function down()
     {
         //
+
     }
 }
