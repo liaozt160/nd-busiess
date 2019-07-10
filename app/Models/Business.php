@@ -200,6 +200,7 @@ class Business extends Model
             $columns = $list?$levelTwoList:$levelTwo;
         }else{
             $columns = ['*'];
+            array_push($columns,'b.status');
         }
         $columns = array_map(function ($item) use ($columnPrefix) {
             return  $item == 'status' ? 'b.status': $columnPrefix . $item;
