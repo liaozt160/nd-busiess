@@ -105,7 +105,7 @@ class Business extends Model
         }
 
         if (isset($param['status']) && $param['status']) {
-            $query->where($prifix . 'status', $param['status']);
+            $query->where('b.status', $param['status']);
         }
 
         // order 排序
