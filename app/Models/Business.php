@@ -71,7 +71,7 @@ class Business extends Model
         } else {
             $prifix = 'b.';
         }
-        //DB::enableQueryLog();
+//        DB::enableQueryLog();
         $query = self::from('business as b')
             ->select($columns)
             ->leftjoin('business_zh as z', 'b.id', 'z.business_id')
@@ -112,7 +112,7 @@ class Business extends Model
         $order = (isset($param['order']) && $param['order'] == '1') ? 'ASC' : 'DESC';
         $column = 'b.updated_at';
         if (isset($param['prop']) && $param['prop']) {
-            $column = $param['prop'];
+            $column = $prifix.$param['prop'];
         }
         $query->orderBy($column, $order);
         $list = $query->with('account:id,name')->paginate(15);
@@ -156,6 +156,24 @@ class Business extends Model
             ->from('business as b')
             ->leftjoin('business_zh as z', 'b.id', 'z.business_id')
             ->whereNull('b.deleted_at');
+
+        // filter and search
+        if (isset($param['q']) && isset($param['q'])) {
+            $query->where(DB::raw("concat(nd_{$columnPrefix}company,nd_{$columnPrefix}title)"), 'like', '%' . $param['q'] . '%');
+        }
+
+        if (isset($param['price_from']) && $param['price_from']) {
+            $query->where($columnPrefix . 'price', '>=', $param['price_from']);
+        }
+
+        if (isset($param['price_to']) && $param['price_to']) {
+            $query->where($columnPrefix . 'price', '<=', $param['price_to']);
+        }
+
+        if (isset($param['status']) && $param['status']) {
+            $query->where('b.status', $param['status']);
+        }
+
         // order 排序
         $order = (isset($param['order']) && $param['order'] == '1') ? 'ASC' : 'DESC';
         $column = 'b.updated_at';
@@ -186,13 +204,16 @@ class Business extends Model
 
     public static function getColumnsByLevel($level = 1,$list = false)
     {
-        $levelOneList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'updated_at', 'created_at'];
-        $levelOne = ['id', 'listing', 'title', 'price', 'company', 'employee_count', 'profitability'
-            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'status'];
-        $levelTwoList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'status', 'updated_at', 'created_at'];
-        $levelTwo = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'profitability'
+        $levelOneList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'updated_at', 'created_at','b.status'];
+//        $levelOne = ['id', 'listing', 'title', 'price', 'company', 'employee_count', 'profitability'
+//            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'b.status'];
+        $levelOne = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability'
             , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income',
-            'value_of_real_estate', 'net_income', 'lease', 'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing', 'status'];
+            'value_of_real_estate', 'net_income', 'lease', 'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing', 'b.status'];
+        $levelTwoList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'b.status', 'updated_at', 'created_at'];
+        $levelTwo = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability'
+            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income',
+            'value_of_real_estate', 'net_income', 'lease', 'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description', 'b.status'];
         $columnPrefix = App::getLocale() == 'zh'? 'z.':'b.';
         if($level == 1){
             $columns = $list?$levelOneList:$levelOne;

@@ -19,12 +19,7 @@ class BusinessController extends BaseController
     public function Add(Request $request){
         $param = $request->except('lang');
         $param['business_broker'] = $this->guard()->id();
-        $lang =  App::getLocale();
-        if($lang == 'zh'){
-            $m = BusinessZh::addItem($param);
-        }else{
-            $m = Business::addItem($param);
-        }
+        $m = Business::addItem($param);
         return $this->ok($m);
     }
 
