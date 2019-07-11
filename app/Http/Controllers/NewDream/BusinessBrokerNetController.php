@@ -72,7 +72,9 @@ class BusinessBrokerNetController extends BaseController
     }
 
     public function brokers(Request $request){
-        $list = BusinessBrokerNetMember::getFreeBusinessBroker(null);
+        $user = $this->guard()->user();
+        $accountId = $user->role==Consts::ACCOUNT_ROLE_ADMIN?null:$user->id;
+        $list = BusinessBrokerNetMember::getAccountIdByManager($accountId);
         return $this->ok($list);
     }
 

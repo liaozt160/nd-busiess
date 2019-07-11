@@ -40,7 +40,7 @@ class BusinessBrokerNetMember extends Model
 
     public static function getFreeBusinessBroker($netId =null)
     {
-        //  一个中介能属于多个中介网络！
+        //  一个中介能属于多个中介网络！ 管理员
         // a business broker cant only belong to multiple business broker net
         if($netId === null){
             $query = self::from('accounts')
@@ -50,6 +50,7 @@ class BusinessBrokerNetMember extends Model
             $list = $query->get();
             return $list;
         }
+
 //         DB::enableQueryLog();  //  一个中介只能属于一个中介网络！
         // a business broker cant only belong to one business broker net
         $exist = DB::table('accounts as a')->select(['id as key', 'name as label'])
@@ -88,21 +89,20 @@ class BusinessBrokerNetMember extends Model
         }
 
         // don't belong to any broke net manage role
-        $m = self::select(['account_id','net_id','manager'])->where('account_id', $accountId)->get();
+        $m = self::select(['account_id','net_id','manager'])->where('account_id', $accountId)->where('manager',1)->get();
         if ($m->isEmpty()) {
             $accounts = [['account_id' => $accountId, 'name' => 'my self']];
             return $accounts;
         }
         $netids = $m->map(function ($item,$key){
-            if($item->manager == 1){
-                return $item->net_id;
-            }
+            return $item->net_id;
         });
         // find all broker net member account id by manager
         $accounts = self::select(['account_id'])->whereIn('net_id', $netids)->get()->toArray();
         $accounts = array_column($accounts, 'account_id');
         $query = self::from('business_broker_net_member as m')
             ->select(['a.id as account_id', 'a.name'])
+            ->distinct()
             ->join('accounts as a', 'a.id', 'm.account_id')
             ->whereIn('m.account_id', $accounts);
         $list = $query->get();

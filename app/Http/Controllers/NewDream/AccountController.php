@@ -178,8 +178,8 @@ class AccountController extends BaseController
     }
 
     public function test(){
-//        $log = Log::critical('aaaaaaaaa');
-//        var_dump($log);
+        $log = Log::emergency('aaaaaaaaa');
+        var_dump($log);
         throw new BaseException(1,'dddddddddd');
         return $this->ok();
         exit;

@@ -76,7 +76,6 @@ class Business extends Model
             ->select($columns)
             ->leftjoin('business_zh as z', 'b.id', 'z.business_id')
             ->whereNull('b.deleted_at');
-
         //with broker id or account's id
         if (isset($param['broker_id']) && $param['broker_id'] != 0) {
             $query->where($prifix . 'business_broker', $param['broker_id']);
@@ -86,7 +85,6 @@ class Business extends Model
                 if (is_object($accountIds)) {
                     $accountIds = $accountIds->all();
                 }
-                Log::debug(__METHOD__, $accountIds);
                 $accountIds = array_column($accountIds, 'account_id');
                 $query->whereIn($prifix . 'business_broker', $accountIds);
             }
