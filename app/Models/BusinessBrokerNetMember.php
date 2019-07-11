@@ -38,9 +38,20 @@ class BusinessBrokerNetMember extends Model
         throw new BaseException(Consts::SAVE_RECORD_FAILED);
     }
 
-    public static function getFreeBusinessBroker($netId)
+    public static function getFreeBusinessBroker($netId =null)
     {
-//         DB::enableQueryLog();
+        //  一个中介能属于多个中介网络！
+        // a business broker cant only belong to multiple business broker net
+        if($netId === null){
+            $query = self::from('accounts')
+                ->select(['id as key', 'name as label'])
+                ->where('role', Consts::ACCOUNT_ROLE_BUSINESS_BROKER)
+                ->whereNull('deleted_at');
+            $list = $query->get();
+            return $list;
+        }
+//         DB::enableQueryLog();  //  一个中介只能属于一个中介网络！
+        // a business broker cant only belong to one business broker net
         $exist = DB::table('accounts as a')->select(['id as key', 'name as label'])
             ->whereExists(function ($subQuery) use ($netId) {
                 $subQuery->select('account_id as id')->from('business_broker_net_member as m')

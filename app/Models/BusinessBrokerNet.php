@@ -120,7 +120,7 @@ class BusinessBrokerNet extends Model
     }
 
     public function withFreeNetBroker(){
-        $list = BusinessBrokerNetMember::getFreeBusinessBroker($this->id);
+        $list = BusinessBrokerNetMember::getFreeBusinessBroker(null);
         $this->free_brokers = $list;
     }
 
