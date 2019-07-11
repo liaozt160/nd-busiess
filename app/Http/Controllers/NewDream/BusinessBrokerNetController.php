@@ -67,6 +67,7 @@ class BusinessBrokerNetController extends BaseController
     public function setManager(Request $request){
         $id = $request->post('id');
         $status = $request->post('manager');
+        $status = $status=='true'?1:0;
         $m = BusinessBrokerNetMember::setManager($id,$status);
         return $this->ok();
     }

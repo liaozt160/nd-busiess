@@ -26,6 +26,14 @@ class BusinessBrokerNetMember extends Model
     public static function getMember($netId)
     {
         $list = self::where('net_id', $netId)->with(['account:id,name'])->get();
+        $list->transform(function ($item, $key) {
+            if($item->manager == 1){
+                $item->manager =true;
+            }else{
+                $item->manager =false;
+            }
+            return $item;
+        });
         return $list;
     }
 
