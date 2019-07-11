@@ -40,8 +40,8 @@ class BusinessAttention extends Model
             ->select(['t.id','b.company','b.title','b.listing','b.price','b.status','t.business_id','a.name','t.account_id','s.buyer','t.buyer_id','t.created_at']);
         $query->leftjoin('accounts as a','t.account_id','=','a.id')
         ->leftjoin('business as b','t.business_id','=','b.id')
-        ->leftjoin('buyer as s','t.buyer_id','=','s.id');
-
+        ->leftjoin('buyer as s','t.buyer_id','=','s.id')
+        ->whereNull('buyer_deleted_at');
         // filter
         if(isset($param['status']) && $param['status']){
             $query->where('b.status',$param['status']);
@@ -102,6 +102,7 @@ class BusinessAttention extends Model
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
         $m->buyer_deleted_at = new Carbon();
+        $m->business_deleted_at = new Carbon();
         if($m->save()){
             return $m;
         }
