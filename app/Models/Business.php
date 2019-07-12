@@ -230,7 +230,9 @@ class Business extends Model
     public static function showLevelOne($businessId)
     {
         $columns = self::getColumnsByLevel(Consts::ACCOUNT_ACCESS_LEVEL_ONE);
-        $query = self::from('business as b')->select($columns)->whereNull('b.deleted_at')->where('b.id', $businessId);
+        $query = self::from('business as b')
+            ->leftjoin('business_zh as z', 'b.id', 'z.business_id')
+            ->select($columns)->whereNull('b.deleted_at')->where('b.id', $businessId);
         $m = $query->first();
         if ($m) {
             $m->setLocation();
@@ -243,6 +245,7 @@ class Business extends Model
         $columns = self::getColumnsByLevel(Consts::ACCOUNT_ACCESS_LEVEL_ONE);
         $query = self::from('business_assign as a')->select($columns)->whereNull('b.deleted_at');
         $query->join('business as b', 'a.business_id', '=', 'b.id')
+            ->leftjoin('business_zh as z', 'b.id', 'z.business_id')
             ->where('a.account_id', $accountId)->where('a.business_id', $businessId);
         $m = $query->first();
         if ($m) {
@@ -321,9 +324,15 @@ class Business extends Model
 
     public static function changeOwner($businessId, $ownerId)
     {
-        $m = self::where(['id' => $businessId])->update(['business_broker' => $ownerId]);
-        if (!$m) {
-            throw new BaseException(Consts::SAVE_RECORD_FAILED);
+        DB::beginTransaction();
+        try{
+            $m = self::where(['id' => $businessId])->update(['business_broker' => $ownerId]);
+            $m = BusinessZh::where(['business_id' => $businessId])->update(['business_broker' => $ownerId]);
+            DB::commit();
+        }catch (BaseException $b){
+            throw new BaseException($b->getKey());
+        }catch (\Exception $e){
+            throw new BaseException(Consts::UNKNOWN_ERROR,$e->getMessage());
         }
         return $m;
     }
