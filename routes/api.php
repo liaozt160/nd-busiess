@@ -16,7 +16,8 @@ use Illuminate\Http\Request;
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
 //    return $request->user();
 //});
-
+//Route::any('order/payment/file/view/{id}', 'NewDream\OrderController@showOrderPayInformation')->name('file');
+//Route::any('order/payment/file/view', 'NewDream\OrderController@showOrderPayInformation');
 Route::post('/login', 'NewDream\AccountController@login')->name('login');
 Route::post('account/add', 'NewDream\AccountController@accountAdd');
 Route::namespace('NewDream')->group(function () {
@@ -109,6 +110,13 @@ Route::namespace('NewDream')->group(function () {
             Route::post('order/show', 'OrderController@Show');
             Route::post('order/view', 'OrderController@View');
             Route::post('order/status', 'OrderController@Status');
+            Route::post('order/payment/show', 'OrderController@showPayInformation');
+            Route::post('order/payment/pay', 'OrderController@addPayInformation');
+            Route::post('order/payment/del', 'OrderController@delPayInformation');
+
+            Route::post('order/payment/file/del', 'OrderController@deleteOrderPayInformation');
+            Route::post('order/payment/file/upload', 'OrderController@uploadOrderPayInformation');
+            Route::any('order/payment/file/view', 'OrderController@showOrderPayInformation');
         });
     });
 

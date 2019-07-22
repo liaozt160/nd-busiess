@@ -212,11 +212,19 @@ class Business extends Model
         $levelTwo = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability'
             , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income','gross_income_unit',
             'value_of_real_estate', 'net_income', 'net_income_unit','lease','lease_unit',  'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description', 'b.status'];
+
+        $levelThreeList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'b.status', 'updated_at', 'created_at'];
+        $levelThree = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability'
+            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income','gross_income_unit',
+            'value_of_real_estate', 'net_income', 'net_income_unit','lease','lease_unit',  'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description', 'b.status'];
+
         $columnPrefix = App::getLocale() == 'zh'? 'z.':'b.';
-        if($level == 1){
+        if($level == Consts::ACCOUNT_ACCESS_LEVEL_ONE){
             $columns = $list?$levelOneList:$levelOne;
-        }elseif($level == 2){
+        }elseif($level == Consts::ACCOUNT_ACCESS_LEVEL_TWO){
             $columns = $list?$levelTwoList:$levelTwo;
+        }elseif ($level == Consts::ACCOUNT_ACCESS_LEVEL_THREE){
+            $columns = $list?$levelThreeList:$levelThree;
         }else{
             $columns = ['*'];
             array_push($columns,'b.status');

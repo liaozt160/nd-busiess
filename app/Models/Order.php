@@ -145,6 +145,11 @@ class Order extends Model
         return $this->hasMany('App\Models\OrderDetail', 'order_id', 'id');
     }
 
+    public function payInfo()
+    {
+        return $this->hasMany('App\Models\OrderPayInfo', 'order_id', 'id');
+    }
+
     public function buyer()
     {
         return $this->hasOne('App\Models\Buyer', 'id', 'buyer_id');
@@ -208,13 +213,13 @@ class Order extends Model
         return $m;
     }
 
-    public static function getDetailList($id)
+    public static function getDetailList($id , $level = Consts::ACCOUNT_ACCESS_LEVEL_TWO)
     {
         $m = self::with('buyer:id,buyer', 'audit:id,name')->find($id);
         if (!$m) {
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
-        $m->details = OrderDetail::getBusinessLevelTwo($m->id);
+        $m->details = OrderDetail::getBusinessLevel($m->id);
         return $m;
     }
 

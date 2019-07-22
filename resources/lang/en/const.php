@@ -22,6 +22,7 @@ return [
     \App\Traits\Consts::PARAM_VALIDATE_OUT_OF_LIMIT => 'param validate out of limit',
     \App\Traits\Consts::PARAM_VALIDATE_WRONG => 'param validate wrong',
     \App\Traits\Consts::SUBITEM_NEED_TO_CLEAN_FIRST => 'business broker need clean first',
+    \App\Traits\Consts::SAVE_FILE_ERROR => 'save file error',
 
 
 ];

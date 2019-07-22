@@ -15,8 +15,8 @@ class OrderDetail extends Model
         return $list;
     }
 
-    public static function getBusinessLevelTwo($orderId){
-        $columns = Business::getColumnsByLevel(Consts::ACCOUNT_ACCESS_LEVEL_TWO);
+    public static function getBusinessLevel($orderId,$level = Consts::ACCOUNT_ACCESS_LEVEL_TWO){
+        $columns = Business::getColumnsByLevel($level);
         $query = self::select($columns)->from('buyer_order_detail as d')
             ->leftjoin('business as b','d.business_id','=','b.id')
             ->leftjoin('business_zh as z','z.business_id','=','b.id')
@@ -24,4 +24,6 @@ class OrderDetail extends Model
         $list = $query->get();
         return $list;
     }
+
+
 }

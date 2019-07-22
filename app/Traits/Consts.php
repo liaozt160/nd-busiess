@@ -24,6 +24,7 @@ class Consts {
     const RECORD_EXIST =  1008;
     const PARAM_VALIDATE_WRONG =  1009;
     const PARAM_VALIDATE_OUT_OF_LIMIT =  1010;
+    const SAVE_FILE_ERROR =  1011;
 
 
     /** business status */
@@ -41,6 +42,7 @@ class Consts {
     const ACCOUNT_ACCESS_LEVEL_ONE = 1;
     const ACCOUNT_ACCESS_LEVEL_TWO = 2;
     const ACCOUNT_ACCESS_LEVEL_THREE = 3;
+    const ACCOUNT_ACCESS_LEVEL_Four = 4;
 
     const ACCOUNT_ROLE_ADMIN = 1;
     const ACCOUNT_ROLE_BUYER_BROKER = 2;

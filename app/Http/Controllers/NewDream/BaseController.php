@@ -38,4 +38,7 @@ class BaseController extends Controller
         throw new BaseException(Consts::SUCCESS,'Method not defined');
     }
 
+    protected function paramValidateWrong(){
+        throw new BaseException(Consts::PARAM_VALIDATE_WRONG);
+    }
 }
