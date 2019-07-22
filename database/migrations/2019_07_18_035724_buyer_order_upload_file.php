@@ -13,7 +13,7 @@ class BuyerOrderUploadFile extends Migration
      */
     public function up()
     {
-        Schema::create('buyer_order_upload_file',function (Blueprint $table){
+        Schema::create('buyer_order_upload_files',function (Blueprint $table){
             $table->bigIncrements('id');
             $table->bigInteger('order_id')->comment("订单ID");
             $table->bigInteger('file_id')->comment("文件ID");
