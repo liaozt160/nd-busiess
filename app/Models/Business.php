@@ -72,9 +72,11 @@ class Business extends Model
             $prifix = 'b.';
         }
 //        DB::enableQueryLog();
+        array_push($columns,'a.name as account_name');
         $query = self::from('business as b')
             ->select($columns)
             ->leftjoin('business_zh as z', 'b.id', 'z.business_id')
+            ->leftjoin('accounts as a', 'b.business_broker', 'a.id')
             ->whereNull('b.deleted_at');
         //with broker id or account's id
         if (isset($param['broker_id']) && $param['broker_id'] != 0) {
@@ -113,7 +115,8 @@ class Business extends Model
             $column = $prifix.$param['prop'];
         }
         $query->orderBy($column, $order);
-        $list = $query->with('account:id,name')->paginate(15);
+//        $list = $query->with('account:id,name')->paginate(15);
+        $list = $query->paginate(15);
 //        var_dump(DB::getQueryLog());
         return $list;
     }
@@ -207,16 +210,16 @@ class Business extends Model
 //            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'b.status'];
         $levelOne = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability'
             , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income','gross_income_unit',
-            'value_of_real_estate', 'net_income','net_income_unit', 'lease', 'lease_unit', 'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing', 'b.status'];
+            'value_of_real_estate', 'net_income','net_income_unit', 'lease', 'lease_unit', 'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description','financial_performance','business_assets', 'b.status'];
         $levelTwoList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'b.status', 'updated_at', 'created_at'];
-        $levelTwo = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability'
+        $levelTwo = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability','type'
             , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income','gross_income_unit',
-            'value_of_real_estate', 'net_income', 'net_income_unit','lease','lease_unit',  'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description', 'b.status'];
+            'value_of_real_estate', 'net_income', 'net_income_unit','lease','lease_unit',  'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description','financial_performance','business_assets', 'b.status'];
 
         $levelThreeList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'b.status', 'updated_at', 'created_at'];
-        $levelThree = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability'
+        $levelThree = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability','type'
             , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income','gross_income_unit',
-            'value_of_real_estate', 'net_income', 'net_income_unit','lease','lease_unit',  'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description', 'b.status'];
+            'value_of_real_estate', 'net_income', 'net_income_unit','lease','lease_unit',  'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description','financial_performance','business_assets', 'b.status'];
 
         $columnPrefix = App::getLocale() == 'zh'? 'z.':'b.';
         if($level == Consts::ACCOUNT_ACCESS_LEVEL_ONE){

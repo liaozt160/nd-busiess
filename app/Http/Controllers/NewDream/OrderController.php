@@ -99,14 +99,15 @@ class OrderController extends BaseController
         $user = $this->guard()->user();
 //        Order::accessCheck($orderId,$user);
         $m = Order::getDetailList($orderId);
-//        dd($m->toArray());
         $business = $m->details;
         if($business->isEmpty()){
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
-//        dd($business);
+//        return view('pdf.business_level_one',['business' =>$business]);
         $fileName = 'business('.date('Y-m-d').').pdf';
         $pdf = PDF::loadView('pdf.business_level_one',['business' =>$business]);
+        $pdf->setOptions(['isPhpEnabled'=> true]);
+        $pdf->setPaper('a4');
         return $pdf->stream($fileName);
     }
 
@@ -116,7 +117,6 @@ class OrderController extends BaseController
         $param = $request->input();
         $m = OrderPayInfo::addItem($param);
         return $this->ok($m);
-
     }
 
     public function delPayInformation(Request $request){

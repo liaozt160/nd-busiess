@@ -41,6 +41,7 @@ class Order extends Model
                 $details[] = ['order_no' => $m->order_no, 'business_id' => $item];
             }
             $m->orderDetail()->createMany($details);
+            $m->payInfo()->create(['order_id'=>$m->id,'payment'=>1]);
             DB::commit();
             return $m;
         } catch (BaseException $b) {
@@ -181,27 +182,42 @@ class Order extends Model
 
     public static function auditItem($id, $status, $auditId)
     {
-        if (!($status == 2 || $status == 3)) {
-            throw new BaseException(Consts::STATUS_OUT_OF_RANGE);
-        }
+//        if (!($status == 2 || $status == 3)) {
+//            throw new BaseException(Consts::STATUS_OUT_OF_RANGE);
+//        }
         $m = self::find($id);
         if (!$m) {
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
+
         $m->audit_id = $auditId;
         $m->audit_at = new Carbon();
         $m->status = $status;
-        if ($m->save()) {
-            return $m;
+        if (!$m->save()) {
+            throw new BaseException(Consts::SAVE_RECORD_FAILED);
         }
-        throw new BaseException(Consts::SAVE_RECORD_FAILED);
+        if ($status == 2) {
+            $pay = $m->payInfo()->where('payment', 1)->first();
+            if ($pay) {
+                $pay->verification = 1;
+                $pay->save();
+            }
+        }
+        if ($status == 6) {
+            $pay = $m->payInfo()->where('payment', 2)->first();
+            if ($pay) {
+                $pay->verification = 1;
+                $pay->save();
+            }
+        }
+        return $m;
     }
 
     public static function updateStatus($id, $status)
     {
-        if (!($status == 0 || $status == 1)) {
-            throw new BaseException(Consts::STATUS_OUT_OF_RANGE);
-        }
+//        if (!($status == 0 || $status == 1)) {
+//            throw new BaseException(Consts::STATUS_OUT_OF_RANGE);
+//        }
         $m = self::find($id);
         if (!$m) {
             throw new BaseException(Consts::NO_RECORD_FOUND);
@@ -210,17 +226,30 @@ class Order extends Model
         if (!$m->save()) {
             throw new BaseException(Consts::SAVE_RECORD_FAILED);
         }
+        if ($status == 2) {
+            $pay = $m->payInfo()->where('payment', 1)->first();
+            if ($pay) {
+                $pay->verification = 1;
+                $pay->save();
+            }
+        }
+        if ($status == 6) {
+            $pay = $m->payInfo()->where('payment', 2)->first();
+            if ($pay) {
+                $pay->verification = 1;
+                $pay->save();
+            }
+        }
         return $m;
     }
 
-    public static function getDetailList($id , $level = Consts::ACCOUNT_ACCESS_LEVEL_TWO)
+    public static function getDetailList($id, $level = Consts::ACCOUNT_ACCESS_LEVEL_TWO)
     {
         $m = self::with('buyer:id,buyer', 'audit:id,name')->find($id);
         if (!$m) {
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
-        $m->details = OrderDetail::getBusinessLevel($m->id);
+        $m->details = OrderDetail::getBusinessLevelTwo($m->id);
         return $m;
     }
-
 }

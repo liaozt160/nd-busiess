@@ -19,17 +19,41 @@ class OrderPayInfo extends Model
         }
         $m = self::create($param);
         if($m){
+            if($m->payment == 2){
+                $order = $m->order;
+                if($order){
+                    $order->status = 5;
+                    $order->paid = 2;
+                    $order->save();
+                }
+            }else{
+                $order = $m->order;
+                if($order){
+                    $order->status = 1;
+                    $order->paid = 1;
+                    $order->save();
+                }
+            }
            return $m;
         }
         throw new BaseException(Consts::SAVE_RECORD_FAILED);
     }
 
     public static function delItem($id){
-        $del = self::destroy($id);
-        if($del){
-            return true;
+        $m = self::where('id',$id)->whereNull('verification')->first();
+        if(!$m){
+            throw new BaseException(Consts::NO_RECORD_FOUND);
         }
-        throw new BaseException(Consts::SAVE_RECORD_FAILED);
+        $order = $m->order;
+        if($order){
+            if($m->payment == 2){
+                $order->paid=1;
+                $order->status = 2;
+                $order->save();
+            }
+        }
+        $m->delete();
+        return true;
     }
 
     public static function getList($orderId){
@@ -37,6 +61,9 @@ class OrderPayInfo extends Model
         return  $list;
     }
 
+    public function order(){
+        return $this->belongsTo('App\Models\Order','order_id','id');
+    }
 
 
 }

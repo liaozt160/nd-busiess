@@ -35,4 +35,13 @@ function create_guid($namespace = '')
     return $guid;
 }
 
+function getBusinessStatus($num = null){
+    $array = [
+        1 => 'Yes',
+        2 => 'No',
+        3 => 'NA',
+    ];
+    return isset($array[$num])?$array[$num]:$array[3];
+}
+
 

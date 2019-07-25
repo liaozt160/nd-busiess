@@ -25,5 +25,8 @@ class OrderDetail extends Model
         return $list;
     }
 
+    public static function getBusinessLevelTwo($orderId){
+            return self::getBusinessLevel($orderId,Consts::ACCOUNT_ACCESS_LEVEL_TWO);
+    }
 
 }

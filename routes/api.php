@@ -113,6 +113,7 @@ Route::namespace('NewDream')->group(function () {
             Route::post('order/payment/show', 'OrderController@showPayInformation');
             Route::post('order/payment/pay', 'OrderController@addPayInformation');
             Route::post('order/payment/del', 'OrderController@delPayInformation');
+            Route::post('order/detail/pdf', 'OrderController@loadOrderPdf');
 
             Route::post('order/payment/file/del', 'OrderController@deleteOrderPayInformation');
             Route::post('order/payment/file/upload', 'OrderController@uploadOrderPayInformation');
