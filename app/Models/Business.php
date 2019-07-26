@@ -205,21 +205,26 @@ class Business extends Model
 
     public static function getColumnsByLevel($level = 1,$list = false)
     {
-        $levelOneList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'updated_at', 'created_at','b.status'];
+        $levelOneList = ['id', 'listing', 'title', 'company', 'price', 'updated_at', 'created_at','b.status'];
 //        $levelOne = ['id', 'listing', 'title', 'price', 'company', 'employee_count', 'profitability'
 //            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'b.status'];
-        $levelOne = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability'
-            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income','gross_income_unit',
-            'value_of_real_estate', 'net_income','net_income_unit', 'lease', 'lease_unit', 'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description','financial_performance','business_assets', 'b.status'];
+        $levelOne = ['id', 'listing', 'title', 'company', 'price', 'profitability'
+            , 'country', 'states', 'city', 'address', 'real_estate',
+            'value_of_real_estate',  'commission','business_description','business_assets', 'b.status'];
         $levelTwoList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'b.status', 'updated_at', 'created_at'];
         $levelTwo = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability','type'
             , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income','gross_income_unit',
-            'value_of_real_estate', 'net_income', 'net_income_unit','lease','lease_unit',  'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description','financial_performance','business_assets', 'b.status'];
+            'value_of_real_estate', 'net_income', 'net_income_unit','lease','lease_unit',  'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description','business_assets','financial_performance', 'b.status'];
+
+//        $levelThreeList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'b.status', 'updated_at', 'created_at'];
+//        $levelThree = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability','type'
+//            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income','gross_income_unit',
+//            'value_of_real_estate', 'net_income', 'net_income_unit','lease','lease_unit',  'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description','financial_performance','business_assets', 'b.status'];
 
         $levelThreeList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'b.status', 'updated_at', 'created_at'];
         $levelThree = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability','type'
             , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income','gross_income_unit',
-            'value_of_real_estate', 'net_income', 'net_income_unit','lease','lease_unit',  'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description','financial_performance','business_assets', 'b.status'];
+            'value_of_real_estate', 'net_income', 'net_income_unit','lease','lease_unit',  'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description','business_assets','financial_performance','reason_for_selling', 'b.status'];
 
         $columnPrefix = App::getLocale() == 'zh'? 'z.':'b.';
         if($level == Consts::ACCOUNT_ACCESS_LEVEL_ONE){

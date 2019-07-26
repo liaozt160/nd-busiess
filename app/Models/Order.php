@@ -41,7 +41,7 @@ class Order extends Model
                 $details[] = ['order_no' => $m->order_no, 'business_id' => $item];
             }
             $m->orderDetail()->createMany($details);
-            $m->payInfo()->create(['order_id'=>$m->id,'payment'=>1]);
+            $m->payInfo()->create(['order_id' => $m->id, 'payment' => 1]);
             DB::commit();
             return $m;
         } catch (BaseException $b) {
@@ -243,13 +243,30 @@ class Order extends Model
         return $m;
     }
 
-    public static function getDetailList($id, $level = Consts::ACCOUNT_ACCESS_LEVEL_TWO)
+    public static function getDetailList($id, $level = Consts::ACCOUNT_ACCESS_LEVEL_ONE, $isAdmin = false)
     {
         $m = self::with('buyer:id,buyer', 'audit:id,name')->find($id);
         if (!$m) {
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
-        $m->details = OrderDetail::getBusinessLevelTwo($m->id);
+        if ($isAdmin) {   //admin access watch all
+            $level = Consts::ACCOUNT_ACCESS_LEVEL_FOUR;
+        } else {
+            $pays = $m->payInfo()->whereNotNull('verification')->get();
+            if ($pays->isEmpty()) {
+                $level = Consts::ACCOUNT_ACCESS_LEVEL_ONE;
+            } elseif ($pays->count() > 1) {
+                $level = Consts::ACCOUNT_ACCESS_LEVEL_THREE; //decide the level from the pay detail
+            } else {
+                $pay = $pays->pop();
+                if ($pay->payment == Consts::ORDER_PAYMENT_INSPECT) {
+                    $level = Consts::ACCOUNT_ACCESS_LEVEL_THREE;
+                } else {
+                    $level = Consts::ACCOUNT_ACCESS_LEVEL_TWO;
+                }
+            }
+        }
+        $m->details = OrderDetail::getBusinessLevel($m->id, $level);
         return $m;
     }
 }
