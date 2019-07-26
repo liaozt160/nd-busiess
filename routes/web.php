@@ -18,7 +18,7 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
 });
 
 Route::get('/info', function () {
-//    echo phpinfo();
+    echo phpinfo();
 });
 
 Route::get('/pdf', function () {
@@ -34,10 +34,10 @@ Route::get('/pdf', function () {
     return $pdf->stream();
 });
 
-Route::get('/loadpdf', 'NewDream\OrderController@loadOrderPdf');
-Route::get('/viewpdf', function () {
-   return view();
-});
+//Route::get('/loadpdf', 'NewDream\OrderController@loadOrderPdf');
+//Route::get('/viewpdf', function () {
+//   return view();
+//});
 
 
 Route::get('/vue', function () {

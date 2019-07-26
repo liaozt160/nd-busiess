@@ -11,7 +11,7 @@
     }
 
     body {
-        /*width: 95%;*/
+        width: 95%;
         /*max-width: 1100px;*/
         font-family: msyh, DejaVu Sans,sans-serif;
         margin: 0px auto;
