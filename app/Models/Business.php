@@ -210,11 +210,11 @@ class Business extends Model
 //            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'b.status'];
         $levelOne = ['id', 'listing', 'title', 'company', 'price', 'profitability'
             , 'country', 'states', 'city', 'address', 'real_estate',
-            'value_of_real_estate',  'commission','business_description','business_assets', 'b.status'];
+            'value_of_real_estate',  'commission','business_description','business_assets', 'b.status','updated_at', 'created_at'];
         $levelTwoList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'b.status', 'updated_at', 'created_at'];
         $levelTwo = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability','type'
             , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income','gross_income_unit',
-            'value_of_real_estate', 'net_income', 'net_income_unit','lease','lease_unit',  'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description','business_assets','financial_performance', 'b.status'];
+            'value_of_real_estate', 'net_income', 'net_income_unit','lease','lease_unit',  'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description','business_assets','financial_performance', 'b.status','updated_at', 'created_at'];
 
 //        $levelThreeList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'b.status', 'updated_at', 'created_at'];
 //        $levelThree = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability','type'
@@ -224,7 +224,7 @@ class Business extends Model
         $levelThreeList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'b.status', 'updated_at', 'created_at'];
         $levelThree = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability','type'
             , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income','gross_income_unit',
-            'value_of_real_estate', 'net_income', 'net_income_unit','lease','lease_unit',  'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description','business_assets','financial_performance','reason_for_selling', 'b.status'];
+            'value_of_real_estate', 'net_income', 'net_income_unit','lease','lease_unit',  'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description','business_assets','financial_performance','reason_for_selling', 'b.status','updated_at', 'created_at'];
 
         $columnPrefix = App::getLocale() == 'zh'? 'z.':'b.';
         if($level == Consts::ACCOUNT_ACCESS_LEVEL_ONE){
