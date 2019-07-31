@@ -106,7 +106,7 @@ class OrderController extends BaseController
 //        return view('pdf.business_level_one',['business' =>$business]);
         $fileName = 'business('.date('Y-m-d').').pdf';
         $pdf = PDF::loadView('pdf.business_level_one',['business' =>$business]);
-        $pdf->setOptions(['isPhpEnabled'=> true,'dpi' => 96,'defaultFont' => 'STSong-Light']);
+        $pdf->setOptions(['isPhpEnabled'=> true,'dpi' => 96]);
         $pdf->setPaper('a4');
         return $pdf->stream($fileName);
     }

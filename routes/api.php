@@ -97,6 +97,7 @@ Route::namespace('NewDream')->group(function () {
             Route::post('buyer/attention/pay', 'BuyerController@attentionPay');
             Route::post('buyer/attention/list', 'BuyerController@attentionList');
             Route::post('buyer/attention/del', 'BuyerController@attentionDel');
+            Route::post('buyer/attention/pdf', 'BuyerController@attentionPdf');
 
             Route::post('business/buyer/list/level/one', 'BusinessController@BuyerListLevelOne');
             Route::post('business/buyer/list/level/two', 'BusinessController@BuyerListLevelTwo');

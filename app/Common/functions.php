@@ -44,4 +44,24 @@ function getBusinessStatus($num = null){
     return isset($array[$num])?$array[$num]:$array[3];
 }
 
+function getIdsFromString($str,&$ids){
+    $pattern = '/\d+/';
+    if(preg_match_all($pattern, $str, $ids)){
+        $ids = $ids[0];
+        return  true;
+    }else{
+        return false;
+    }
+}
+
+function getDateUnit($num){
+    $array =[
+        1 => 'week',
+        2 => 'month',
+        3 => 'quarter',
+        4 => 'year',
+    ];
+    return isset($array[$num])?$array[$num]:null;
+}
+
 

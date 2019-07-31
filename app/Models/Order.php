@@ -19,6 +19,9 @@ class Order extends Model
 
     public static function addItem($param, $accountId)
     {
+        if(isset($param['paid']) && $param['paid'] == Consts::ORDER_PAYMENT_INSPECT){
+            $param['paid'] = Consts::ORDER_STATUS_INSPECT_UNPAID;
+        }
         DB::beginTransaction();
         try {
             $m = new self();

@@ -34,7 +34,7 @@ Route::get('/pdf', function () {
     return $pdf->stream();
 });
 
-//Route::get('/loadpdf', 'NewDream\OrderController@loadOrderPdf');
+Route::get('/loadpdf', 'NewDream\OrderController@loadOrderPdf');
 //Route::get('/viewpdf', function () {
 //   return view();
 //});

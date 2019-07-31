@@ -7,6 +7,7 @@ use App\Traits\Consts;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BusinessAttention extends Model
 {
@@ -61,6 +62,7 @@ class BusinessAttention extends Model
 
 
     public static function getListByBuyer($accountId,$param=[]){
+//        DB::enableQueryLog();
         $query = self::from('attention_to_business as t')
             ->select(['t.id','b.company','b.title','b.listing','b.price','b.status','t.business_id','a.name','t.account_id','s.buyer','t.buyer_id','t.created_at']);
         $query->leftjoin('accounts as a','t.account_id','=','a.id')
@@ -77,6 +79,7 @@ class BusinessAttention extends Model
             $query->where(DB::raw("concat(title,listing)"),'like','%'.$q.'%');
         }
         $list = $query->paginate(15);
+//        Log::debug(DB::getQueryLog());
         return $list;
     }
 
@@ -96,17 +99,13 @@ class BusinessAttention extends Model
     }
 
 
-    public static function delItemByBuyer($id){
-        $m = self::find($id);
-        if(!$m){
-            throw new BaseException(Consts::NO_RECORD_FOUND);
+    public static function delItemByBuyer($ids){
+        $update = self::whereIn('id',$ids)
+            ->update(['buyer_deleted_at' => new Carbon(),'business_deleted_at'=>new Carbon()]);
+        if($update){
+            return $update;
         }
-        $m->buyer_deleted_at = new Carbon();
-        $m->business_deleted_at = new Carbon();
-        if($m->save()){
-            return $m;
-        }
-        throw new BaseException(Consts::SAVE_RECORD_FAILED);
+        throw new BaseException(Consts::NO_RECORD_FOUND);
     }
 
     public static function delItemByBusiness($id){

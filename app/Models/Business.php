@@ -208,8 +208,9 @@ class Business extends Model
         $levelOneList = ['id', 'listing', 'title', 'company', 'price', 'updated_at', 'created_at','b.status'];
 //        $levelOne = ['id', 'listing', 'title', 'price', 'company', 'employee_count', 'profitability'
 //            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'b.status'];
-        $levelOne = ['id', 'listing', 'title', 'company', 'price', 'profitability'
-            , 'country', 'states', 'city', 'address', 'real_estate',
+        $levelOne = ['id', 'listing', 'title', 'company', 'price','employee_count','profitability','type'
+            , 'country', 'states', 'city', 'address',
+//            'real_estate','gross_income','gross_income_unit','net_income', 'net_income_unit','lease','lease_unit', 'building_sf',
             'value_of_real_estate',  'commission','business_description','business_assets', 'b.status','updated_at', 'created_at'];
         $levelTwoList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'b.status', 'updated_at', 'created_at'];
         $levelTwo = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability','type'
@@ -238,7 +239,9 @@ class Business extends Model
             array_push($columns,'b.status');
         }
         $columns = array_map(function ($item) use ($columnPrefix) {
-            return  $item == 'b.status' ? $item: $columnPrefix . $item;
+            if($item == 'id')  return 'b.id';
+            if($item == 'b.status') return $item;
+            return  $columnPrefix . $item;
         }, $columns);
         return $columns;
     }
@@ -351,6 +354,22 @@ class Business extends Model
             throw new BaseException(Consts::UNKNOWN_ERROR,$e->getMessage());
         }
         return $m;
+    }
+
+    public static function getBusinessLevel($ids,$level = Consts::ACCOUNT_ACCESS_LEVEL_ONE){
+        $columns = Business::getColumnsByLevel($level);
+        if (App::getLocale() == 'zh') {
+            $columnPrefix = 'z.';
+        } else {
+            $columnPrefix = 'b.';
+        }
+        $query = self::select($columns)
+            ->from('business as b')
+            ->leftjoin('business_zh as z', 'b.id', 'z.business_id')
+            ->whereIn('b.id',$ids);
+//            ->whereNull('b.deleted_at');
+        $list = $query->get();
+        return $list;
     }
 
 

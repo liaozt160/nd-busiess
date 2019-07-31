@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\NewDream;
 
 use App\Exceptions\BaseException;
+use App\Models\Business;
 use App\Models\BusinessAttention;
 use App\Models\Buyer;
 use App\Traits\Consts;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use PDF;
 
 class BuyerController extends BaseController
 {
@@ -63,15 +65,34 @@ class BuyerController extends BaseController
 
     public function attentionList(Request $request){
         $accountId = $this->guard()->id();
-        $list = BusinessAttention::getListByBuyer($accountId);
+        $param = $request->input();
+        $list = BusinessAttention::getListByBuyer($accountId,$param);
         return $this->ok($list);
     }
 
     public function attentionDel(Request $request){
-        $id = $request->input('id');
-        $m = BusinessAttention::delItemByBuyer($id);
+        $str = $request->input('ids');
+        if(!getIdsFromString($str,$ids)){
+            throw new BaseException(Consts::PARAM_VALIDATE_WRONG);
+        }
+        $m = BusinessAttention::delItemByBuyer($ids);
         return $this->ok();
     }
+
+    public function attentionPdf(Request $request){
+        $str = $request->input('ids');
+        if(!getIdsFromString($str,$ids)){
+            throw new BaseException(Consts::PARAM_VALIDATE_WRONG);
+        }
+        $business = Business::getBusinessLevel($ids,Consts::ACCOUNT_ACCESS_LEVEL_ONE);
+//        return view('pdf.business_level_one',['business' =>$business]);
+        $fileName = 'business('.date('Y-m-d').').pdf';
+        $pdf = PDF::loadView('pdf.business_level_one',['business' =>$business]);
+        $pdf->setOptions(['isPhpEnabled'=> true,'dpi' => 96]);
+        $pdf->setPaper('a4');
+        return $pdf->stream($fileName);
+    }
+
 
     public function Query(){
         $accountId = $this->guard()->id();
