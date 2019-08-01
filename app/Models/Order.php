@@ -19,7 +19,7 @@ class Order extends Model
 
     public static function addItem($param, $accountId)
     {
-        if(isset($param['paid']) && $param['paid'] == Consts::ORDER_PAYMENT_INSPECT){
+        if (isset($param['paid']) && $param['paid'] == Consts::ORDER_PAYMENT_INSPECT) {
             $param['paid'] = Consts::ORDER_STATUS_INSPECT_UNPAID;
         }
         DB::beginTransaction();
@@ -118,12 +118,14 @@ class Order extends Model
             ->whereNull('o.deleted_at');
         if ($buyerId) {
             $query->where('o.buyer_id', $buyerId);
-        }
-        if ($accountId) {
-            $query->where('o.account_id', $accountId);
         } else {
-            $query->where('o.status', '<>', 0);
+            if ($accountId) {
+                $query->where('o.account_id', $accountId);
+            } else {
+                $query->where('o.status', '<>', 0);
+            }
         }
+
         $list = $query->paginate(15);
 //        var_dump(DB::getQueryLog());
         return $list;
