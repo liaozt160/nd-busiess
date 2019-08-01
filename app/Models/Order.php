@@ -20,7 +20,7 @@ class Order extends Model
     public static function addItem($param, $accountId)
     {
         if (isset($param['paid']) && $param['paid'] == Consts::ORDER_PAYMENT_INSPECT) {
-            $param['paid'] = Consts::ORDER_STATUS_INSPECT_UNPAID;
+            $param['status'] = Consts::ORDER_STATUS_INSPECT_UNPAID;
         }
         DB::beginTransaction();
         try {
@@ -44,7 +44,7 @@ class Order extends Model
                 $details[] = ['order_no' => $m->order_no, 'business_id' => $item];
             }
             $m->orderDetail()->createMany($details);
-            $m->payInfo()->create(['order_id' => $m->id, 'payment' => 1]);
+            $m->payInfo()->create(['order_id' => $m->id, 'payment' => $m->paid]);
             DB::commit();
             return $m;
         } catch (BaseException $b) {
@@ -125,7 +125,6 @@ class Order extends Model
                 $query->where('o.status', '<>', 0);
             }
         }
-
         $list = $query->paginate(15);
 //        var_dump(DB::getQueryLog());
         return $list;
