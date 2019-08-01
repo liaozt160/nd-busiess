@@ -122,7 +122,7 @@ class Order extends Model
             if ($accountId) {
                 $query->where('o.account_id', $accountId);
             } else {
-                $query->where('o.status', '<>', 0);
+                $query->whereNotIn('o.status',[Consts::ORDER_STATUS_INSPECT_UNPAID,Consts::ORDER_STATUS_INFO_UNPAID]);
             }
         }
         $list = $query->paginate(15);
