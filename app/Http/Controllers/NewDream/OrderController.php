@@ -72,10 +72,11 @@ class OrderController extends BaseController
     public function Status(Request $request){
         $id = $request->input('id');
         $status = $request->input('status');
+        $reason = $request->input('reason');
         if(!($id || $status)){
             throw new BaseException(Consts::DATA_VALIDATE_WRONG);
         }
-        $m = Order::updateStatus($id,$status);
+        $m = Order::updateStatus($id,$status,$reason);
         return $this->ok();
     }
 

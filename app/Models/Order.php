@@ -19,9 +19,9 @@ class Order extends Model
 
     public static function addItem($param, $accountId)
     {
-        if (isset($param['paid']) && $param['paid'] == Consts::ORDER_PAYMENT_INSPECT) {
-            $param['status'] = Consts::ORDER_STATUS_INSPECT_UNPAID;
-        }
+//        if (isset($param['paid']) && $param['paid'] == Consts::ORDER_PAYMENT_INSPECT) {
+//            $param['status'] = Consts::ORDER_STATUS_INSPECT_UNPAID;
+//        }
         DB::beginTransaction();
         try {
             $m = new self();
@@ -118,11 +118,14 @@ class Order extends Model
             ->whereNull('o.deleted_at');
         if ($buyerId) {
             $query->where('o.buyer_id', $buyerId);
+            $query->orderBy('o.updated_at','DESC');
         } else {
             if ($accountId) {
                 $query->where('o.account_id', $accountId);
             } else {
                 $query->whereNotIn('o.status',[Consts::ORDER_STATUS_INSPECT_UNPAID,Consts::ORDER_STATUS_INFO_UNPAID]);
+                $query->orderBy('o.updated_at','DESC');
+                $query->orderBy('o.status','ASC');
             }
         }
         $list = $query->paginate(15);
@@ -217,7 +220,7 @@ class Order extends Model
         return $m;
     }
 
-    public static function updateStatus($id, $status)
+    public static function updateStatus($id, $status,$reason = null)
     {
 //        if (!($status == 0 || $status == 1)) {
 //            throw new BaseException(Consts::STATUS_OUT_OF_RANGE);
@@ -227,22 +230,11 @@ class Order extends Model
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
         $m->status = $status;
+        if($reason && $status == 3){
+            $m->audit_reason = $reason;
+        }
         if (!$m->save()) {
             throw new BaseException(Consts::SAVE_RECORD_FAILED);
-        }
-        if ($status == 2) {
-            $pay = $m->payInfo()->where('payment', 1)->first();
-            if ($pay) {
-                $pay->verification = 1;
-                $pay->save();
-            }
-        }
-        if ($status == 6) {
-            $pay = $m->payInfo()->where('payment', 2)->first();
-            if ($pay) {
-                $pay->verification = 1;
-                $pay->save();
-            }
         }
         return $m;
     }
