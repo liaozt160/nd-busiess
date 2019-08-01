@@ -109,7 +109,7 @@ class Order extends Model
     public static function listItem($param, $buyerId = null, $accountId = null)
     {
 //        DB::enableQueryLog();
-        $column = ['o.id', 'o.account_id', 'b.name as account_name', 'b.role as account_role', 'o.buyer_id', 'c.buyer as buyer_name', 'o.audit_id', 'a.name as audit_name', 'o.order_no', 'o.paid', 'o.pay_amount', 'o.remark', 'o.created_at', 'o.audit_at', 'o.status'];
+        $column = ['o.id', 'o.account_id', 'b.name as account_name', 'b.role as account_role', 'o.buyer_id', 'c.buyer as buyer_name', 'o.audit_id', 'a.name as audit_name', 'o.order_no', 'o.paid', 'o.pay_amount', 'o.remark', 'o.created_at', 'o.audit_at','o.audit_reason', 'o.status'];
         $query = self::from('buyer_order as o')
             ->select($column)
             ->leftjoin('accounts as a', 'o.audit_id', '=', 'a.id')
@@ -187,7 +187,7 @@ class Order extends Model
         return $m;
     }
 
-    public static function auditItem($id, $status, $auditId)
+    public static function auditItem($id, $status, $auditId , $reason = null)
     {
 //        if (!($status == 2 || $status == 3)) {
 //            throw new BaseException(Consts::STATUS_OUT_OF_RANGE);
@@ -200,22 +200,11 @@ class Order extends Model
         $m->audit_id = $auditId;
         $m->audit_at = new Carbon();
         $m->status = $status;
+        if($reason && $status == 3){
+            $m->audit_reason = $reason;
+        }
         if (!$m->save()) {
             throw new BaseException(Consts::SAVE_RECORD_FAILED);
-        }
-        if ($status == 2) {
-            $pay = $m->payInfo()->where('payment', 1)->first();
-            if ($pay) {
-                $pay->verification = 1;
-                $pay->save();
-            }
-        }
-        if ($status == 6) {
-            $pay = $m->payInfo()->where('payment', 2)->first();
-            if ($pay) {
-                $pay->verification = 1;
-                $pay->save();
-            }
         }
         return $m;
     }
@@ -230,9 +219,9 @@ class Order extends Model
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
         $m->status = $status;
-        if($reason && $status == 3){
-            $m->audit_reason = $reason;
-        }
+//        if($reason && $status == 3){
+//            $m->audit_reason = $reason;
+//        }
         if (!$m->save()) {
             throw new BaseException(Consts::SAVE_RECORD_FAILED);
         }
