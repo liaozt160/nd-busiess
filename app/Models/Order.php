@@ -237,19 +237,25 @@ class Order extends Model
         if ($isAdmin) {   //admin access watch all
             $level = Consts::ACCOUNT_ACCESS_LEVEL_FOUR;
         } else {
-            $pays = $m->payInfo()->whereNotNull('verification')->get();
-            if ($pays->isEmpty()) {
-                $level = Consts::ACCOUNT_ACCESS_LEVEL_ONE;
-            } elseif ($pays->count() > 1) {
-                $level = Consts::ACCOUNT_ACCESS_LEVEL_THREE; //decide the level from the pay detail
-            } else {
-                $pay = $pays->pop();
-                if ($pay->payment == Consts::ORDER_PAYMENT_INSPECT) {
-                    $level = Consts::ACCOUNT_ACCESS_LEVEL_THREE;
-                } else {
-                    $level = Consts::ACCOUNT_ACCESS_LEVEL_TWO;
-                }
+              if($m->paid == 1 && $m->status == 2){
+                  $level = Consts::ACCOUNT_ACCESS_LEVEL_TWO;
+              }
+            if($m->paid == 2 && $m->status == 2){
+                $level = Consts::ACCOUNT_ACCESS_LEVEL_THREE;
             }
+//            $pays = $m->payInfo()->whereNotNull('verification')->get();
+//            if ($pays->isEmpty()) {
+//                $level = Consts::ACCOUNT_ACCESS_LEVEL_ONE;
+//            } elseif ($pays->count() > 1) {
+//                $level = Consts::ACCOUNT_ACCESS_LEVEL_THREE; //decide the level from the pay detail
+//            } else {
+//                $pay = $pays->pop();
+//                if ($pay->payment == Consts::ORDER_PAYMENT_INSPECT) {
+//                    $level = Consts::ACCOUNT_ACCESS_LEVEL_THREE;
+//                } else {
+//                    $level = Consts::ACCOUNT_ACCESS_LEVEL_TWO;
+//                }
+//            }
         }
         $m->details = OrderDetail::getBusinessLevel($m->id, $level);
         return $m;
