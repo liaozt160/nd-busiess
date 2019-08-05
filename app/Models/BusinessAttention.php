@@ -6,6 +6,7 @@ use App\Exceptions\BaseException;
 use App\Traits\Consts;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -37,11 +38,13 @@ class BusinessAttention extends Model
     }
 
     public static function getList($param,$accountId){
+        $prefix = App::getLocale() == 'zh'?'z':'b';
         $query = self::from('attention_to_business as t')
-            ->select(['t.id','b.company','b.title','b.listing','b.price','b.status','t.business_id','a.name','t.account_id','s.buyer','t.buyer_id','t.created_at']);
+            ->select(['t.id','b.company',$prefix.'.title',$prefix.'.listing',$prefix.'.price','b.status','t.business_id','a.name','t.account_id','s.buyer','t.buyer_id','t.created_at']);
         $query->leftjoin('accounts as a','t.account_id','=','a.id')
-        ->leftjoin('business as b','t.business_id','=','b.id')
-        ->leftjoin('buyer as s','t.buyer_id','=','s.id')
+        ->leftjoin('business_zh as z','t.business_id','=','z.business_id')
+        ->leftjoin('business as b','t.business_id','=','b.id');
+        $query->leftjoin('buyer as s','t.buyer_id','=','s.id')
         ->whereNull('buyer_deleted_at');
         // filter
         if(isset($param['status']) && $param['status']){
@@ -53,9 +56,15 @@ class BusinessAttention extends Model
 
         if(isset($param['q']) && $param['q']){
             $q = $param['q'];
-            $query->where(DB::raw("concat(title,listing)"),'like','%'.$q.'%');
+            $query->where(DB::raw("concat(nd_{$prefix}.title,nd_{$prefix}.listing)"),'like','%'.$q.'%');
         }
 
+        if(isset($param['buyers']) && $param['buyers']){
+            $buyerId = $param['buyers'];
+            $query->where('t.buyer_id',$buyerId);
+        }
+
+        $query->orderBy('t.updated_at','DESC');
         $list = $query->paginate(15);
         return $list;
     }

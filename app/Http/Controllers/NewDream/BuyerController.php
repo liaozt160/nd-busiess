@@ -95,7 +95,9 @@ class BuyerController extends BaseController
 
 
     public function Query(){
-        $accountId = $this->guard()->id();
+//        $accountId = $this->guard()->id();
+        $user = $this->guard()->user();
+        $accountId = $user->role==Consts::ACCOUNT_ROLE_ADMIN?null:$user->id;
         $list = Buyer::queryAll($accountId);
         return $this->ok($list);
     }
