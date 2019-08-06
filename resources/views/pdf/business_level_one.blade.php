@@ -114,9 +114,9 @@
                 <div class="headerTitle"><b>REAL ESTATE:</b> {{getBusinessStatus($busines->real_estate)}}</div>
             @endif
         <!--是否连锁店-->
-            {{--@if(isset($busines->listing) && $busines->type)--}}
-            {{--<div class="headerTitle">Type: {{$busines->type}}</div>--}}
-            {{--@endif--}}
+            @if(isset($busines->franchise) && $busines->franchise)
+            <div class="headerTitle">Franchise: {{getBusinessStatus($busines->franchise)}}</div>
+            @endif
         <!--营业面积-->
             @if(isset($busines->building_sf) && $busines->building_sf)
                 <div class="headerTitle"><b>BUILDING SF: </b>{{$busines->building_sf}}</div>
@@ -165,11 +165,34 @@
                     {{$busines->business_description}}
                 </p>
             @endif
+
+            @if(isset($busines->employee_info) && $busines->employee_info)
+                <div class="headerTitle"><b>EMPLOYEE INFORMATION</b></div>
+                <p class="description">
+                    {{$busines->employee_info}}
+                </p>
+            @endif
+
             @if(isset($busines->financial_performance) && $busines->financial_performance)
                 <div class="headerTitle"><b>FINANCIAL PERFORMANCE</b></div>
                 <p class="description"> {{$busines->financial_performance}}
                 </p>
             @endif
+
+            @if(isset($busines->franchise_reports) && $busines->franchise_reports)
+                <div class="headerTitle"><b>FRANCHISE REPORTS</b></div>
+                <p class="description">
+                    {{$busines->franchise_reports}}
+                </p>
+            @endif
+
+            @if(isset($busines->tax_returns) && $busines->tax_returns)
+                <div class="headerTitle"><b>TAX RETURNS</b></div>
+                <p class="description">
+                    {{$busines->tax_returns}}
+                </p>
+            @endif
+
             @if(isset($busines->business_assets) && $busines->business_assets)
                 <div class="headerTitle"><b>BUSINESS ASSETS</b></div>
                 <p class="description">
