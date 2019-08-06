@@ -83,10 +83,16 @@ class BusinessAttention extends Model
         if(isset($param['status']) && $param['status']){
             $query->where('b.status',$param['status']);
         }
+
+        if(isset($param['buyers']) && $param['buyers']){
+            $query->where('t.buyer_id',$param['buyers']);
+        }
+
         if(isset($param['q']) && $param['q']){
             $q = $param['q'];
             $query->where(DB::raw("concat(title,listing)"),'like','%'.$q.'%');
         }
+
         $list = $query->paginate(15);
 //        Log::debug(DB::getQueryLog());
         return $list;
