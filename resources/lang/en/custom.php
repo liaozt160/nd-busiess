@@ -18,6 +18,7 @@ return [
     'building_sf' => 'BUILDING SF',
     'employee_count' => 'EMPLOYEE COUNT',
     'gross_income' => 'GROSS INCOME',
+    'gross_revenue' => 'GROSS REVENUE',
     'ebitda' => 'EBITDA(Earning Before Interest, Tax, Depreciation & Amortization)',
     'ff_e' => 'FF&E(Furniture, Fixture, & Equipment)(Furniture, Fixture, & Equipment)',
     'inventory' => 'INVENTORY',

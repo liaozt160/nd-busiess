@@ -130,7 +130,7 @@
             @endif
         <!--毛利润-->
             @if(isset($busines->gross_income) && $busines->gross_income)
-                <div class="headerTitle"><span>{{__('custom.gross_income')}}: </span>{{$busines->gross_income . '  /' . __('custom.'.getDateUnit($busines->gross_income_unit))}}</div>
+                <div class="headerTitle"><span>{{__('custom.gross_revenue')}}: </span>{{$busines->gross_income . '  /' . __('custom.'.getDateUnit($busines->gross_income_unit))}}</div>
             @endif
         <!--税息折旧及摊销前利润-->
             @if(isset($busines->ebitda) && $busines->ebitda)
