@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderPayInfo;
 use App\Models\UploadFile;
 use App\Traits\Consts;
+use Illuminate\Support\Facades\App;
 use PDF;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

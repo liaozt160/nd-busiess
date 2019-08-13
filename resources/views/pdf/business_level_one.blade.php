@@ -54,7 +54,10 @@
             width: 95%;
             /*background-color: #03a9f4;*/
         }
-
+        .headerTitle span{
+            font-size: 16px;
+            padding-right: 10px;
+        }
         main {
             width: 95%;
             margin: 0 auto;
@@ -88,119 +91,118 @@
         @endif
                 ">
             <!--编号-->
-            <div class="headerTitle"><b>NO #: </b>{{++$key }}</div>
+            <div class="headerTitle"><span>{{__('custom.no')}} #: </span>{{++$key }}</div>
             @if(isset($busines->listing) && $busines->listing)
-                <div class="headerTitle"><b>LISTING #:</b> {{$busines->listing}}</div>
+                <div class="headerTitle"><span>{{__('custom.listing')}} #:</span> {{$busines->listing}}</div>
             @endif
         <!--标题-->
             @if(isset($busines->title) && $busines->title)
-                <div class="headerTitle"><b>TITLE:</b> {{$busines->title}}</div>
+                <div class="headerTitle"><span>{{__('custom.title')}}:</span> {{$busines->title}}</div>
             @endif
         <!--标价-->
             @if(isset($busines->price) && $busines->price)
-                <div class="headerTitle"><b>PRICE:</b> $ {{$busines->price}}</div>
+                <div class="headerTitle"><span>{{__('custom.price')}}:</span> $ {{$busines->price}}</div>
             @endif
         <!--地理位置-->
             @if(isset($busines->address) || isset($busines->country) || isset($busines->states))
                 <div class="headerTitle">
-                    <b>LOCATION:</b>{{isset($busines->country)?$busines->country:'' .' '. isset($busines->states)?$busines->states:'' .' '. isset($busines->states)?$busines->address:'' }}</div>
+                    <span>{{__('custom.location')}}:</span>{{isset($busines->country)?$busines->country:'' .' '. isset($busines->states)?$busines->states:'' .' '. isset($busines->states)?$busines->address:'' }}</div>
             @endif
             <!--是否盈利-->
             @if(isset($busines->profitability) && $busines->profitability)
-                <div class="headerTitle"><b>PROFITABILITY:</b> {{getBusinessStatus($busines->profitability)}}</div>
+                <div class="headerTitle"><span>{{__('custom.profitability')}}:</span> {{getBusinessStatus($busines->profitability)}}</div>
             @endif
         <!--是否包含房地产-->
             @if(isset($busines->real_estate) && $busines->real_estate)
-                <div class="headerTitle"><b>REAL ESTATE:</b> {{getBusinessStatus($busines->real_estate)}}</div>
+                <div class="headerTitle"><span>{{__('custom.real_estate')}}:</span> {{getBusinessStatus($busines->real_estate)}}</div>
             @endif
         <!--是否连锁店-->
             @if(isset($busines->franchise) && $busines->franchise)
-            <div class="headerTitle">Franchise: {{getBusinessStatus($busines->franchise)}}</div>
+            <div class="headerTitle">{{__('custom.Franchise')}}: {{getBusinessStatus($busines->franchise)}}</div>
             @endif
         <!--营业面积-->
             @if(isset($busines->building_sf) && $busines->building_sf)
-                <div class="headerTitle"><b>BUILDING SF: </b>{{$busines->building_sf}}</div>
+                <div class="headerTitle"><span>{{__('custom.building_sf')}}: </span>{{$busines->building_sf}}</div>
             @endif
         <!--员工人数-->
             @if(isset($busines->employee_count) && $busines->employee_count)
-                <div class="headerTitle"><b>EMPLOYEE COUNT:</b> {{$busines->employee_count}}</div>
+                <div class="headerTitle"><span>{{__('custom.employee_count')}}:</span> {{$busines->employee_count}}</div>
             @endif
         <!--毛利润-->
             @if(isset($busines->gross_income) && $busines->gross_income)
-                <div class="headerTitle"><b>GROSS INCOME: </b>{{$busines->gross_income . '  /' . __('custom.'.getDateUnit($busines->gross_income_unit))}}</div>
+                <div class="headerTitle"><span>{{__('custom.gross_income')}}: </span>{{$busines->gross_income . '  /' . __('custom.'.getDateUnit($busines->gross_income_unit))}}</div>
             @endif
         <!--税息折旧及摊销前利润-->
             @if(isset($busines->ebitda) && $busines->ebitda)
-                <div class="headerTitle"><b>EBITDA(Earning Before Interest, Tax, Depreciation &
-                        Amortization): </b>{{$busines->ebitda}}</div>
+                <div class="headerTitle"><span>{{__('custom.ebitda')}}: </span>{{$busines->ebitda}}</div>
             @endif
         <!--硬件资产价值-->
             @if(isset($busines->ff_e) && $busines->ff_e)
-                <div class="headerTitle"><b>FF&E(Furniture, Fixture, & Equipment):</b> {{$busines->ff_e}}</div>
+                <div class="headerTitle"><span>{{__('custom.ff_e')}}:</span> {{$busines->ff_e}}</div>
             @endif
         <!--库存-->
             @if(isset($busines->inventory) && $busines->inventory)
-                <div class="headerTitle"><b>INVENTORY: </b>{{$busines->inventory}}</div>
+                <div class="headerTitle"><span>{{__('custom.inventory')}}: </span>{{$busines->inventory}}</div>
             @endif
         <!--净利润-->
             @if(isset($busines->net_income) && $busines->net_income)
-                <div class="headerTitle"><b>NET INCOME:</b> {{$busines->net_income . '  /' . __('custom.'.getDateUnit($busines->net_income_unit))}}</div>
+                <div class="headerTitle"><span>{{__('custom.net_income')}}:</span> {{$busines->net_income . '  /' . __('custom.'.getDateUnit($busines->net_income_unit))}}</div>
             @endif
         <!--租约有效期-->
             @if(isset($busines->lease) && $busines->lease)
-                <div class="headerTitle"><b>LEASE TERM:</b> {{$busines->lease . ' /' . __('custom.'.getDateUnit($busines->lease_unit))}}</div>
+                <div class="headerTitle"><span>{{__('custom.lease_term')}}:</span> {{$busines->lease . ' /' . __('custom.'.getDateUnit($busines->lease_unit))}}</div>
             @endif
         <!--房地产估价-->
             @if(isset($busines->leasvalue_of_real_estatee) && $busines->leasvalue_of_real_estatee)
-                <div class="headerTitle"><b>Est. Value of Real Estate: </b>{{$busines->value_of_real_estate}}</div>
+                <div class="headerTitle"><b{{__('custom.value_of_real')}}: </span>{{$busines->value_of_real_estate}}</div>
             @endif
         <!--卖家融资-->
             @if(isset($busines->buyer_financing) && $busines->buyer_financing)
-                <div class="headerTitle"><b>BUYER FINANCING: </b>{{$busines->buyer_financing}}</div>
+                <div class="headerTitle"><span>{{__('custom.buyer_financing')}}: </span>{{$busines->buyer_financing}}</div>
             @endif
 
             @if(isset($busines->business_description) && $busines->business_description)
-                <div class="headerTitle"><b>BUSINESS DESCRIPTION</b></div>
+                <div class="headerTitle"><span>{{__('custom.business_description')}}</span></div>
                 <p class="description">
                     {{$busines->business_description}}
                 </p>
             @endif
 
             @if(isset($busines->employee_info) && $busines->employee_info)
-                <div class="headerTitle"><b>EMPLOYEE INFORMATION</b></div>
+                <div class="headerTitle"><span>{{__('custom.employee_information')}}</span></div>
                 <p class="description">
                     {{$busines->employee_info}}
                 </p>
             @endif
 
             @if(isset($busines->financial_performance) && $busines->financial_performance)
-                <div class="headerTitle"><b>FINANCIAL PERFORMANCE</b></div>
+                <div class="headerTitle"><span>{{__('custom.financial_performance')}}</span></div>
                 <p class="description"> {{$busines->financial_performance}}
                 </p>
             @endif
 
             @if(isset($busines->franchise_reports) && $busines->franchise_reports)
-                <div class="headerTitle"><b>FRANCHISE REPORTS</b></div>
+                <div class="headerTitle"><span>{{__('custom.franchise_reports')}}</span></div>
                 <p class="description">
                     {{$busines->franchise_reports}}
                 </p>
             @endif
 
             @if(isset($busines->tax_returns) && $busines->tax_returns)
-                <div class="headerTitle"><b>TAX RETURNS</b></div>
+                <div class="headerTitle"><span>{{__('custom.tax_returns')}}</span></div>
                 <p class="description">
                     {{$busines->tax_returns}}
                 </p>
             @endif
 
             @if(isset($busines->business_assets) && $busines->business_assets)
-                <div class="headerTitle"><b>BUSINESS ASSETS</b></div>
+                <div class="headerTitle"><span>{{__('custom.business_assets')}}</span></div>
                 <p class="description">
                     {{$busines->business_assets}}
                 </p>
             @endif
             @if(isset($busines->reason_for_selling) && $busines->reason_for_selling)
-                <div class="headerTitle"><b>REASON FOR SELLING</b></div>
+                <div class="headerTitle"><span>{{__('custom.reason_for_selling')}}</span></div>
                 <p class="description">
                     {{$busines->reason_for_selling}}
                 </p>
