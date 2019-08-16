@@ -64,7 +64,7 @@ class BusinessZh extends Model
             'listing','price','employee_count','country','states','city',
             'profitability','real_estate','gross_income','value_of_real_estate',
             'net_income','lease','lease_term','ebitda','ff_e','inventory','commission',
-            'buyer_financing','building_sf','status','Franchise',
+            'buyer_financing','building_sf','status','franchise',
         ];
         return $fillable;
     }
