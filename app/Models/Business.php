@@ -43,7 +43,14 @@ class Business extends Model
         }
         $m->fill($param);
         if ($m->save()) {
-            return $m;
+            $businessZh = $m->businessZh;
+            if(!$businessZh){
+                throw new BaseException(Consts::SAVE_RECORD_FAILED);
+            }
+            $businessZh->fillUpdate()->fill($param);
+            if($businessZh->save()){
+                return $m;
+            }
         }
         throw new BaseException(Consts::SAVE_RECORD_FAILED);
     }
@@ -371,6 +378,12 @@ class Business extends Model
 //            ->whereNull('b.deleted_at');
         $list = $query->get();
         return $list;
+    }
+
+    public function fillUpdate()
+    {
+        $this->fillable(BusinessZh::getFillableParam());
+        return $this;
     }
 
 

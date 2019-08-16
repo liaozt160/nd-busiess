@@ -19,10 +19,18 @@ class BusinessZh extends Model
         }
         $m->fill($param);
         if($m->save()){
-            return $m;
+            $business = $m->business;
+            if(!$business){
+                throw new BaseException(Consts::SAVE_RECORD_FAILED);
+            }
+            $business->fillUpdate()->fill($param);
+            if($business->save()){
+                return $m;
+            }
         }
         throw new BaseException(Consts::SAVE_RECORD_FAILED);
     }
+
 
     public static function addItem($param)
     {
@@ -40,4 +48,24 @@ class BusinessZh extends Model
         throw new BaseException(Consts::SAVE_RECORD_FAILED);
     }
 
+    public function business()
+    {
+        return $this->hasOne('App\Models\Business', 'id', 'business_id');
+    }
+
+    public function fillUpdate()
+    {
+        $this->fillable(self::getFillableParam());
+        return $this;
+    }
+
+    public static function getFillableParam(){
+        $fillable = [
+            'listing','price','employee_count','country','states','city',
+            'profitability','real_estate','gross_income','value_of_real_estate',
+            'net_income','lease','lease_term','ebitda','ff_e','inventory','commission',
+            'buyer_financing','building_sf','status','Franchise',
+        ];
+        return $fillable;
+    }
 }

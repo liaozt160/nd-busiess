@@ -12,7 +12,7 @@ use App\Traits\Consts;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\App;
-
+use PDF;
 class BusinessController extends BaseController
 {
 
@@ -232,6 +232,30 @@ class BusinessController extends BaseController
         }
         $boolean = Business::changeOwner($businessId,$ownerId);
         return $this->ok();
+    }
+
+    /**
+     * 生成pdf
+     * @param Request $request
+     * User: Tank
+     * Date: 2019/8/16
+     * Time: 10:49
+     */
+    public function generatePDF(Request $request,$level = '1'){
+        $str = $request->input('ids');
+        if(!getIdsFromString($str,$ids)){
+            throw new BaseException(Consts::PARAM_VALIDATE_WRONG);
+        }
+        if(!in_array($level,['1','2','3','4'])){
+            throw new BaseException(Consts::PARAM_VALIDATE_WRONG);
+        }
+        $business = Business::getBusinessLevel($ids,(int)$level);
+//        return view('pdf.business_level_one',['business' =>$business]);
+        $fileName = 'business('.date('Y-m-d').').pdf';
+        $pdf = PDF::loadView('pdf.business_level_one',['business' =>$business]);
+        $pdf->setOptions(['isPhpEnabled'=> true,'dpi' => 96]);
+        $pdf->setPaper('a4');
+        return $pdf->stream($fileName);
     }
 
 
