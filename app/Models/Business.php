@@ -434,7 +434,7 @@ class Business extends Model
             $code = $this->city;
         }elseif ($this->states){
             $code = $this->states;
-        }elseif ($this->country){
+        }else{
             $code = $this->country;
         }
         $location = Location::getLocationByCode($code,$lang);
