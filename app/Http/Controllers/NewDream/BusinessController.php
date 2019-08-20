@@ -250,6 +250,9 @@ class BusinessController extends BaseController
             throw new BaseException(Consts::PARAM_VALIDATE_WRONG);
         }
         $business = Business::getBusinessLevel($ids,(int)$level);
+//        $business = $business[0];
+//        var_dump($business->category);
+//        dd($business);
 //        return view('pdf.business_level_one',['business' =>$business]);
         $fileName = 'business('.date('Y-m-d').').pdf';
         $pdf = PDF::loadView('pdf.business_level_one',['business' =>$business]);

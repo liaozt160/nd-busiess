@@ -18,4 +18,10 @@ class Location extends Model
         $list = self::select($columns)->where('parentId',$code)->orderBy('name')->get();
         return $list;
     }
+
+    public static function getLocationByCode($code,$lang='en'){
+        $column = $lang=='en'?'CONCAT(MergerNameEn," ",nameEn) as location':'CONCAT(MergerName," ",name) as location';
+        $location = self::select(DB::raw($column))->where('code',$code)->first();
+        return $location;
+    }
 }

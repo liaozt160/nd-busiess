@@ -33,6 +33,9 @@ Route::namespace('NewDream')->group(function () {
         Route::post('/business/query', 'BusinessController@query');
         Route::post('/business/attention/query', 'BusinessController@queryByAttention');
 
+        //public
+        Route::post('/category/query', 'PublicController@getCategoryQuery');
+
         Route::middleware('access.level:three')->group(function (){
 //            Route::post('account/add', 'AccountController@accountAdd'); //remark
             Route::post('account/update', 'AccountController@accountUpdate');

@@ -34,6 +34,7 @@ Route::get('/pdf', function () {
     return $pdf->stream();
 });
 
+Route::get('/genpdf/{level}', 'NewDream\BusinessController@generatePDF');
 Route::get('/loadpdf', 'NewDream\OrderController@loadOrderPdf');
 //Route::get('/viewpdf', function () {
 //   return view();

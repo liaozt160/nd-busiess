@@ -95,6 +95,14 @@
             @if(isset($busines->listing) && $busines->listing)
                 <div class="headerTitle"><span>{{__('custom.listing')}} #:</span> {{$busines->listing}}</div>
             @endif
+            @if(isset($busines->company) && $busines->company)
+                <div class="headerTitle"><span>{{__('custom.company_name')}}:</span> {{$busines->company}}</div>
+            @endif
+            @if(isset($busines->category) && $busines->category)
+                <div class="headerTitle"><span>{{__('custom.company_category')}}:</span>
+     {{\Illuminate\Support\Facades\App::getLocale() == 'en'?$busines->category->category_en:$busines->category->category_zh }}
+                </div>
+            @endif
         <!--标题-->
             @if(isset($busines->title) && $busines->title)
                 <div class="headerTitle"><span>{{__('custom.title')}}:</span> {{$busines->title}}</div>
@@ -154,7 +162,7 @@
             @endif
         <!--房地产估价-->
             @if(isset($busines->leasvalue_of_real_estatee) && $busines->leasvalue_of_real_estatee)
-                <div class="headerTitle"><b{{__('custom.value_of_real')}}: </span>{{$busines->value_of_real_estate}}</div>
+                <div class="headerTitle"><span>{{__('custom.value_of_real')}}: </span>{{$busines->value_of_real_estate}}</div>
             @endif
         <!--卖家融资-->
             @if(isset($busines->buyer_financing) && $busines->buyer_financing)
@@ -162,47 +170,47 @@
             @endif
 
             @if(isset($busines->business_description) && $busines->business_description)
-                <div class="headerTitle"><span>{{__('custom.business_description')}}</span></div>
+                <div class="headerTitle"><span>{{__('custom.business_description')}}:</span></div>
                 <p class="description">
                     {{$busines->business_description}}
                 </p>
             @endif
 
             @if(isset($busines->employee_info) && $busines->employee_info)
-                <div class="headerTitle"><span>{{__('custom.employee_information')}}</span></div>
+                <div class="headerTitle"><span>{{__('custom.employee_information')}}:</span></div>
                 <p class="description">
                     {{$busines->employee_info}}
                 </p>
             @endif
 
             @if(isset($busines->financial_performance) && $busines->financial_performance)
-                <div class="headerTitle"><span>{{__('custom.financial_performance')}}</span></div>
+                <div class="headerTitle"><span>{{__('custom.financial_performance')}}:</span></div>
                 <p class="description"> {{$busines->financial_performance}}
                 </p>
             @endif
 
             @if(isset($busines->franchise_reports) && $busines->franchise_reports)
-                <div class="headerTitle"><span>{{__('custom.franchise_reports')}}</span></div>
+                <div class="headerTitle"><span>{{__('custom.franchise_reports')}}:</span></div>
                 <p class="description">
                     {{$busines->franchise_reports}}
                 </p>
             @endif
 
             @if(isset($busines->tax_returns) && $busines->tax_returns)
-                <div class="headerTitle"><span>{{__('custom.tax_returns')}}</span></div>
+                <div class="headerTitle"><span>{{__('custom.tax_returns')}}:</span></div>
                 <p class="description">
                     {{$busines->tax_returns}}
                 </p>
             @endif
 
             @if(isset($busines->business_assets) && $busines->business_assets)
-                <div class="headerTitle"><span>{{__('custom.business_assets')}}</span></div>
+                <div class="headerTitle"><span>{{__('custom.business_assets')}}:</span></div>
                 <p class="description">
                     {{$busines->business_assets}}
                 </p>
             @endif
             @if(isset($busines->reason_for_selling) && $busines->reason_for_selling)
-                <div class="headerTitle"><span>{{__('custom.reason_for_selling')}}</span></div>
+                <div class="headerTitle"><span>{{__('custom.reason_for_selling')}}:</span></div>
                 <p class="description">
                     {{$busines->reason_for_selling}}
                 </p>

@@ -124,6 +124,10 @@ class Business extends Model
         $query->orderBy($column, $order);
 //        $list = $query->with('account:id,name')->paginate(15);
         $list = $query->paginate(15);
+        $list->transform(function ($item, $key){
+            $item->setLocations();
+            return $item;
+        });
 //        var_dump(DB::getQueryLog());
         return $list;
     }
@@ -190,6 +194,10 @@ class Business extends Model
         }
         $query->orderBy($column, $order);
         $list = $query->paginate(15);
+        $list->transform(function ($item, $key){
+            $item->setLocations();
+            return $item;
+        });
         return $list;
     }
 
@@ -207,10 +215,14 @@ class Business extends Model
         }
         $query->orderBy($column, $order);
         $list = $query->paginate(15);
+        $list->transform(function ($item, $key){
+            $item->setLocations();
+            return $item;
+        });
         return $list;
     }
 
-    public static function getColumnsByLevel($level = 1,$list = false)
+    public static function getColumnsByLevelBack($level = 1,$list = false)
     {
         $levelOneList = ['id', 'listing', 'title', 'company', 'price', 'updated_at', 'created_at','b.status'];
 //        $levelOne = ['id', 'listing', 'title', 'price', 'company', 'employee_count', 'profitability'
@@ -254,6 +266,37 @@ class Business extends Model
         return $columns;
     }
 
+    public static function getColumnsByLevel($level = 1,$list = false){
+
+        $levelList = ['id', 'listing', 'title', 'company', 'price', 'updated_at', 'created_at','b.status','country', 'states', 'city', 'address','b.status','category_id'];
+
+        $levelOne = ['id', 'listing', 'title', 'company', 'price','employee_count','profitability','type','country', 'states', 'city', 'address','category_id',
+            'value_of_real_estate',  'commission','business_description','business_assets', 'b.status','updated_at', 'created_at','b.status',];
+
+        $levelTwo = ['real_estate','building_sf','gross_income','gross_income_unit','franchise','employee_info','net_income','net_income_unit','lease','lease_unit','lease_term','ebitda','ff_e','inventory','buyer_financing','financial_performance',
+        ];
+        $levelThree = [
+            'franchise_reports','tax_returns','reason_for_selling'
+        ];
+        $columnPrefix = App::getLocale() == 'zh'? 'z.':'b.';
+        if($level == Consts::ACCOUNT_ACCESS_LEVEL_ONE){
+            $columns = $list?$levelList:$levelOne;
+        }elseif($level == Consts::ACCOUNT_ACCESS_LEVEL_TWO){
+            $columns = $list?$levelList:array_merge($levelOne,$levelTwo);
+        }elseif ($level == Consts::ACCOUNT_ACCESS_LEVEL_THREE){
+            $columns = $list?$levelList:array_merge($levelOne,$levelTwo,$levelThree);
+        }else{
+            $columns = ['*'];
+//            array_push($columns,'b.status');
+        }
+        $columns = array_map(function ($item) use ($columnPrefix) {
+            if($item == 'id')  return 'b.id';
+            if($item == 'b.status') return $item;
+            return  $columnPrefix . $item;
+        }, $columns);
+        return $columns;
+    }
+
     public static function showLevelOne($businessId)
     {
         $columns = self::getColumnsByLevel(Consts::ACCOUNT_ACCESS_LEVEL_ONE);
@@ -262,7 +305,7 @@ class Business extends Model
             ->select($columns)->whereNull('b.deleted_at')->where('b.id', $businessId);
         $m = $query->first();
         if ($m) {
-            $m->setLocation();
+            $m->setLocations();
         }
         return $m;
     }
@@ -276,7 +319,7 @@ class Business extends Model
             ->where('a.account_id', $accountId)->where('a.business_id', $businessId);
         $m = $query->first();
         if ($m) {
-            $m->setLocation();
+            $m->setLocations();
         }
         return $m;
     }
@@ -323,6 +366,11 @@ class Business extends Model
     public function businessZh()
     {
         return $this->hasOne('App\Models\BusinessZh', 'business_id', 'id');
+    }
+
+    public function category()
+    {
+        return $this->hasOne('App\Models\BusinessCategory', 'id', 'category_id');
     }
 
     public function setLocation($lang = 'en')
@@ -378,6 +426,22 @@ class Business extends Model
 //            ->whereNull('b.deleted_at');
         $list = $query->get();
         return $list;
+    }
+
+    public function setLocations(){
+        $lang = App::getLocale();
+        if($this->city){
+            $code = $this->city;
+        }elseif ($this->states){
+            $code = $this->states;
+        }elseif ($this->country){
+            $code = $this->country;
+        }
+        $location = Location::getLocationByCode($code,$lang);
+        if($location){
+            $this->location=$location->location .' '. $this->address;
+        }
+        return $this;
     }
 
     public function fillUpdate()

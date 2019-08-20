@@ -178,16 +178,21 @@ class AccountController extends BaseController
     }
 
     public function test(){
-        $log = Log::emergency('aaaaaaaaa');
-        var_dump($log);
-        throw new BaseException(1,'dddddddddd');
-        return $this->ok();
-        exit;
-        $account = $this->guard()->user();
-        $m =  BusinessAttention::find(1);
-        event(new PayAttention($m));
+//        $log = Log::emergency('aaaaaaaaa');
+//        var_dump($log);
+//        throw new BaseException(1,'dddddddddd');
+//        return $this->ok();
+//        exit;
+//        $account = $this->guard()->user();
+//        $m =  BusinessAttention::find(1);
+//        event(new PayAttention($m));
 //        $m = Mail::to('tank@ylbservices.com')->send(new CreateUser());
-        return $this->ok();
+        $one = Business::getColumnsByLevel(1);
+        $two = Business::getColumnsByLevel(2);
+        $three = Business::getColumnsByLevel(3);
+        $diff = array_diff($three,$two);
+        var_dump($diff);
+        return $this->ok($diff);
     }
 
 
