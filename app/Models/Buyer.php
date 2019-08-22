@@ -49,9 +49,19 @@ class Buyer extends Model
     public static function listItem($param,$accountId=null){
         $query  = self::whereNull('deleted_at');
 
-        if($accountId){
-            $query->where('buyer_broker',$accountId);
+        if (isset($param['broker_id']) && $param['broker_id'] != 0) {
+            $query->where('buyer_broker', $param['broker_id']);
+        } else {
+            if ($accountId) {
+                $accountIds = BuyerBrokerNetMember::getAccountIdByManager($accountId);
+                if (is_object($accountIds)) {
+                    $accountIds = $accountIds->all();
+                }
+                $accountIds = array_column($accountIds, 'account_id');
+                $query->whereIn('buyer_broker', $accountIds);
+            }
         }
+
         if(isset($param['q']) && isset($param['q'])){
             $query->where(DB::raw("concat(email,phone,buyer)"),'like','%'.$param['q'].'%');
         }

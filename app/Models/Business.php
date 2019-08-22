@@ -74,8 +74,10 @@ class Business extends Model
         $columns = self::getColumnsByLevel(Consts::ACCOUNT_ACCESS_LEVEL_THREE);
         if (App::getLocale() == 'zh') {
             array_push($columns,'z.business_id as id');
+            array_push($columns,'category_zh as category');
             $prifix = 'z.';
         } else {
+            array_push($columns,'category_en as category');
             $prifix = 'b.';
         }
 //        DB::enableQueryLog();
@@ -84,6 +86,7 @@ class Business extends Model
             ->select($columns)
             ->leftjoin('business_zh as z', 'b.id', 'z.business_id')
             ->leftjoin('accounts as a', 'b.business_broker', 'a.id')
+            ->leftjoin('category as c', $prifix.'category_id', 'c.id')
             ->whereNull('b.deleted_at');
         //with broker id or account's id
         if (isset($param['broker_id']) && $param['broker_id'] != 0) {
@@ -109,6 +112,10 @@ class Business extends Model
 
         if (isset($param['price_to']) && $param['price_to']) {
             $query->where($prifix . 'price', '<=', $param['price_to']);
+        }
+
+        if (isset($param['category_id']) && $param['category_id']) {
+            $query->where($prifix . 'category_id', $param['category_id']);
         }
 
         if (isset($param['status']) && $param['status']) {

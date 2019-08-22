@@ -77,4 +77,6 @@ class Consts {
     const STATUS_OUT_OF_RANGE = 2014;
     const SUBITEM_NEED_TO_CLEAN_FIRST = 2015;
 
+    const BUYER_BROKER_SUBITEM_NEED_TO_CLEAN_FIRST = 2016;
+
 }

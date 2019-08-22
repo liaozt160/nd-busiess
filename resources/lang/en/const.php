@@ -23,6 +23,8 @@ return [
     \App\Traits\Consts::PARAM_VALIDATE_WRONG => 'param validate wrong',
     \App\Traits\Consts::SUBITEM_NEED_TO_CLEAN_FIRST => 'business broker need clean first',
     \App\Traits\Consts::SAVE_FILE_ERROR => 'save file error',
+    \App\Traits\Consts::BUYER_BROKER_SUBITEM_NEED_TO_CLEAN_FIRST => 'buyer broker need clean first',
+
 
 
 ];

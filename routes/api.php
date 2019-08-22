@@ -68,6 +68,16 @@ Route::namespace('NewDream')->group(function () {
             // business
             Route::post('account/business/owner', 'BusinessController@changeOwner');
             Route::post('account/business/pdf/{level}', 'BusinessController@generatePDF');
+
+            //buyer broker net
+            Route::post('account/buyer/net/add', 'BuyerBrokerNetController@Add');
+            Route::post('account/buyer/net/list', 'BuyerBrokerNetController@List');
+            Route::post('account/buyer/net/del', 'BuyerBrokerNetController@Delete');
+            Route::post('account/buyer/net/update', 'BuyerBrokerNetController@Update');
+            Route::post('account/buyer/net/members', 'BuyerBrokerNetController@getMember');
+            Route::post('account/buyer/net/manager', 'BuyerBrokerNetController@setManager');
+            Route::post('account/buyer/net/brokers', 'BuyerBrokerNetController@brokers');
+            Route::post('account/buyer/net/show', 'BuyerBrokerNetController@Show');
         });
 
         Route::middleware(['access.business'])->group(function (){
