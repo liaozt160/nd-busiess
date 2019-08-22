@@ -107,6 +107,16 @@ class Buyer extends Model
         if($user->id == $m->buyer_broker){
             return true;
         }
+
+        $list = BuyerBrokerNetMember::getAccountIdByManager($user->id);
+        if (is_object($list)) {
+            $list = $list->all();
+        }
+        $accountIds = array_column($list, 'account_id');
+        if (in_array($m->buyer_broker, $accountIds)) {
+            return true;
+        }
+
         throw new BaseException(Consts::ACCOUNT_ACCESS_DENY);
     }
 
