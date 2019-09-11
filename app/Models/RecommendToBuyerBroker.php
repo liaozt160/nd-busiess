@@ -48,6 +48,14 @@ class RecommendToBuyerBroker extends Model
         return $m;
     }
 
+    /**
+     * @param $param
+     * @return mixed
+     * @throws BaseException
+     * User: Tank
+     * Date: 2019/9/11
+     * Time: 13:41
+     */
     public static function updateItem($param){
         if(!$id = isset($param['id'])?$param['id']:null){
             throw new BaseException(Consts::DATA_VALIDATE_WRONG);
