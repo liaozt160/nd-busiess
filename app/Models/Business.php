@@ -198,7 +198,7 @@ class Business extends Model
         }
 
         if (isset($param['state']) && $param['state']) {
-            $query->where($columnPrefix . 'state', $param['state']);
+            $query->where($columnPrefix . 'states', $param['state']);
         }
 
 
