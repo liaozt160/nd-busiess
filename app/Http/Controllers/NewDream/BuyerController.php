@@ -94,10 +94,13 @@ class BuyerController extends BaseController
     }
 
 
-    public function Query(){
+    public function Query(Request $request){
 //        $accountId = $this->guard()->id();
-        $user = $this->guard()->user();
-        $accountId = $user->role==Consts::ACCOUNT_ROLE_ADMIN?null:$user->id;
+        $accountId = $request->input('id');
+        if(!$accountId){
+            $user = $this->guard()->user();
+            $accountId = $user->role==Consts::ACCOUNT_ROLE_ADMIN?null:$user->id;
+        }
         $list = Buyer::queryAll($accountId);
         return $this->ok($list);
     }
@@ -109,5 +112,38 @@ class BuyerController extends BaseController
         return $this->ok();
 
     }
+
+    /**
+     * 更改买家所属于网络中介
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * User: Tank
+     * Date: 2019/8/23
+     * Time: 15:24
+     */
+    public function brokerChange(Request $request){
+        $id = $request->input('id');
+        $accountId = $request->input('account_id');
+        $r = Buyer::changeBroker($id,$accountId);
+        return $this->ok();
+    }
+
+
+    /**
+     * 更改中介时，给出的中介列表
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * User: Tank
+     * Date: 2019/8/23
+     * Time: 15:49
+     */
+    public function brokerQuery(Request $request){
+        $q = $request->input('q');
+        $user = $this->guard()->user();
+        $accountId = $user->role==Consts::ACCOUNT_ROLE_ADMIN?null:$user->id;
+        $list = Buyer::buyerBrokerQuery($q,$accountId);
+        return $this->ok($list);
+    }
+
 
 }

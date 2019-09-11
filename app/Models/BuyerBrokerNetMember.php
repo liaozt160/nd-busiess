@@ -59,6 +59,16 @@ class BuyerBrokerNetMember extends Model
 
     public static function getAccountIdByManager($accountId)
     {
+
+        if ($accountId === null) {
+            $query = self::from('accounts as a')
+                ->select(['a.id as account_id', 'a.name'])
+                ->where('role', Consts::ACCOUNT_ROLE_BUYER_BROKER)
+                ->whereNull('deleted_at');
+            $list = $query->get();
+            return $list;
+        }
+
         // don't belong to any broke net manage role
         $m = self::select(['account_id','net_id','manager'])->where('account_id', $accountId)->where('manager',1)->get();
         if ($m->isEmpty()) {

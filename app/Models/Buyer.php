@@ -81,6 +81,8 @@ class Buyer extends Model
         return $list;
         $list = $query->paginate(15);
     }
+
+
     public static function queryAll($accountId,$q=null){
         $query = self::select(['id as key','buyer as label'])
             ->where('status',Consts::BUSINESS_STATUS_NORMAL)->whereNull('deleted_at');
@@ -145,6 +147,20 @@ class Buyer extends Model
             return $m;
         }
         throw new BaseException(Consts::SAVE_RECORD_FAILED);
+    }
+
+    public static function changeBroker($buyerId,$accountId){
+        $r = self::where('id',$buyerId)->update(['buyer_broker' => $accountId]);
+        return $r;
+    }
+
+
+    public static function buyerBrokerQuery($q,$accountId){
+        $accounts = BuyerBrokerNetMember::getAccountIdByManager($accountId);
+        if(is_object($accounts)){
+            $accounts = $accounts->all();
+        }
+        return $accounts;
     }
 
 }

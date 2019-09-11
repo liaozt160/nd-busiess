@@ -41,6 +41,7 @@ class Kernel extends HttpKernel
             'throttle:60,1',
             'bindings',
             'language.check',
+            'cors',
         ],
     ];
 
@@ -66,6 +67,7 @@ class Kernel extends HttpKernel
         'access.business' => \App\Http\Middleware\BusinessBroker::class,
         'access.buyer' => \App\Http\Middleware\BuyerBroker::class,
         'language.check' => \App\Http\Middleware\CheckLanguage::class,
+        'cors' => \App\Http\Middleware\CorsHttp::class,
     ];
 
     /**

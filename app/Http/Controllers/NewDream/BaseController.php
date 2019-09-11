@@ -19,6 +19,19 @@ class BaseController extends Controller
         return $this->ok();
     }
 
+    /**
+     *  判断获取用户id，管理员的返回null
+     * @return null
+     * User: Tank
+     * Date: 2019/8/23
+     * Time: 17:59
+     */
+    protected function getAdminAccountId(){
+        $user = $this->guard()->user();
+        $accountId = $user->role==Consts::ACCOUNT_ROLE_ADMIN?null:$user->id;
+        return $accountId;
+    }
+
     public function Add(Request $request){
         throw new BaseException(Consts::SUCCESS,'Method not defined');
     }

@@ -118,6 +118,10 @@ class Business extends Model
             $query->where($prifix . 'category_id', $param['category_id']);
         }
 
+        if (isset($param['state']) && $param['state']) {
+            $query->where($prifix . 'states', $param['state']);
+        }
+
         if (isset($param['status']) && $param['status']) {
             $query->where('b.status', $param['status']);
         }
@@ -165,15 +169,19 @@ class Business extends Model
 
     public static function getListByBuyerLevelOne($param)
     {
+        $columns = self::getColumnsByLevel(Consts::ACCOUNT_ACCESS_LEVEL_ONE,true);
         if (App::getLocale() == 'zh') {
             $columnPrefix = 'z.';
+            array_push($columns,'category_zh as category');
         } else {
             $columnPrefix = 'b.';
+            array_push($columns,'category_en as category');
         }
-        $columns = self::getColumnsByLevel(Consts::ACCOUNT_ACCESS_LEVEL_ONE,true);
+
         $query = self::select($columns)
             ->from('business as b')
             ->leftjoin('business_zh as z', 'b.id', 'z.business_id')
+            ->leftjoin('category as c', $columnPrefix.'category_id', 'c.id')
             ->whereNull('b.deleted_at');
 
         // filter and search
@@ -189,8 +197,24 @@ class Business extends Model
             $query->where($columnPrefix . 'price', '<=', $param['price_to']);
         }
 
+        if (isset($param['state']) && $param['state']) {
+            $query->where($columnPrefix . 'state', $param['state']);
+        }
+
+
+        if (isset($param['category_id']) && $param['category_id']) {
+            $query->where($columnPrefix . 'category_id', $param['category_id']);
+        }
+
         if (isset($param['status']) && $param['status']) {
             $query->where('b.status', $param['status']);
+        }
+
+        //默认未发布内容
+        if (isset($param['ids']) && $param['ids']) {
+            $query->whereIn('b.id', $param['ids']);
+        }else{
+            $query->where($columnPrefix . 'public','1');
         }
 
         // order 排序
@@ -275,10 +299,10 @@ class Business extends Model
 
     public static function getColumnsByLevel($level = 1,$list = false){
 
-        $levelList = ['id', 'listing', 'title', 'company', 'price', 'updated_at', 'created_at','b.status','country', 'states', 'city', 'address','b.status','category_id'];
+        $levelList = ['id', 'listing', 'title', 'company', 'price', 'updated_at', 'created_at','b.status','country', 'states', 'city', 'address','b.status','category_id','public'];
 
         $levelOne = ['id', 'listing', 'title', 'company', 'price','employee_count','profitability','type','country', 'states', 'city', 'address','category_id',
-            'value_of_real_estate',  'commission','business_description','business_assets', 'b.status','updated_at', 'created_at','b.status',];
+            'value_of_real_estate',  'commission','business_description','business_assets', 'b.status','updated_at', 'created_at','b.status','public'];
 
         $levelTwo = ['real_estate','building_sf','gross_income','gross_income_unit','franchise','employee_info','net_income','net_income_unit','lease','lease_unit','lease_term','ebitda','ff_e','inventory','buyer_financing','financial_performance',
         ];
@@ -432,6 +456,10 @@ class Business extends Model
             ->whereIn('b.id',$ids);
 //            ->whereNull('b.deleted_at');
         $list = $query->get();
+        $list->transform(function ($item, $key){
+            $item->setLocations();
+            return $item;
+        });
         return $list;
     }
 
@@ -457,5 +485,15 @@ class Business extends Model
         return $this;
     }
 
+
+    public static function setPublic($businessId,$status=0){
+        try{
+            self::where('id',$businessId)->update(['public'=>$status]);
+            BusinessZh::where('business_id',$businessId)->update(['public'=>$status]);
+        }catch (\Exception $e){
+            throw new BaseException(Consts::SAVE_RECORD_FAILED,$e->getMessage());
+        }
+        return true;
+    }
 
 }

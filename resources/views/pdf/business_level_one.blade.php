@@ -114,7 +114,7 @@
         <!--地理位置-->
             @if(isset($busines->address) || isset($busines->country) || isset($busines->states))
                 <div class="headerTitle">
-                    <span>{{__('custom.location')}}:</span>{{isset($busines->country)?$busines->country:'' .' '. isset($busines->states)?$busines->states:'' .' '. isset($busines->states)?$busines->address:'' }}</div>
+                    <span>{{__('custom.location')}}:</span>{{ $busines->location }}</div>
             @endif
             <!--是否盈利-->
             @if(isset($busines->profitability) && $busines->profitability)

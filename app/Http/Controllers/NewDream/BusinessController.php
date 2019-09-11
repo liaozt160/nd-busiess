@@ -261,6 +261,20 @@ class BusinessController extends BaseController
         return $pdf->stream($fileName);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws BaseException
+     * User: Tank
+     * Date: 2019/8/28
+     * Time: 16:43
+     */
+    public function businessPublicStatus(Request $request){
+        $id = $request->input('business_id');
+        $status = $request->input('public');
+        $r = Business::setPublic($id,$status);
+        return $this->ok($r);
+    }
 
 
 }

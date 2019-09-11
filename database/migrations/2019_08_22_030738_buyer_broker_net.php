@@ -17,8 +17,8 @@ class BuyerBrokerNet extends Migration
             $table->bigIncrements('id');
             $table->string('name',250)->nullable();
             $table->string('remark',250)->nullable();
-            $table->bigInteger('created_by')->nullable();;
-            $table->bigInteger('deleted_by')->nullable();;
+            $table->bigInteger('created_by')->nullable();
+            $table->bigInteger('deleted_by')->nullable();
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
         });
