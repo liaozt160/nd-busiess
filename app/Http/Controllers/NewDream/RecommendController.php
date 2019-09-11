@@ -4,8 +4,8 @@ namespace App\Http\Controllers\NewDream;
 
 use App\Exceptions\BaseException;
 use App\Models\Business;
-use App\models\RecommendToBuyerBroker;
-use App\models\RecommendToBuyerBrokerDetail;
+use App\Models\RecommendToBuyerBroker;
+use App\Models\RecommendToBuyerBrokerDetail;
 use App\Traits\Consts;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

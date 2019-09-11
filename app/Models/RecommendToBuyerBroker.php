@@ -1,6 +1,6 @@
 <?php
 
-namespace App\models;
+namespace App\Models;
 
 use App\Exceptions\BaseException;
 use App\Traits\Consts;
