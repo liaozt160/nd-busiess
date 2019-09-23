@@ -301,10 +301,10 @@ class Business extends Model
 
         $levelList = ['id', 'listing', 'title', 'company', 'price', 'updated_at', 'created_at','b.status','country', 'states', 'city', 'address','b.status','category_id','public'];
 
-        $levelOne = ['id', 'listing', 'title', 'company', 'price','employee_count','profitability','type','country', 'states', 'city', 'address','category_id',
+        $levelOne = ['id', 'listing', 'title', 'company', 'price','profitability','type','country', 'states', 'city', 'address','category_id',
             'value_of_real_estate',  'commission','business_description','business_assets', 'b.status','updated_at', 'created_at','b.status','public'];
 
-        $levelTwo = ['real_estate','building_sf','gross_income','gross_income_unit','franchise','employee_info','net_income','net_income_unit','lease','lease_unit','lease_term','ebitda','ff_e','inventory','buyer_financing','financial_performance',
+        $levelTwo = ['real_estate','building_sf','employee_count','gross_income','gross_income_unit','franchise','employee_info','net_income','net_income_unit','lease','lease_unit','lease_term','ebitda','ff_e','inventory','buyer_financing','financial_performance',
         ];
         $levelThree = [
             'franchise_reports','tax_returns','reason_for_selling'

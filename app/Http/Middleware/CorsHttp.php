@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\App;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class CorsHttp
 {
