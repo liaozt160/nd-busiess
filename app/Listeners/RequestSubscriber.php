@@ -24,7 +24,6 @@ class RequestSubscriber implements ShouldQueue
         }
 //        dd($loggers);
         $log  = Logger::create($loggers);
-        dd($log->id);
     }
 
 
