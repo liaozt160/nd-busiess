@@ -21,10 +21,14 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\PayAttention' => [
 //            'App\Listeners\PayAttentionListener',
         ],
+        'App\Events\ContactUsEvent' => [
+            'App\Listeners\ContactUsListener',
+        ],
     ];
 
     protected $subscribe = [
         'App\Listeners\PayAttentionSubscriber',
+        'App\Listeners\RequestSubscriber',
     ];
 
     /**

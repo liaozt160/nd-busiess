@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\NewDream;
 
 use App\Events\PayAttention;
+use App\Events\RequestEvent;
 use App\Exceptions\BaseException;
 use App\Mail\CreateUser;
 use App\Models\Account;

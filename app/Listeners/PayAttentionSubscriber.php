@@ -46,9 +46,9 @@ class PayAttentionSubscriber implements ShouldQueue
             'App\Listeners\PayAttentionSubscriber@payAttention'
         );
 
-//        $events->listen(
-//            'App\Events\PayAttention',
-//                'App\Listeners\PayAttentionSubscriber@payAttentionTo'
-//        );
+        $events->listen(
+            'App\Events\PayAttention',
+                'App\Listeners\PayAttentionSubscriber@payAttentionTo'
+        );
     }
 }

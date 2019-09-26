@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 //Route::any('order/payment/file/view/{id}', 'NewDream\OrderController@showOrderPayInformation')->name('file');
 //Route::any('order/payment/file/view', 'NewDream\OrderController@showOrderPayInformation');
 Route::post('/login', 'NewDream\AccountController@login')->name('login');
+Route::post('/contact', 'NewDream\ContactController@Add');
 Route::any('/landing/business', 'NewDream\LandingBusinessController@landingList')->name('login');
 
 //Route::post('account/add', 'NewDream\AccountController@accountAdd');
@@ -109,6 +110,9 @@ Route::namespace('NewDream')->group(function () {
 
 
             Route::post('business/brokers', 'BusinessController@getBusinessBrokers');
+            //contact us
+            Route::post('contact/list', 'ContactController@List');
+            Route::post('contact/del', 'ContactController@Delete');
 
 
         });
