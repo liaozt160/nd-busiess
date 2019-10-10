@@ -92,6 +92,30 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'mongodb' => [
+            'driver'   => 'mongodb',
+            'host'     => env('MONGO_SERVER'),
+            'port'     => env('MONGO_PORT'),
+            'database' => env('MONGO_DB'),
+//            'options' => [
+//                'database' => 'test',
+//            ],
+            'username' => env('MONGO_USER'),
+            'password' => env('MONGO_PASSWORD'),
+        ],
+
+        'mongodb_log' => [
+            'driver'   => 'mongodb',
+            'host'     => env('MONGO_SERVER'),
+            'port'     => env('MONGO_PORT'),
+            'database' => env('LOG_MONGO_DB'),
+//            'options' => [
+//                'database' => 'test',
+//            ],
+            'username' => env('MONGO_USER'),
+            'password' => env('MONGO_PASSWORD'),
+        ],
+
     ],
 
     /*

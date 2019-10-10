@@ -14,6 +14,4 @@ class CheckForMaintenanceMode extends Middleware
     protected $except = [
         //
     ];
-
-
 }

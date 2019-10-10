@@ -2,9 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Contact;
-use App\Models\Logger;
-use Carbon\Carbon;
+use App\Models\MongoRequest;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Http\Request;
 use Illuminate\Queue\SerializesModels;
@@ -14,6 +12,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class RequestEvent
 {
@@ -27,6 +26,7 @@ class RequestEvent
      */
     public function __construct(Request $request)
     {
+        $logger['created_at'] = defined("LARAVEL_START")?date('Y-m-d H:i:s',constant("LARAVEL_START")):date('Y-m-d H:i:s');
         $logger['url'] = $request->path();
         $logger['user_id'] = Auth::id();
         $logger['method'] = $request->getMethod();

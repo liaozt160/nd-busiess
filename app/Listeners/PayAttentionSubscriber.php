@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Mail;
 class PayAttentionSubscriber implements ShouldQueue
 {
 
+    public $tries = 2;
+
     public function payAttention(PayAttention $payAttention)
     {
 

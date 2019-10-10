@@ -17,9 +17,9 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
     return redirect($url);
 });
 
-//Route::get('/info', function () {
-//    echo phpinfo();
-//});
+Route::get('/info', function () {
+    echo phpinfo();
+});
 
 Route::get('/pdf', function () {
     $pdf = \Illuminate\Support\Facades\App::make('dompdf.wrapper');

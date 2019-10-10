@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Events\RequestEvent;
 use Closure;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\App;
 use Tymon\JWTAuth\Facades\JWTAuth;
 

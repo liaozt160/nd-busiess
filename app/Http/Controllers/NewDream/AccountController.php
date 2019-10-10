@@ -11,11 +11,13 @@ use App\Models\Business;
 use App\Models\BusinessAssign;
 use App\Models\BusinessAttention;
 use App\Models\Buyer;
+use App\Models\MongoContact;
 use App\Traits\ApiTrait;
 use App\Traits\Consts;
 use App\Traits\MsgTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -179,21 +181,10 @@ class AccountController extends BaseController
     }
 
     public function test(){
-//        $log = Log::emergency('aaaaaaaaa');
-//        var_dump($log);
-//        throw new BaseException(1,'dddddddddd');
-//        return $this->ok();
-//        exit;
-//        $account = $this->guard()->user();
-//        $m =  BusinessAttention::find(1);
-//        event(new PayAttention($m));
-//        $m = Mail::to('tank@ylbservices.com')->send(new CreateUser());
-        $one = Business::getColumnsByLevel(1);
-        $two = Business::getColumnsByLevel(2);
-        $three = Business::getColumnsByLevel(3);
-        $diff = array_diff($three,$two);
-        var_dump($diff);
-        return $this->ok($diff);
+//        $list = MyContact::where('_id','5d8d9fad7f0219058d2fd3bb')->get();
+//        $list = MyContact::where('role.name','tank')->get();
+        $list = MongoContact::where("name","name")->where("role.first_name.als","liao")->get();
+        return $this->ok($list);
     }
 
 

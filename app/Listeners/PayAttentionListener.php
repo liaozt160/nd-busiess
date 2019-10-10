@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class PayAttentionListener implements ShouldQueue
 {
+    public $tries = 2;
     /**
      * Create the event listener.
      *

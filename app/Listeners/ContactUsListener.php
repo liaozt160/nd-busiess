@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 
 class ContactUsListener implements ShouldQueue
 {
+    public $tries = 2;
     /**
      * Create the event listener.
      *

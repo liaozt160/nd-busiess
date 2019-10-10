@@ -7,23 +7,31 @@ use App\Events\RequestEvent;
 use App\Mail\PayAttentionSystem;
 use App\Mail\PayAttentionTo;
 use App\Models\Logger;
+use App\Models\MongoRequest;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Symfony\Component\Debug\Exception;
 
 class RequestSubscriber implements ShouldQueue
 {
+    public $tries = 2;
 
-    public function onRequest(RequestEvent $event){
+    public function onRequest(RequestEvent $event)
+    {
+        try{
         $loggers = $event->logger;
-        foreach ($loggers as $key =>$log){
-            if(is_array($log) || is_object($log)){
+        foreach ($loggers as $key => $log) {
+            if (is_array($log) || is_object($log)) {
                 $loggers[$key] = json_encode($log);
             }
         }
-//        dd($loggers);
-        $log  = Logger::create($loggers);
+        $m = MongoRequest::insert($loggers);
+//        $log = Logger::create($loggers);
+        }catch (\Exception $e){
+            throw new \Exception($e->getMessage());
+        }
     }
 
 
@@ -34,4 +42,17 @@ class RequestSubscriber implements ShouldQueue
             'App\Listeners\RequestSubscriber@onRequest'
         );
     }
+
+    /**
+     * param is the trigger event
+     * @param RequestEvent $event
+     * User: Tank
+     * Date: 2019/9/29
+     * Time: 11:17
+     */
+    public function failed($event)
+    {
+
+    }
+
 }
