@@ -40,7 +40,7 @@ Route::namespace('NewDream')->group(function () {
         Route::post('/category/query', 'PublicController@getCategoryQuery');
 
         Route::middleware('access.level:three')->group(function (){
-//            Route::post('account/add', 'AccountController@accountAdd'); //remark
+            Route::post('account/add', 'AccountController@accountAdd'); //remark
             Route::post('account/update', 'AccountController@accountUpdate');
             Route::post('account/del', 'AccountController@accountDelete');
             Route::post('account/list', 'AccountController@accountList');
