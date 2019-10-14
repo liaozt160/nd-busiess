@@ -181,6 +181,8 @@ class AccountController extends BaseController
     }
 
     public function test(){
+        var_dump(config('config.config.name'));
+        exit();
 //        $list = MyContact::where('_id','5d8d9fad7f0219058d2fd3bb')->get();
 //        $list = MyContact::where('role.name','tank')->get();
         $list = MongoContact::where("name","name")->where("role.first_name.als","liao")->get();

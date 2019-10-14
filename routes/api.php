@@ -20,7 +20,7 @@ use Illuminate\Http\Request;
 //Route::any('order/payment/file/view', 'NewDream\OrderController@showOrderPayInformation');
 Route::post('/login', 'NewDream\AccountController@login')->name('login');
 Route::post('/contact', 'NewDream\ContactController@Add');
-Route::any('/landing/business', 'NewDream\LandingBusinessController@landingList')->name('login');
+Route::any('/landing/business', 'NewDream\LandingBusinessController@landingList')->name('business');
 
 //Route::post('account/add', 'NewDream\AccountController@accountAdd');
 Route::namespace('NewDream')->group(function () {

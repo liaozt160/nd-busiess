@@ -30,11 +30,12 @@ class ContactManageNotice extends Mailable
      */
     public function build()
     {
+        if(env('APP_ENV') == 'production'){
+            $this->to(config('config.victor.email'),config('config.victor.name'))
+                ->to(config('config.karen.email'),config('config.karen.name'));
+        }
         return $this->subject($this->subject)
-            ->to('tank@ylbservices.com','tank')
-            ->to('liaozt160@qq.com','liao')
-            ->bcc('jason@ylbservices.com','tank')
+            ->bcc(config('config.tank.email'),config('config.tank.name'))
             ->view('emails.ContactManageNotice');
     }
-
 }
