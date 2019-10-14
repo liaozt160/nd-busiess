@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Events\RequestEvent;
 use Closure;
 use Illuminate\Support\Facades\App;
 
@@ -16,6 +17,7 @@ class CheckLanguage
      */
     public function handle($request, Closure $next)
     {
+        event(new RequestEvent($request));
         $lang = $request->header('Language');
         if($lang){
             App::setLocale($lang);
