@@ -9,6 +9,11 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class CorsHttp
 {
+
+    protected $except = [
+        '/api/order/payment/file/view'
+    ];
+
     /**
      * Handle an incoming request.
      *
@@ -18,6 +23,9 @@ class CorsHttp
      */
     public function handle($request, Closure $next)
     {
+        if(in_array($request->path(),$this->except)){
+            return $next($request);
+        }
         $response = $next($request);
         $response->header('Access-Control-Allow-Origin', '*');
         $response->header('Access-Control-Allow-Headers', 'Origin,No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With, token, Authorization,Language');
