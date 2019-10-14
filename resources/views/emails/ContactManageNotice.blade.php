@@ -19,7 +19,7 @@
         <span>Email:</span><span>{{$contact->email}}</span>
     </div>
     <div>
-        <span>Role:</span><span>{{$contact->role}}</span>
+        <span>Role:</span><span>{{getRoles($contact->role)}}</span>
     </div>
     <div>
         <span>Remark:</span><span>{{$contact->remark}}</span>

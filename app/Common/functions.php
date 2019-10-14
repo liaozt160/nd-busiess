@@ -64,4 +64,17 @@ function getDateUnit($num){
     return isset($array[$num])?$array[$num]:null;
 }
 
+function getRoles($index = 1, $all = false){
+    $array = [
+        1 => 'Intention buyer',
+        2 => 'Buyer advisor',
+        3 => 'Seller intermediary',
+    ];
+    if($all) return $array;
+    if(isset($array[$index])){
+        return $array[$index];
+    }
+    return 'None';
+}
+
 
