@@ -9,11 +9,6 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class CorsHttp
 {
-
-    protected $except = [
-        '/api/order/payment/file/view'
-    ];
-
     /**
      * Handle an incoming request.
      *
@@ -23,15 +18,32 @@ class CorsHttp
      */
     public function handle($request, Closure $next)
     {
-//        if(in_array($request->path(),$this->except)){
-//            return $next($request);
-//        }
         $response = $next($request);
-        $response->header('Access-Control-Allow-Origin', '*');
-        $response->header('Access-Control-Allow-Headers', 'Origin,No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With, token, Authorization,Language');
-        $response->header('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, OPTIONS');
-        $response->header('Access-Control-Allow-Credentials', 'true');
+        $IlluminateResponse = 'Illuminate\Http\Response';
+        $SymfonyResponse = 'Symfony\Component\HttpFoundation\Response';
+        $headers = [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'POST, GET, OPTIONS, PUT, PATCH, DELETE',
+            'Access-Control-Allow-Headers' => 'Origin,No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With, token, Authorization,Language',
+            'Access-Control-Allow-Credentials'=>'true'
+        ];
+
+        if ($response instanceof $IlluminateResponse) {
+            foreach ($headers as $key => $value) {
+                $response->header($key, $value);
+            }
+            return $response;
+        }
+
+        if ($response instanceof $SymfonyResponse) {
+            foreach ($headers as $key => $value) {
+                $response->headers->set($key, $value);
+            }
+            return $response;
+        }
+
         return $response;
+
     }
 
 }
