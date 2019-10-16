@@ -32,6 +32,8 @@ class RequestEvent
         $logger['method'] = $request->getMethod();
         $logger['is_ajax'] = $request->ajax();
         $logger['header'] = $request->header();
+        $logger['x-forwarded-for'] = $request->header('x-forwarded-for');
+        $logger['x-real-ip'] = $request->header('x-real-ip');
         $logger['cookies'] = $request->cookie();
         $logger['query'] = $request->query();
         $logger['post'] = $request->post();

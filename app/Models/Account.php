@@ -163,6 +163,12 @@ class Account extends Authenticatable implements JWTSubject
         return $list;
     }
 
+    public static function accountQuery(){
+        $list = self::select(['id as user_id','name','email'])->get();
+        $list->makeHidden('roles');
+        return $list;
+    }
+
 
 
 }

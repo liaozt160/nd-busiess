@@ -9,4 +9,11 @@ class Logger extends Model
     protected $guarded = ['id'];
     public $timestamps = false;
 //    protected $table = 'logs';
+
+    public static function getListByAccount($account = null,$param = []){
+        $query = self::select();
+        if($account){
+            $query->where('user_id');
+        }
+    }
 }

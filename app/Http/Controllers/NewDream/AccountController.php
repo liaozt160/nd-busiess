@@ -181,7 +181,6 @@ class AccountController extends BaseController
     }
 
     public function test(){
-        var_dump(config('config.config.name'));
         exit();
 //        $list = MyContact::where('_id','5d8d9fad7f0219058d2fd3bb')->get();
 //        $list = MyContact::where('role.name','tank')->get();
@@ -251,6 +250,12 @@ class AccountController extends BaseController
         $attentions = BusinessAttention::getListSumByBuyer($id);
         return compact('buyers','attentions','business');
     }
+
+    public function accountQuery(Request $request){
+        $list = Account::accountQuery();
+        return $this->ok($list);
+    }
+
 
 
 }

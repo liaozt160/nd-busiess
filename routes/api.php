@@ -39,11 +39,15 @@ Route::namespace('NewDream')->group(function () {
         //public
         Route::post('/category/query', 'PublicController@getCategoryQuery');
 
+        //common
+        Route::post('/log/index', 'LogController@index');
+
         Route::middleware('access.level:three')->group(function (){
             Route::post('account/add', 'AccountController@accountAdd'); //remark
             Route::post('account/update', 'AccountController@accountUpdate');
             Route::post('account/del', 'AccountController@accountDelete');
             Route::post('account/list', 'AccountController@accountList');
+            Route::post('account/query', 'AccountController@accountQuery');
             Route::post('account/show', 'AccountController@accountShow');
             Route::post('account/status', 'AccountController@accountStatus');
             Route::post('account/password', 'AccountController@accountPassword');

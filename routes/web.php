@@ -18,8 +18,17 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
 });
 
 Route::get('/info', function () {
+    if(env('APP_ENV') == 'production'){
+        return ;
+    }
+    try{
+        $a = 10/0;
+    }catch (Exception $e){
+        debug($e->getMessage());
+    }
     echo phpinfo();
 });
+
 
 Route::get('/pdf', function () {
     $pdf = \Illuminate\Support\Facades\App::make('dompdf.wrapper');

@@ -22,11 +22,11 @@ class RequestSubscriber implements ShouldQueue
     {
         try{
         $loggers = $event->logger;
-        foreach ($loggers as $key => $log) {
-            if (is_array($log) || is_object($log)) {
-                $loggers[$key] = json_encode($log);
-            }
-        }
+//        foreach ($loggers as $key => $log) {
+//            if (is_array($log) || is_object($log)) {
+//                $loggers[$key] = json_encode($log);
+//            }
+//        }
         $m = MongoRequest::insert($loggers);
 //        $log = Logger::create($loggers);
         }catch (\Exception $e){
