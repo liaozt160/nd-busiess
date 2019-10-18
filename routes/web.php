@@ -40,8 +40,16 @@ Route::get('/pdf', function () {
 <h1>Page 1</h1>
 <div class="page-break"></div>
 <h1>Page 2</h1>');
+
+    \Illuminate\Support\Facades\Storage::disk('s3')->put('test.pdf',$pdf->output());
     return $pdf->stream();
 });
+
+Route::get('/test', function () {
+    \App\Models\UploadFile::getS3TempPdf('test.pdf');
+    return '';
+});
+
 
 Route::get('/genpdf/{level}', 'NewDream\BusinessController@generatePDF');
 Route::get('/loadpdf', 'NewDream\OrderController@loadOrderPdf');

@@ -107,10 +107,16 @@ class OrderController extends BaseController
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
 //        return view('pdf.business_level_one',['business' =>$business]);
-        $fileName = 'business('.date('Y-m-d').').pdf';
+        $fileName = $user->id . '/business('.date('Y-m-d').').pdf';
         $pdf = PDF::loadView('pdf.business_level_one',['business' =>$business]);
         $pdf->setOptions(['isPhpEnabled'=> true,'dpi' => 96]);
         $pdf->setPaper('a4');
+        $r = UploadFile::saveOrderDetailPdf($fileName,$pdf->output());
+        if($r){
+            $url = UploadFile::getS3OrderTempPdf($fileName);
+            return $this->ok(['url' => (string)$url]);
+        }
+        return $this->err(Consts::SAVE_FILE_ERROR);
         return $pdf->stream($fileName);
     }
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Exceptions\BaseException;
 use App\Traits\Consts;
+use Aws\S3\S3Client;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -45,5 +46,35 @@ class UploadFile extends Model
 //        header('Content-type: '.$this->mime_type);
 //        header("Content-Disposition", "inline;fileName=".$this->name);
         return Storage::disk($this->disk)->download($this->file,$this->name);
+    }
+
+    public static function getS3OrderTempPdf($name){
+        $prefix = 'temp/';
+        $name = $prefix.$name;
+        $bucket = env('AWS_BUCKET');
+        $s3Client = new S3Client([
+//            'profile' => 'default',
+            'region' => env('AWS_DEFAULT_REGION'),
+            'version' => '2006-03-01',
+            'credentials' => [
+                'key' => env('AWS_ACCESS_KEY_ID'),
+                'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            ],
+        ]);
+
+        $cmd = $s3Client->getCommand('GetObject',[
+            'Bucket' => $bucket,
+            'Key' => $name
+        ]);
+        $request = $s3Client->createPresignedRequest($cmd,'+60 minutes');
+        $url = $request->getUri();
+        return $url;
+    }
+
+    public static function saveOrderDetailPdf($name,$content){
+        $disk = Storage::disk('s3');
+        $prefix = 'temp/';
+        $r = $disk->put($prefix.$name,$content);
+        return $r;
     }
 }

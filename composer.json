@@ -16,6 +16,7 @@
         "jenssegers/mongodb": "^3.6",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
+        "league/flysystem-aws-s3-v3": "^1.0",
         "mongodb/mongodb": "^1.5",
         "predis/predis": "^1.1",
         "tecnickcom/tcpdf": "^6.2",
