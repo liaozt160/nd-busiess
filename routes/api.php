@@ -129,11 +129,14 @@ Route::namespace('NewDream')->group(function () {
             Route::post('buyer/show', 'BuyerController@Show');
             Route::post('buyer/broker/change', 'BuyerController@brokerChange');
             Route::post('buyer/query', 'BuyerController@Query');
+            Route::post('buyer/query/email', 'BuyerController@QueryWithEmail');
+
             Route::post('buyer/broker/query', 'BuyerController@brokerQuery');
             Route::post('buyer/attention/pay', 'BuyerController@attentionPay');
             Route::post('buyer/attention/list', 'BuyerController@attentionList');
             Route::post('buyer/attention/del', 'BuyerController@attentionDel');
             Route::post('buyer/attention/pdf', 'BuyerController@attentionPdf');
+            Route::post('buyer/attention/pdf/email', 'BuyerController@attentionPdfEmail');
 
             Route::post('business/buyer/list/level/one', 'BusinessController@BuyerListLevelOne');
             Route::post('business/buyer/list/level/two', 'BusinessController@BuyerListLevelTwo');

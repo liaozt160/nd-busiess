@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers\NewDream;
 
+use App\Events\BusinessEmailEvent;
 use App\Exceptions\BaseException;
+use App\Mail\RecommendBusiness;
 use App\Models\Business;
 use App\Models\BusinessAttention;
 use App\Models\Buyer;
+use App\Models\UploadFile;
 use App\Traits\Consts;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use PDF;
 
 class BuyerController extends BaseController
@@ -86,22 +91,71 @@ class BuyerController extends BaseController
         }
         $business = Business::getBusinessLevel($ids,Consts::ACCOUNT_ACCESS_LEVEL_ONE);
 //        return view('pdf.business_level_one',['business' =>$business]);
-        $fileName = 'business('.date('Y-m-d').').pdf';
+        $user = $this->guard()->user();
+        $fileName = $user->id . '/attention('.date('Y-m-d').').pdf';
         $pdf = PDF::loadView('pdf.business_level_one',['business' =>$business]);
         $pdf->setOptions(['isPhpEnabled'=> true,'dpi' => 96]);
         $pdf->setPaper('a4');
-        return $pdf->stream($fileName);
+        $r = UploadFile::saveS3TempPdf($fileName,$pdf->output());
+        if($r){
+            $url = UploadFile::getS3TempPdf($fileName);
+            return $this->ok(['url' => (string)$url]);
+        }
+        return $this->err(Consts::SAVE_FILE_ERROR);
+//        return $pdf->stream($fileName);
+    }
+
+    public function attentionPdfEmail(Request $request){
+        $buyerId = $request->input('buyer_id');
+        if(!$buyerId){
+            throw new BaseException(Consts::PARAM_VALIDATE_WRONG);
+        }
+        $str = $request->input('ids');
+        if(!getIdsFromString($str,$ids)){
+            throw new BaseException(Consts::PARAM_VALIDATE_WRONG);
+        }
+        $buyer = Buyer::find($buyerId);
+        if(!$buyer){
+            throw new BaseException(Consts::NO_RECORD_FOUND);
+        }
+        $email = $buyer->email;
+        $business = Business::getBusinessLevel($ids,Consts::ACCOUNT_ACCESS_LEVEL_ONE);
+//        return view('pdf.business_level_one',['business' =>$business]);
+        $user = $this->guard()->user();
+        $fileName = $user->id . '/Business('.date('Y-m-d').').pdf';
+        $pdf = PDF::loadView('pdf.business_level_one',['business' =>$business]);
+        $pdf->setOptions(['isPhpEnabled'=> true,'dpi' => 96]);
+        $pdf->setPaper('a4');
+        $r = Storage::disk('temp')->put($fileName,$pdf->output());
+        if($r){
+            event(new BusinessEmailEvent($fileName,$email));
+//            Mail::send(new RecommendBusiness($fileName));
+            return $this->ok();
+        }
+        return $this->err(Consts::SAVE_FILE_ERROR);
+//        return $pdf->stream($fileName);
     }
 
 
     public function Query(Request $request){
-//        $accountId = $this->guard()->id();
         $accountId = $request->input('id');
         if(!$accountId){
             $user = $this->guard()->user();
             $accountId = $user->role==Consts::ACCOUNT_ROLE_ADMIN?null:$user->id;
         }
-        $list = Buyer::queryAll($accountId);
+        $column = ['id as key','buyer as label'];
+        $list = Buyer::queryAll($accountId,null,$column);
+        return $this->ok($list);
+    }
+
+    public function QueryWithEmail(Request $request){
+        $accountId = $request->input('id');
+        if(!$accountId){
+            $user = $this->guard()->user();
+            $accountId = $user->role==Consts::ACCOUNT_ROLE_ADMIN?null:$user->id;
+        }
+        $column = ['id as key','buyer as label','email'];
+        $list = Buyer::queryAll($accountId,null,$column);
         return $this->ok($list);
     }
 

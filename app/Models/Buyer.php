@@ -83,8 +83,8 @@ class Buyer extends Model
     }
 
 
-    public static function queryAll($accountId,$q=null){
-        $query = self::select(['id as key','buyer as label'])
+    public static function queryAll($accountId,$q=null,$column=[]){
+        $query = self::select($column)
             ->where('status',Consts::BUSINESS_STATUS_NORMAL)->whereNull('deleted_at');
         if($accountId){
             $query->where('buyer_broker',$accountId);
@@ -94,7 +94,6 @@ class Buyer extends Model
         }
         return $query->get();
     }
-
 
 
 

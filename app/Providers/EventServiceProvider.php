@@ -24,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\ContactUsEvent' => [
             'App\Listeners\ContactUsListener',
         ],
+        'App\Events\BusinessEmailEvent' => [
+            'App\Listeners\BusinessEmailListener',
+        ],
     ];
 
     protected $subscribe = [

@@ -48,7 +48,7 @@ class UploadFile extends Model
         return Storage::disk($this->disk)->download($this->file,$this->name);
     }
 
-    public static function getS3OrderTempPdf($name){
+    public static function getS3TempPdf($name){
         $prefix = 'temp/';
         $name = $prefix.$name;
         $bucket = env('AWS_BUCKET');
@@ -71,7 +71,7 @@ class UploadFile extends Model
         return $url;
     }
 
-    public static function saveOrderDetailPdf($name,$content){
+    public static function saveS3TempPdf($name,$content){
         $disk = Storage::disk('s3');
         $prefix = 'temp/';
         $r = $disk->put($prefix.$name,$content);

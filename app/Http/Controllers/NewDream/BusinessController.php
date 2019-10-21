@@ -8,6 +8,7 @@ use App\Models\BusinessAttention;
 use App\Models\BusinessBrokerNetMember;
 use App\Models\BusinessZh;
 use App\Models\Location;
+use App\Models\UploadFile;
 use App\Traits\Consts;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -250,15 +251,18 @@ class BusinessController extends BaseController
             throw new BaseException(Consts::PARAM_VALIDATE_WRONG);
         }
         $business = Business::getBusinessLevel($ids,(int)$level);
-//        $business = $business[0];
-//        var_dump($business->category);
-//        dd($business);
-//        return view('pdf.business_level_one',['business' =>$business]);
-        $fileName = 'business('.date('Y-m-d').').pdf';
+        $user = $this->guard()->user();
+        $fileName = $user->id . '/business('.date('Y-m-d').').pdf';
         $pdf = PDF::loadView('pdf.business_level_one',['business' =>$business]);
         $pdf->setOptions(['isPhpEnabled'=> true,'dpi' => 96]);
         $pdf->setPaper('a4');
-        return $pdf->stream($fileName);
+        $r = UploadFile::saveS3TempPdf($fileName,$pdf->output());
+        if($r){
+            $url = UploadFile::getS3TempPdf($fileName);
+            return $this->ok(['url' => (string)$url]);
+        }
+        return $this->err(Consts::SAVE_FILE_ERROR);
+//        return $pdf->stream($fileName);
     }
 
     /**

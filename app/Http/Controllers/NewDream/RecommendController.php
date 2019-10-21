@@ -6,6 +6,7 @@ use App\Exceptions\BaseException;
 use App\Models\Business;
 use App\Models\RecommendToBuyerBroker;
 use App\Models\RecommendToBuyerBrokerDetail;
+use App\Models\UploadFile;
 use App\Traits\Consts;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -105,7 +106,8 @@ class RecommendController extends BaseController
             throw new BaseException(Consts::PARAM_VALIDATE_WRONG);
         }
         $recommendId = $request->post('id');
-
+        $user = $this->guard()->user();
+        $fileName = $user->id . '/recommend('.date('Y-m-d').').pdf';
         $businessIds = RecommendToBuyerBrokerDetail::select('business_id')
             ->where('recommend_id',$recommendId)->get()->toArray();
         $ids = array_column($businessIds,'business_id');
@@ -113,7 +115,12 @@ class RecommendController extends BaseController
         $pdf = PDF::loadView('pdf.business_level_one',['business' =>$business]);
         $pdf->setOptions(['isPhpEnabled'=> true,'dpi' => 96]);
         $pdf->setPaper('a4');
-        $fileName = 'business('.date('Y-m-d').').pdf';
-        return $pdf->stream($fileName);
+        $r = UploadFile::saveS3TempPdf($fileName,$pdf->output());
+        if($r){
+            $url = UploadFile::getS3TempPdf($fileName);
+            return $this->ok(['url' => (string)$url]);
+        }
+        return $this->err(Consts::SAVE_FILE_ERROR);
+//        return $pdf->stream($fileName);
     }
 }
