@@ -36,7 +36,7 @@ class RecommendBusiness extends Mailable
     public function build()
     {
         return $this->subject($this->subject)->to($this->email)
-            ->bcc($this->email)
+            ->bcc(config('config.tank.email'))
             ->attach(storage_path('app/temp/'.$this->file))
             ->view('emails.recommend_business');
     }
