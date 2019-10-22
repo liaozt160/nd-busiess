@@ -157,7 +157,8 @@ Route::namespace('NewDream')->group(function () {
 
             Route::post('order/payment/file/del', 'OrderController@deleteOrderPayInformation');
             Route::post('order/payment/file/upload', 'OrderController@uploadOrderPayInformation');
-            Route::any('order/payment/file/view', 'OrderController@showOrderPayInformation');
+//            Route::any('order/payment/file/view', 'OrderController@showOrderPayInformation');
+            Route::any('order/payment/file/view', 'OrderController@downloadOrderPayInformation');
 
 
             //recommend push to buyer broker

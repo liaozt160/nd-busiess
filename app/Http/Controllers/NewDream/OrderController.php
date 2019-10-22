@@ -148,7 +148,7 @@ class OrderController extends BaseController
             $this->paramValidateWrong();
         }
         $file->remark = $request->input('remark');
-        $file = UploadFile::saveFile($file,'upload');
+        $file = UploadFile::s3SaveOrderPayment($file);
         $m = BuyerOrderUploadFile::addItem(['order_id'=>$orderId,'file_id'=>$file->id]);
         return $this->ok();
     }
@@ -170,6 +170,16 @@ class OrderController extends BaseController
         }
         $stream = $file->downLoad();
         return $stream;
+    }
+
+    public function downloadOrderPayInformation(Request $request){
+        $id =  $request->input('file_id');
+        $file = UploadFile::find($id);
+        if(!$file){
+            $this->paramValidateWrong();
+        }
+        $url = $file->getS3Url();
+        return $this->ok(['url' => $url]);
     }
 
 }
