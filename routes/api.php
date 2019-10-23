@@ -171,6 +171,7 @@ Route::namespace('NewDream')->group(function () {
             Route::post('recommend/details', 'RecommendController@Details');
             Route::post('recommend/query', 'RecommendController@Query');
             Route::post('recommend/pdf/{level}', 'RecommendController@generatePdf');
+            Route::post('recommend/pdf/email/{level}', 'RecommendController@generateEmailPdf');
 
 
         });

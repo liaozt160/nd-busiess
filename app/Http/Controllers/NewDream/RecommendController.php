@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\NewDream;
 
+use App\Events\BusinessEmailEvent;
 use App\Exceptions\BaseException;
 use App\Models\Business;
+use App\Models\Buyer;
 use App\Models\RecommendToBuyerBroker;
 use App\Models\RecommendToBuyerBrokerDetail;
 use App\Models\UploadFile;
 use App\Traits\Consts;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use PDF;
 
 class RecommendController extends BaseController
@@ -107,7 +110,7 @@ class RecommendController extends BaseController
         }
         $recommendId = $request->post('id');
         $user = $this->guard()->user();
-        $fileName = $user->id . '/recommend('.date('Y-m-d').').pdf';
+        $fileName = $user->id . '/Business('.date('Y-m-d').').pdf';
         $businessIds = RecommendToBuyerBrokerDetail::select('business_id')
             ->where('recommend_id',$recommendId)->get()->toArray();
         $ids = array_column($businessIds,'business_id');
@@ -119,6 +122,40 @@ class RecommendController extends BaseController
         if($r){
             $url = UploadFile::getS3TempPdf($fileName);
             return $this->ok(['url' => (string)$url]);
+        }
+        return $this->err(Consts::SAVE_FILE_ERROR);
+//        return $pdf->stream($fileName);
+    }
+
+    public function generateEmailPdf(Request $request, $level = 1 ){
+        if(!in_array($level,['1','2','3','4'])){
+            throw new BaseException(Consts::PARAM_VALIDATE_WRONG);
+        }
+
+        $buyerId = $request->input('buyer_id');
+        if(!$buyerId){
+            throw new BaseException(Consts::PARAM_VALIDATE_WRONG);
+        }
+        $buyer = Buyer::find($buyerId);
+        if(!$buyer){
+            throw new BaseException(Consts::NO_RECORD_FOUND);
+        }
+        $email = $buyer->email;
+
+        $recommendId = $request->post('id');
+        $user = $this->guard()->user();
+        $fileName = $user->id . '/recommend/Business('.date('Y-m-d').').pdf';
+        $businessIds = RecommendToBuyerBrokerDetail::select('business_id')
+            ->where('recommend_id',$recommendId)->get()->toArray();
+        $ids = array_column($businessIds,'business_id');
+        $business = Business::getBusinessLevel($ids,$level);
+        $pdf = PDF::loadView('pdf.business_level_one',['business' =>$business]);
+        $pdf->setOptions(['isPhpEnabled'=> true,'dpi' => 96]);
+        $pdf->setPaper('a4');
+        $r = Storage::disk('temp')->put($fileName,$pdf->output());
+        if($r){
+            event(new BusinessEmailEvent($fileName,$email));
+            return $this->ok();
         }
         return $this->err(Consts::SAVE_FILE_ERROR);
 //        return $pdf->stream($fileName);

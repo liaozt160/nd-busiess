@@ -3,7 +3,7 @@
     <style>
         /** Define the margins of your page **/
         @page {
-            margin: 40px 20px;
+            margin: 70px 20px 5px;
         }
 
         @font-face {
@@ -22,13 +22,13 @@
 
         header {
             position: fixed;
-            top: -60px;
+            top: -20px;
             left: 0px;
             right: 0px;
-            height: 50px;
+            height: 1px;
 
             /** Extra personal styles **/
-            /*background-color: #03a9f4;*/
+            background-color: #03a9f4;
             color: white;
             text-align: center;
             line-height: 35px;
@@ -36,13 +36,13 @@
 
         footer {
             position: fixed;
-            bottom: -20px;
+            bottom: 30px;
             left: 0px;
             right: 0px;
-            height: 50px;
+            height: 5px;
 
             /** Extra personal styles **/
-            /*background-color: #03a9f4;*/
+            background-color: #03a9f4;
             color: white;
             text-align: center;
             line-height: 18px;
@@ -69,15 +69,6 @@
 <header>
 </header>
 
-<footer>
-    <script type="text/php">
-              if (isset($pdf)) {
-                $font = $fontMetrics->getFont("Arial");
-                 $pdf->page_text(255, 800, "Page  {PAGE_NUM} / {PAGE_COUNT}", $font, 14, array(0, 0, 0));
-               }
-
-    </script>
-</footer>
 
 <!-- Wrap the content of your PDF inside a main tag -->
 @php
@@ -218,5 +209,14 @@
         </div>
     @endforeach
 </main>
+{{--<footer>--}}
+{{--</footer>--}}
+<script type="text/php">
+              if (isset($pdf)) {
+                $font = $fontMetrics->getFont("Arial");
+                $pdf->page_text(480, 15, "Page  {PAGE_NUM} / {PAGE_COUNT}", $font, 14, array(0, 0, 0));
+               }
+
+</script>
 </body>
 </html>
