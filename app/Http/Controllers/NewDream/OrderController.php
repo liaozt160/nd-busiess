@@ -111,13 +111,13 @@ class OrderController extends BaseController
         $pdf = PDF::loadView('pdf.business_level_one',['business' =>$business]);
         $pdf->setOptions(['isPhpEnabled'=> true,'dpi' => 96]);
         $pdf->setPaper('a4');
-//        $r = UploadFile::saveS3TempPdf($fileName,$pdf->output());
-//        if($r){
-//            $url = UploadFile::getS3TempPdf($fileName);
-//            return $this->ok(['url' => (string)$url]);
-//        }
-//        return $this->err(Consts::SAVE_FILE_ERROR);
-        return $pdf->stream($fileName);
+        $r = UploadFile::saveS3TempPdf($fileName,$pdf->output());
+        if($r){
+            $url = UploadFile::getS3TempPdf($fileName);
+            return $this->ok(['url' => (string)$url]);
+        }
+        return $this->err(Consts::SAVE_FILE_ERROR);
+//        return $pdf->stream($fileName);
     }
 
     public function addPayInformation(Request $request){
