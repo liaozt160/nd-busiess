@@ -198,6 +198,4 @@ class BuyerController extends BaseController
         $list = Buyer::buyerBrokerQuery($q,$accountId);
         return $this->ok($list);
     }
-
-
 }
