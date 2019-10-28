@@ -18,15 +18,20 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
 });
 
 Route::get('/info', function () {
-    if(env('APP_ENV') == 'production'){
-        return ;
-    }
-    try{
-        $a = 10/0;
-    }catch (Exception $e){
-        debug($e->getMessage());
-    }
-    echo phpinfo();
+//    if(env('APP_ENV') == 'production'){
+//        return ;
+//    }
+//    try{
+//        $a = 10/0;
+//    }catch (Exception $e){
+//        debug($e->getMessage());
+//    }
+//    try{
+//        throw new Exception('ddddddddddddddddddd');
+//    }catch (Exception $e){
+//        debug($e->getMessage());
+//    }
+//    echo phpinfo();
 });
 
 
@@ -45,14 +50,14 @@ Route::get('/pdf', function () {
     return $pdf->stream();
 });
 
-Route::get('/test', function () {
-    \App\Models\UploadFile::getS3TempPdf('test.pdf');
-    return '';
-});
+//Route::get('/test', function () {
+//    \App\Models\UploadFile::getS3TempPdf('test.pdf');
+//    return '';
+//});
 
 
-Route::get('/genpdf/{level}', 'NewDream\BusinessController@generatePDF');
-Route::get('/loadpdf', 'NewDream\OrderController@loadOrderPdf');
+//Route::get('/genpdf/{level}', 'NewDream\BusinessController@generatePDF');
+//Route::get('/loadpdf', 'NewDream\OrderController@loadOrderPdf');
 //Route::get('/viewpdf', function () {
 //   return view();
 //});
