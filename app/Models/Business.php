@@ -506,7 +506,9 @@ class Business extends Model
         $query = self::select($columns)
             ->from('business as b')
             ->leftjoin('business_zh as z', 'b.id', 'z.business_id')
-            ->where('b.status',Consts::BUSINESS_STATUS_NORMAL);
+            ->whereNull('b.deleted_at')
+            ->where('b.status',Consts::BUSINESS_STATUS_NORMAL)
+            ->orderBy('b.created_at','DESC');
         $list = $query->get();
         $list->transform(function ($item, $key){
             $item->setLocations();

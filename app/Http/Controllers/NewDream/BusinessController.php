@@ -277,9 +277,7 @@ class BusinessController extends BaseController
         $pdf->setPaper('a4');
         $r = Storage::disk('temp')->put($fileName,$pdf->output());
         if($r){
-//            $email = config('config.tank.email');
             event(new SystemEvent($fileName,null));
-//            Mail::send(new RecommendBusiness($fileName));
             return $this->ok();
         }
         return $this->err(Consts::SAVE_FILE_ERROR);
