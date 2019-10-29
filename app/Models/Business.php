@@ -496,4 +496,23 @@ class Business extends Model
         return true;
     }
 
+    public static function getAllBusiness($level= Consts::ACCOUNT_ACCESS_LEVEL_ONE){
+        $columns = self::getColumnsByLevel($level);
+        if (App::getLocale() == 'zh') {
+            $columnPrefix = 'z.';
+        } else {
+            $columnPrefix = 'b.';
+        }
+        $query = self::select($columns)
+            ->from('business as b')
+            ->leftjoin('business_zh as z', 'b.id', 'z.business_id')
+            ->where('b.status',Consts::BUSINESS_STATUS_NORMAL);
+        $list = $query->get();
+        $list->transform(function ($item, $key){
+            $item->setLocations();
+            return $item;
+        });
+        return $list;
+    }
+
 }

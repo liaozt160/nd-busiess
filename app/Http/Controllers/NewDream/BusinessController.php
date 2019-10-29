@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\NewDream;
 
+use App\Events\BusinessEmailEvent;
+use App\Events\SystemEvent;
 use App\Exceptions\BaseException;
 use App\Models\Business;
 use App\Models\BusinessAttention;
@@ -13,6 +15,7 @@ use App\Traits\Consts;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Storage;
 use PDF;
 class BusinessController extends BaseController
 {
@@ -263,6 +266,23 @@ class BusinessController extends BaseController
         }
         return $this->err(Consts::SAVE_FILE_ERROR);
 //        return $pdf->stream($fileName);
+    }
+
+    public function generateForSalePDF(Request $request,$level = '1'){
+        $business = Business::getAllBusiness();
+        $user = $this->guard()->user();
+        $fileName = $user->id . '/business('.date('Y-m-d').').pdf';
+        $pdf = PDF::loadView('pdf.business_level_one',['business' =>$business]);
+        $pdf->setOptions(['isPhpEnabled'=> true,'dpi' => 96]);
+        $pdf->setPaper('a4');
+        $r = Storage::disk('temp')->put($fileName,$pdf->output());
+        if($r){
+//            $email = config('config.tank.email');
+            event(new SystemEvent($fileName,null));
+//            Mail::send(new RecommendBusiness($fileName));
+            return $this->ok();
+        }
+        return $this->err(Consts::SAVE_FILE_ERROR);
     }
 
     /**

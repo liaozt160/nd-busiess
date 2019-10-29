@@ -75,6 +75,7 @@ Route::namespace('NewDream')->group(function () {
             // business
             Route::post('account/business/owner', 'BusinessController@changeOwner');
             Route::post('account/business/pdf/{level}', 'BusinessController@generatePDF');
+            Route::any('account/business/all/pdf/{level}', 'BusinessController@generateForSalePDF');
 
             //buyer broker net
             Route::post('account/buyer/net/add', 'BuyerBrokerNetController@Add');

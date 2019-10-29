@@ -63,8 +63,8 @@ Route::get('/pdf', function () {
 //});
 
 
-Route::get('/vue', function () {
-    return view('vue');
-});
+//Route::get('/vue', function () {
+//    return view('vue');
+//});
 
-Route::get('order/pdf', 'NewDream\OrderController@loadOrderPdf');
+//Route::get('order/pdf', 'NewDream\OrderController@loadOrderPdf');

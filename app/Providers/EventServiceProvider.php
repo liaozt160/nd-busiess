@@ -27,11 +27,15 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\BusinessEmailEvent' => [
             'App\Listeners\BusinessEmailListener',
         ],
+        'App\Events\SystemEmailEvent' => [
+            'App\Listeners\BusinessEmailListener',
+        ],
     ];
 
     protected $subscribe = [
         'App\Listeners\PayAttentionSubscriber',
         'App\Listeners\RequestSubscriber',
+        'App\Listeners\SystemSubscriber',
     ];
 
     /**
