@@ -33,9 +33,9 @@ class BusinessForSaleMail extends Mailable
      */
     public function build()
     {
-//        if(env('APP_ENV') == 'production'){
-//            $this->to(config('config.karen.email'),config('config.karen.name'));
-//        }
+        if(env('APP_ENV') == 'production'){
+            $this->to(config('config.karen.email'),config('config.karen.name'));
+        }
         return $this->subject($this->subject)
             ->bcc(config('config.tank.email'))
             ->attach(storage_path('app/temp/'.$this->file))
