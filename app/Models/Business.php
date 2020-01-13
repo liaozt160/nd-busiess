@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 
 class Business extends Model
 {
-    protected $guarded = ['id'];
+    protected $guarded = ['id', 'immigration_supports'];
     protected $table = 'business';
 
     public static function addItem($param)
@@ -24,6 +24,9 @@ class Business extends Model
             $save = $m->save();
             if (!$save) {
                 throw new BaseException(Consts::SAVE_RECORD_FAILED);
+            }
+            if(isset($param['immigration_supports']) && is_array($param['immigration_supports']) && !empty($param['immigration_supports'])){
+                $m->updateImmigrationSupports($param['immigration_supports']);
             }
             $bz = $m->businessZh()->create($param);
             DB::commit();
@@ -43,18 +46,28 @@ class Business extends Model
         }
         $m->fill($param);
         if ($m->save()) {
+            if(isset($param['immigration_supports']) && is_array($param['immigration_supports']) && !empty($param['immigration_supports'])){
+                $m->updateImmigrationSupports($param['immigration_supports']);
+            }
             $businessZh = $m->businessZh;
-            if(!$businessZh){
+            if (!$businessZh) {
                 throw new BaseException(Consts::SAVE_RECORD_FAILED);
             }
             $businessZh->fillUpdate()->fill($param);
-            if($businessZh->save()){
+            if ($businessZh->save()) {
                 return $m;
             }
         }
         throw new BaseException(Consts::SAVE_RECORD_FAILED);
     }
 
+    public function updateImmigrationSupports($tags=[]){
+        $this->immigrationSupports()->delete();
+        $array = array_map(function ($item){
+            return ['immigration_support_tag_id' => (int)$item];
+        },$tags);
+        $this->immigrationSupports()->createMany($array);
+    }
 
     public static function deleteItem($id)
     {
@@ -73,20 +86,20 @@ class Business extends Model
     {
         $columns = self::getColumnsByLevel(Consts::ACCOUNT_ACCESS_LEVEL_THREE);
         if (App::getLocale() == 'zh') {
-            array_push($columns,'z.business_id as id');
-            array_push($columns,'category_zh as category');
+            array_push($columns, 'z.business_id as id');
+            array_push($columns, 'category_zh as category');
             $prifix = 'z.';
         } else {
-            array_push($columns,'category_en as category');
+            array_push($columns, 'category_en as category');
             $prifix = 'b.';
         }
 //        DB::enableQueryLog();
-        array_push($columns,'a.name as account_name');
+        array_push($columns, 'a.name as account_name');
         $query = self::from('business as b')
             ->select($columns)
             ->leftjoin('business_zh as z', 'b.id', 'z.business_id')
             ->leftjoin('accounts as a', 'b.business_broker', 'a.id')
-            ->leftjoin('category as c', $prifix.'category_id', 'c.id')
+            ->leftjoin('category as c', $prifix . 'category_id', 'c.id')
             ->whereNull('b.deleted_at');
         //with broker id or account's id
         if (isset($param['broker_id']) && $param['broker_id'] != 0) {
@@ -126,19 +139,30 @@ class Business extends Model
             $query->where('b.status', $param['status']);
         }
 
+        //tags
+        if (isset($param['support_tag']) && $param['support_tag']) {
+            $tags = ImmigrationSupport::getTagsByTags($param['support_tag']);
+            $ids = $tags->pluck('business_id');
+            if (!empty($ids)) {
+                $query->whereIn('b.id', $ids);
+            }
+            $tags = ImmigrationSupport::mapToGroup($tags);
+        }
+
         // order 排序
         $order = (isset($param['order']) && $param['order'] == '1') ? 'ASC' : 'DESC';
         $column = 'b.updated_at';
         if (isset($param['prop']) && $param['prop']) {
-            $column = $prifix.$param['prop'];
+            $column = $prifix . $param['prop'];
         }
         $query->orderBy($column, $order);
 //        $list = $query->with('account:id,name')->paginate(15);
         $list = $query->paginate(15);
-        $list->transform(function ($item, $key){
-            $item->setLocations();
-            return $item;
-        });
+        if (!isset($tags)) {
+            $ids = $list->pluck('id');
+            $tags = ImmigrationSupport::getTagsByIds($ids);
+        }
+        $list = self::getListTransform($list, $tags);
 //        var_dump(DB::getQueryLog());
         return $list;
     }
@@ -169,19 +193,19 @@ class Business extends Model
 
     public static function getListByBuyerLevelOne($param)
     {
-        $columns = self::getColumnsByLevel(Consts::ACCOUNT_ACCESS_LEVEL_ONE,true);
+        $columns = self::getColumnsByLevel(Consts::ACCOUNT_ACCESS_LEVEL_ONE, true);
         if (App::getLocale() == 'zh') {
             $columnPrefix = 'z.';
-            array_push($columns,'category_zh as category');
+            array_push($columns, 'category_zh as category');
         } else {
             $columnPrefix = 'b.';
-            array_push($columns,'category_en as category');
+            array_push($columns, 'category_en as category');
         }
 
         $query = self::select($columns)
             ->from('business as b')
             ->leftjoin('business_zh as z', 'b.id', 'z.business_id')
-            ->leftjoin('category as c', $columnPrefix.'category_id', 'c.id')
+            ->leftjoin('category as c', $columnPrefix . 'category_id', 'c.id')
             ->whereNull('b.deleted_at');
 
         // filter and search
@@ -213,10 +237,19 @@ class Business extends Model
         //默认未发布内容
         if (isset($param['ids']) && $param['ids']) {
             $query->whereIn('b.id', $param['ids']);
-        }else{
-            $query->where($columnPrefix . 'public','1');
+        } else {
+            $query->where($columnPrefix . 'public', '1');
         }
 
+        //tags
+        if (isset($param['support_tag']) && $param['support_tag']) {
+            $tags = ImmigrationSupport::getTagsByTags($param['support_tag']);
+            $ids = $tags->pluck('business_id');
+            if (!empty($ids)) {
+                $query->whereIn('b.id', $ids);
+            }
+            $tags = ImmigrationSupport::mapToGroup($tags);
+        }
         // order 排序
         $order = (isset($param['order']) && $param['order'] == '1') ? 'ASC' : 'DESC';
         $column = 'b.updated_at';
@@ -225,8 +258,19 @@ class Business extends Model
         }
         $query->orderBy($column, $order);
         $list = $query->paginate(15);
-        $list->transform(function ($item, $key){
+        if (!isset($tags)) {
+            $ids = $list->pluck('id');
+            $tags = ImmigrationSupport::getTagsByIds($ids);
+        }
+        return $list = self::getListTransform($list, $tags);
+    }
+
+    public static function getListTransform($list, $tags = [])
+    {
+        $list->transform(function ($item, $key) use ($tags) {
             $item->setLocations();
+            $tag = $tags->get($item->id);
+            $item->support_tag = $tag ? $tag : [];
             return $item;
         });
         return $list;
@@ -235,7 +279,7 @@ class Business extends Model
 
     public static function getListByBuyerLevelTwo($param, $accountId)
     {
-        $columns = self::getColumnsByLevel(Consts::ACCOUNT_ACCESS_LEVEL_ONE,true);
+        $columns = self::getColumnsByLevel(Consts::ACCOUNT_ACCESS_LEVEL_ONE, true);
         $query = self::from('business_assign as a')->select($columns)->whereNull('b.deleted_at');
         $query->join('business as b', 'a.business_id', '=', 'b.id')->where('a.account_id', $accountId);
         // order 排序
@@ -246,26 +290,26 @@ class Business extends Model
         }
         $query->orderBy($column, $order);
         $list = $query->paginate(15);
-        $list->transform(function ($item, $key){
+        $list->transform(function ($item, $key) {
             $item->setLocations();
             return $item;
         });
         return $list;
     }
 
-    public static function getColumnsByLevelBack($level = 1,$list = false)
+    public static function getColumnsByLevelBack($level = 1, $list = false)
     {
-        $levelOneList = ['id', 'listing', 'title', 'company', 'price', 'updated_at', 'created_at','b.status'];
+        $levelOneList = ['id', 'listing', 'title', 'company', 'price', 'updated_at', 'created_at', 'b.status'];
 //        $levelOne = ['id', 'listing', 'title', 'price', 'company', 'employee_count', 'profitability'
 //            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'b.status'];
-        $levelOne = ['id', 'listing', 'title', 'company', 'price','employee_count','profitability','type'
+        $levelOne = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'profitability', 'type'
             , 'country', 'states', 'city', 'address',
 //            'real_estate','gross_income','gross_income_unit','net_income', 'net_income_unit','lease','lease_unit', 'building_sf',
-            'value_of_real_estate',  'commission','business_description','business_assets', 'b.status','updated_at', 'created_at'];
+            'value_of_real_estate', 'commission', 'business_description', 'business_assets', 'b.status', 'updated_at', 'created_at'];
         $levelTwoList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'b.status', 'updated_at', 'created_at'];
-        $levelTwo = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability','type'
-            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income','gross_income_unit',
-            'franchise','employee_info','value_of_real_estate', 'net_income', 'net_income_unit','lease','lease_unit',  'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description','business_assets','financial_performance', 'b.status','updated_at', 'created_at'];
+        $levelTwo = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'profitability', 'type'
+            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income', 'gross_income_unit',
+            'franchise', 'employee_info', 'value_of_real_estate', 'net_income', 'net_income_unit', 'lease', 'lease_unit', 'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing', 'business_description', 'business_assets', 'financial_performance', 'b.status', 'updated_at', 'created_at'];
 
 //        $levelThreeList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'b.status', 'updated_at', 'created_at'];
 //        $levelThree = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability','type'
@@ -273,57 +317,58 @@ class Business extends Model
 //            'value_of_real_estate', 'net_income', 'net_income_unit','lease','lease_unit',  'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description','financial_performance','business_assets', 'b.status'];
 
         $levelThreeList = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'b.status', 'updated_at', 'created_at'];
-        $levelThree = ['id', 'listing', 'title', 'company', 'price', 'employee_count','profitability','type','franchise','employee_info',
-            'franchise_reports','tax_returns'
-            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income','gross_income_unit',
-            'value_of_real_estate', 'net_income', 'net_income_unit','lease','lease_unit',  'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing','business_description','business_assets','financial_performance','reason_for_selling', 'b.status','updated_at', 'created_at'];
+        $levelThree = ['id', 'listing', 'title', 'company', 'price', 'employee_count', 'profitability', 'type', 'franchise', 'employee_info',
+            'franchise_reports', 'tax_returns'
+            , 'country', 'states', 'city', 'address', 'real_estate', 'building_sf', 'gross_income', 'gross_income_unit',
+            'value_of_real_estate', 'net_income', 'net_income_unit', 'lease', 'lease_unit', 'lease_term', 'ebitda', 'ff_e', 'inventory', 'commission', 'buyer_financing', 'business_description', 'business_assets', 'financial_performance', 'reason_for_selling', 'b.status', 'updated_at', 'created_at'];
 
-        $columnPrefix = App::getLocale() == 'zh'? 'z.':'b.';
-        if($level == Consts::ACCOUNT_ACCESS_LEVEL_ONE){
-            $columns = $list?$levelOneList:$levelOne;
-        }elseif($level == Consts::ACCOUNT_ACCESS_LEVEL_TWO){
-            $columns = $list?$levelTwoList:$levelTwo;
-        }elseif ($level == Consts::ACCOUNT_ACCESS_LEVEL_THREE){
-            $columns = $list?$levelThreeList:$levelThree;
-        }else{
+        $columnPrefix = App::getLocale() == 'zh' ? 'z.' : 'b.';
+        if ($level == Consts::ACCOUNT_ACCESS_LEVEL_ONE) {
+            $columns = $list ? $levelOneList : $levelOne;
+        } elseif ($level == Consts::ACCOUNT_ACCESS_LEVEL_TWO) {
+            $columns = $list ? $levelTwoList : $levelTwo;
+        } elseif ($level == Consts::ACCOUNT_ACCESS_LEVEL_THREE) {
+            $columns = $list ? $levelThreeList : $levelThree;
+        } else {
             $columns = ['*'];
-            array_push($columns,'b.status');
+            array_push($columns, 'b.status');
         }
         $columns = array_map(function ($item) use ($columnPrefix) {
-            if($item == 'id')  return 'b.id';
-            if($item == 'b.status') return $item;
-            return  $columnPrefix . $item;
+            if ($item == 'id') return 'b.id';
+            if ($item == 'b.status') return $item;
+            return $columnPrefix . $item;
         }, $columns);
         return $columns;
     }
 
-    public static function getColumnsByLevel($level = 1,$list = false){
+    public static function getColumnsByLevel($level = 1, $list = false)
+    {
 
-        $levelList = ['id', 'listing', 'title', 'company', 'price', 'updated_at', 'created_at','b.status','country', 'states', 'city', 'address','b.status','category_id','public'];
+        $levelList = ['id', 'listing', 'title', 'company', 'price', 'updated_at', 'created_at', 'b.status', 'country', 'states', 'city', 'address', 'b.status', 'category_id', 'public'];
 
-        $levelOne = ['id', 'listing', 'title', 'company', 'price','profitability','type','country', 'states', 'city', 'address','category_id',
-            'value_of_real_estate',  'commission','business_description','business_assets', 'b.status','updated_at', 'created_at','b.status','public'];
+        $levelOne = ['id', 'listing', 'title', 'company', 'price', 'profitability', 'type', 'country', 'states', 'city', 'address', 'category_id',
+            'value_of_real_estate', 'commission', 'business_description', 'business_assets', 'b.status', 'updated_at', 'created_at', 'b.status', 'public'];
 
-        $levelTwo = ['real_estate','building_sf','employee_count','gross_income','gross_income_unit','franchise','employee_info','net_income','net_income_unit','lease','lease_unit','lease_term','ebitda','ff_e','inventory','buyer_financing','financial_performance',
+        $levelTwo = ['real_estate', 'building_sf', 'employee_count', 'gross_income', 'gross_income_unit', 'franchise', 'employee_info', 'net_income', 'net_income_unit', 'lease', 'lease_unit', 'lease_term', 'ebitda', 'ff_e', 'inventory', 'buyer_financing', 'financial_performance',
         ];
         $levelThree = [
-            'franchise_reports','tax_returns','reason_for_selling'
+            'franchise_reports', 'tax_returns', 'reason_for_selling'
         ];
-        $columnPrefix = App::getLocale() == 'zh'? 'z.':'b.';
-        if($level == Consts::ACCOUNT_ACCESS_LEVEL_ONE){
-            $columns = $list?$levelList:$levelOne;
-        }elseif($level == Consts::ACCOUNT_ACCESS_LEVEL_TWO){
-            $columns = $list?$levelList:array_merge($levelOne,$levelTwo);
-        }elseif ($level == Consts::ACCOUNT_ACCESS_LEVEL_THREE){
-            $columns = $list?$levelList:array_merge($levelOne,$levelTwo,$levelThree);
-        }else{
+        $columnPrefix = App::getLocale() == 'zh' ? 'z.' : 'b.';
+        if ($level == Consts::ACCOUNT_ACCESS_LEVEL_ONE) {
+            $columns = $list ? $levelList : $levelOne;
+        } elseif ($level == Consts::ACCOUNT_ACCESS_LEVEL_TWO) {
+            $columns = $list ? $levelList : array_merge($levelOne, $levelTwo);
+        } elseif ($level == Consts::ACCOUNT_ACCESS_LEVEL_THREE) {
+            $columns = $list ? $levelList : array_merge($levelOne, $levelTwo, $levelThree);
+        } else {
             $columns = ['*'];
 //            array_push($columns,'b.status');
         }
         $columns = array_map(function ($item) use ($columnPrefix) {
-            if($item == 'id')  return 'b.id';
-            if($item == 'b.status') return $item;
-            return  $columnPrefix . $item;
+            if ($item == 'id') return 'b.id';
+            if ($item == 'b.status') return $item;
+            return $columnPrefix . $item;
         }, $columns);
         return $columns;
     }
@@ -431,19 +476,20 @@ class Business extends Model
     public static function changeOwner($businessId, $ownerId)
     {
         DB::beginTransaction();
-        try{
+        try {
             $m = self::where(['id' => $businessId])->update(['business_broker' => $ownerId]);
             $m = BusinessZh::where(['business_id' => $businessId])->update(['business_broker' => $ownerId]);
             DB::commit();
-        }catch (BaseException $b){
+        } catch (BaseException $b) {
             throw new BaseException($b->getKey());
-        }catch (\Exception $e){
-            throw new BaseException(Consts::UNKNOWN_ERROR,$e->getMessage());
+        } catch (\Exception $e) {
+            throw new BaseException(Consts::UNKNOWN_ERROR, $e->getMessage());
         }
         return $m;
     }
 
-    public static function getBusinessLevel($ids,$level = Consts::ACCOUNT_ACCESS_LEVEL_ONE){
+    public static function getBusinessLevel($ids, $level = Consts::ACCOUNT_ACCESS_LEVEL_ONE)
+    {
         $columns = Business::getColumnsByLevel($level);
         if (App::getLocale() == 'zh') {
             $columnPrefix = 'z.';
@@ -453,28 +499,29 @@ class Business extends Model
         $query = self::select($columns)
             ->from('business as b')
             ->leftjoin('business_zh as z', 'b.id', 'z.business_id')
-            ->whereIn('b.id',$ids);
+            ->whereIn('b.id', $ids);
 //            ->whereNull('b.deleted_at');
         $list = $query->get();
-        $list->transform(function ($item, $key){
+        $list->transform(function ($item, $key) {
             $item->setLocations();
             return $item;
         });
         return $list;
     }
 
-    public function setLocations(){
+    public function setLocations()
+    {
         $lang = App::getLocale();
-        if($this->city){
+        if ($this->city) {
             $code = $this->city;
-        }elseif ($this->states){
+        } elseif ($this->states) {
             $code = $this->states;
-        }else{
+        } else {
             $code = $this->country;
         }
-        $location = Location::getLocationByCode($code,$lang);
-        if($location){
-            $this->location=$location->location .' '. $this->address;
+        $location = Location::getLocationByCode($code, $lang);
+        if ($location) {
+            $this->location = $location->location . ' ' . $this->address;
         }
         return $this;
     }
@@ -486,17 +533,19 @@ class Business extends Model
     }
 
 
-    public static function setPublic($businessId,$status=0){
-        try{
-            self::where('id',$businessId)->update(['public'=>$status]);
-            BusinessZh::where('business_id',$businessId)->update(['public'=>$status]);
-        }catch (\Exception $e){
-            throw new BaseException(Consts::SAVE_RECORD_FAILED,$e->getMessage());
+    public static function setPublic($businessId, $status = 0)
+    {
+        try {
+            self::where('id', $businessId)->update(['public' => $status]);
+            BusinessZh::where('business_id', $businessId)->update(['public' => $status]);
+        } catch (\Exception $e) {
+            throw new BaseException(Consts::SAVE_RECORD_FAILED, $e->getMessage());
         }
         return true;
     }
 
-    public static function getAllBusiness($level= Consts::ACCOUNT_ACCESS_LEVEL_ONE){
+    public static function getAllBusiness($level = Consts::ACCOUNT_ACCESS_LEVEL_ONE)
+    {
         $columns = self::getColumnsByLevel($level);
         if (App::getLocale() == 'zh') {
             $columnPrefix = 'z.';
@@ -507,14 +556,24 @@ class Business extends Model
             ->from('business as b')
             ->leftjoin('business_zh as z', 'b.id', 'z.business_id')
             ->whereNull('b.deleted_at')
-            ->where('b.status',Consts::BUSINESS_STATUS_NORMAL)
-            ->orderBy('b.created_at','DESC');
+            ->where('b.status', Consts::BUSINESS_STATUS_NORMAL)
+            ->orderBy('b.created_at', 'DESC');
         $list = $query->get();
-        $list->transform(function ($item, $key){
+        $list->transform(function ($item, $key) {
             $item->setLocations();
             return $item;
         });
         return $list;
     }
 
+    public function immigrationSupports()
+    {
+        return $this->hasMany('App\Models\ImmigrationSupport', 'business_id');
+    }
+
+    public function getImmigrationSupportsAttribute()
+    {
+        $tags = $this->immigrationSupports()->select('immigration_support_tag_id')->get();
+        return $tags->pluck('immigration_support_tag_id');
+    }
 }

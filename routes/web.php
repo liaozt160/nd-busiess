@@ -19,7 +19,7 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
 
 Route::get('/info', function () {
 //    throw new Exception('My first Sentry error!');
-    throw new \App\Exceptions\BaseException('00001','测试test测试test');
+    throw new \App\Exceptions\BaseException('00001','测试tegfdsgdfsst测试test111hjghjgjg1');
 //    if(env('APP_ENV') == 'production'){
 //        return ;
 //    }

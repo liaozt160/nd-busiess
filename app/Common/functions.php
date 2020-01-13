@@ -77,4 +77,30 @@ function getRoles($index = 1, $all = false){
     return 'None';
 }
 
+function rep($data,$code=1001,$status=200,$headers=[]){
+    if($data === false && $code != 1001){
+        $data = [];
+    }
+    $response = Array(
+        'code' => $code,
+        'msg' => __('const.'.$code),
+        'data' => $data,
+    );
+    return response($response,$status,$headers);
+}
 
+function immigrationSupportTags($withKeys=false){
+    $array = [
+      ['label' => 'L1', 'value'=>1],
+      ['label' => 'EB1-C', 'value'=>2],
+      ['label' => 'E2', 'value'=>3],
+    ];
+    if($withKeys){
+        $collection = collect($array);
+        $array = $collection->mapWithKeys(function ($item) {
+            return [$item['label'] => $item['value']];
+        });
+        $array->all();
+    }
+    return $array;
+}

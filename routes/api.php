@@ -22,6 +22,16 @@ Route::post('/login', 'NewDream\AccountController@login')->name('login');
 Route::post('/contact', 'NewDream\ContactController@Add');
 Route::any('/landing/business', 'NewDream\LandingBusinessController@landingList')->name('business');
 
+Route::any('/public/business/levelone', 'NewDream\LandingBusinessController@PublicBusinessLevelOne')->name('levelone');
+
+
+// public resource api
+Route::post('/category/query', 'NewDream\PublicController@getCategoryQuery');
+Route::post('/location/query', 'NewDream\LocationController@query');
+Route::any('/tags/immigration/support', function (){
+    return rep(immigrationSupportTags());
+});
+
 //Route::post('account/add', 'NewDream\AccountController@accountAdd');
 Route::namespace('NewDream')->group(function () {
     Route::middleware('auth.token')->group(function (){
@@ -32,12 +42,12 @@ Route::namespace('NewDream')->group(function () {
 
         Route::post('/dashboard/index', 'AccountController@dashboard');
 
-        Route::post('/location/query', 'LocationController@query');
+
         Route::post('/business/query', 'BusinessController@query');
         Route::post('/business/attention/query', 'BusinessController@queryByAttention');
 
         //public
-        Route::post('/category/query', 'PublicController@getCategoryQuery');
+
 
         //common
         Route::post('/log/index', 'LogController@index');
@@ -173,8 +183,6 @@ Route::namespace('NewDream')->group(function () {
             Route::post('recommend/query', 'RecommendController@Query');
             Route::post('recommend/pdf/{level}', 'RecommendController@generatePdf');
             Route::post('recommend/pdf/email/{level}', 'RecommendController@generateEmailPdf');
-
-
         });
     });
 

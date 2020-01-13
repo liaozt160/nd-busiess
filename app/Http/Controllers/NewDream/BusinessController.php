@@ -60,6 +60,7 @@ class BusinessController extends BaseController
         if(!$m){
             throw new BaseException(Consts::NO_RECORD_FOUND);
         }
+        $m->append('immigration_supports');
 //        $countries = Location::queryChild();
 //        if($m->country){
 //            $states = Location::queryChild($m->country);

@@ -37,7 +37,7 @@ class CreateBusiess extends Migration
             /**
              * 第二批文件列表
              */
-            $table->double('gross_income')->nullable()->comment('毛利润 EX. $8300/month');
+            $table->double('gross_income')->nullable()->comment('毛利润 EX. $83300/month');
             $table->double('value_of_real_estate')->nullable()->comment('Est. Value of Real Estate房地产估价');
 
             $table->double('net_income')->nullable()->comment('Net Income 净利润 $25,000/month');

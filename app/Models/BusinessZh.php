@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BusinessZh extends Model
 {
-    protected $guarded = ['business_id'];
+    protected $guarded = ['id','immigration_supports'];
     protected $table = 'business_zh';
 
     public static function updateItem($businessId,$param){
@@ -67,5 +67,9 @@ class BusinessZh extends Model
             'building_sf','status','franchise','category_id','public'
         ];
         return $fillable;
+    }
+
+    public function immigrationSupports(){
+        return $this->hasMany('App\Models\ImmigrationSupport','business_id','business_id');
     }
 }

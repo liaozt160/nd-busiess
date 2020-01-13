@@ -105,5 +105,11 @@ class LandingBusinessController extends BaseController
         return $this->ok($business);
     }
 
+    public function PublicBusinessLevelOne(Request $request){
+        $param = $request->input();
+        $business = LandingBusiness::getLandingBusinessLevelOne($param);
+        return $this->ok($business);
+    }
+
 
 }

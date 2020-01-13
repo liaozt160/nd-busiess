@@ -104,12 +104,15 @@ class LandingBusiness extends Model
 
     public static function getLandingBusiness($landingBusinessId){
         $list = self::getDetailBusiness($landingBusinessId);
-//        dd($list);
-//        $list->transform(function ($item, $key){
-//            $item->makeHidden(['location','category_id','country','states','city','company','id','address']);
-//            return $item;
-//        });
-        $list->makeHidden(['location','category_id','country','states','city','company','id','address']);
+        // hide the special attribute
+        $list->makeHidden(['location','category_id','country','states','city','company','id','address','immigration_supports']);
+        return $list;
+    }
+
+    public static function getLandingBusinessLevelOne($param=[]){
+        $list = Business::getListByBuyerLevelOne($param);
+        // hide the special attribute
+//        $list->makeHidden(['location','category_id','country','states','city','company','id','address','immigration_supports']);
         return $list;
     }
 }
