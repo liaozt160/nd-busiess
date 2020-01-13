@@ -237,9 +237,10 @@ class Business extends Model
         //默认未发布内容
         if (isset($param['ids']) && $param['ids']) {
             $query->whereIn('b.id', $param['ids']);
-        } else {
-            $query->where($columnPrefix . 'public', '1');
         }
+//        else {
+//            $query->where($columnPrefix . 'public', '1');
+//        }
 
         //tags
         if (isset($param['support_tag']) && $param['support_tag']) {
